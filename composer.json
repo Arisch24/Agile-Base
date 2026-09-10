@@ -1,19 +1,17 @@
 {
-	"name": "arisch/agile",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Arischvaran Puvanesvaran",
-			"email": "arischvaran00@gmail.com"
-		}
-	],
-	"autoload": {
-		"psr-4": {
-			"Arisch\\Agile\\": "includes/"
-		}
+	"name": "arisch24/agile-base",
+	"description": "Dev-only tooling for linting Agile Base. Not required to run the theme; excluded from release builds.",
+	"type": "project",
+	"license": "GPL-2.0-or-later",
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"wp-coding-standards/wpcs": "^3.0"
 	},
 	"config": {
-		"optimize-autoloader": true
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	},
-	"require": {}
+	"minimum-stability": "dev",
+	"prefer-stable": true
 }

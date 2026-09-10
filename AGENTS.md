@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Codex (Codex.ai/code) when working with code in this repository.
 
 ## Overview
 
@@ -13,8 +13,7 @@ is driven almost entirely by `theme.json`; structure by block templates and patt
 - `theme.json` (v3) — the single source of truth for the design system: color palette
   (HSL custom props under `settings.custom.color`, surfaced as presets), fluid typography,
   fluid spacing, layout `contentSize`/`wideSize`, and global block styles. Also declares
-  `templateParts`, `customTemplates`, and the self-hosted Figtree, Space Grotesk, and
-  Space Mono `fontFace` entries.
+  `templateParts`, `customTemplates`, and the self-hosted Figtree `fontFace` entries.
 - `templates/*.html` — block templates (`index`, `single`, `page`, `page-no-title`,
   `page-full-width`, `archive`, `search`, `404`). Each composes: header part → a
   `core/group` with `tagName="main"` → footer part. WordPress auto-injects the skip link
@@ -39,7 +38,7 @@ is driven almost entirely by `theme.json`; structure by block templates and patt
   **Appearance → Editor**. Use the *Create Block Theme* plugin to export Site Editor
   changes back to these files and to manage fonts.
 - Text domain is `agile-base` (must equal the folder slug). All PHP prefixed `agile_base`/`agile_base_`.
-- Self-hosted fonts live in `assets/fonts/` and are wired via `theme.json`
+- Self-hosted fonts live in `assets/fonts/figtree/` and are wired via `theme.json`
   `fontFace` (with `unicodeRange` per latin / latin-ext subset) — **no external font
   requests**. Don't reintroduce Google Fonts.
 - Block markup must use valid Gutenberg block-comment syntax; spacing/colors should
@@ -48,7 +47,7 @@ is driven almost entirely by `theme.json`; structure by block templates and patt
 
 ## Verifying changes
 
-- Activate on a local WP (6.6+) with `WP_DEBUG = true`; confirm no PHP notices.
+- Activate on a local WP (6.5+) with `WP_DEBUG = true`; confirm no PHP notices.
 - Install the **Theme Check** plugin and resolve all REQUIRED items; lint PHP with
   `phpcs` against `phpcs.xml.dist` (WordPress-Extra + WordPress-Docs).
 - In the Site Editor, walk every template and both style variations.

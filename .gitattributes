@@ -16,3 +16,22 @@
 .gitattributes  text eol=lf
 .gitignore      text eol=lf
 .prettierignore	text eol=lf
+
+# Keep development-only files out of `git archive` release packages.
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.agents export-ignore
+/.claude export-ignore
+/.codex export-ignore
+/.gitignore export-ignore
+/.github export-ignore
+/AGENTS.md export-ignore
+/CLAUDE.md export-ignore
+/README.md export-ignore
+/bin export-ignore
+/composer.json export-ignore
+/composer.lock export-ignore
+/docs export-ignore
+/phpcs.xml.dist export-ignore
+/tests export-ignore
+/todo.txt export-ignore

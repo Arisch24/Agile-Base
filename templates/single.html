@@ -1,0 +1,39 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
+
+<!-- wp:group {"tagName":"main","style":{"spacing":{"margin":{"top":"var:preset|spacing|large","bottom":"var:preset|spacing|x-large"}}},"layout":{"type":"constrained"}} -->
+<main class="wp-block-group" style="margin-top:var(--wp--preset--spacing--large);margin-bottom:var(--wp--preset--spacing--x-large)">
+	<!-- wp:post-terms {"term":"category","className":"agile-base-eyebrow"} /-->
+
+	<!-- wp:post-title {"level":1,"fontSize":"4-x-large","style":{"spacing":{"margin":{"top":"var:preset|spacing|x-small"}}}} /-->
+
+	<!-- wp:group {"className":"agile-base-meta","style":{"spacing":{"blockGap":"var:preset|spacing|small","margin":{"top":"var:preset|spacing|small","bottom":"var:preset|spacing|medium"}}},"layout":{"type":"flex","flexWrap":"wrap"}} -->
+	<div class="wp-block-group agile-base-meta" style="margin-top:var(--wp--preset--spacing--small);margin-bottom:var(--wp--preset--spacing--medium)">
+		<!-- wp:post-author {"showAvatar":true,"avatarSize":32,"showBio":false,"fontSize":"small"} /-->
+
+		<!-- wp:post-date {"fontSize":"small"} /-->
+
+		<!-- wp:post-comments-count {"fontSize":"small"} /-->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:post-featured-image {"style":{"spacing":{"margin":{"bottom":"var:preset|spacing|medium"}},"border":{"radius":"8px"}}} /-->
+
+	<!-- wp:post-content {"layout":{"type":"constrained"}} /-->
+
+	<!-- wp:group {"className":"agile-base-postnav","layout":{"type":"flex","justifyContent":"space-between","flexWrap":"wrap"}} -->
+	<div class="wp-block-group agile-base-postnav">
+		<!-- wp:post-navigation-link {"type":"previous","showTitle":true,"label":"Previous","arrow":"arrow"} /-->
+
+		<!-- wp:post-navigation-link {"showTitle":true,"label":"Next","arrow":"arrow"} /-->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:spacer {"height":"var:preset|spacing|x-large"} -->
+	<div style="height:var(--wp--preset--spacing--x-large)" aria-hidden="true" class="wp-block-spacer"></div>
+	<!-- /wp:spacer -->
+
+	<!-- wp:pattern {"slug":"agile-base/comments"} /-->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer","area":"footer"} /-->

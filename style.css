@@ -1,10 +1,377 @@
 /*
-Theme Name: Agile
-Theme URI: https://github.com/arisch24/agile
-Description: A starter theme based on WPGulp with some extras.
-Version: 0.1.0
+Theme Name: Agile Base
+Theme URI: https://github.com/Arisch24/Agile-Base
 Author: Arischvaran Puvanesvaran
-Author URI: https://arischvaran.com/
-License: MIT
-Text Domain: agile
+Author URI: https://varanity.com/
+Description: A clean, fast, full site editing block theme for blogs and simple sites. Ships light and dark style variations, self-hosted fonts, fluid typography and spacing, and editor-ready block patterns.
+Requires at least: 6.6
+Tested up to: 7.1
+Requires PHP: 7.4
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: agile-base
+Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, custom-colors, custom-logo, featured-images, threaded-comments, translation-ready
 */
+
+/*
+ * Most styling is handled by theme.json and core block supports.
+ * This file only covers the few things blocks cannot express on their own.
+ */
+
+/* Accessible visually-hidden text (used by skip link, search labels, etc.). */
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+	background-color: #fff;
+	clip: auto;
+	clip-path: none;
+	color: #000;
+	display: block;
+	height: auto;
+	left: 5px;
+	padding: 15px 23px 14px;
+	top: 5px;
+	width: auto;
+	z-index: 100000;
+}
+
+/* Post cards in the query grid. Surface + shadow adapt to the active light/dark style. */
+.post-card {
+	height: 100%;
+	padding: var(--wp--preset--spacing--small);
+	background-color: color-mix(in srgb, currentColor 6%, transparent);
+	border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+	border-radius: 8px;
+	box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.35);
+}
+
+/* Allow height transitions to/from intrinsic sizes (used by the FAQ). */
+:root {
+	interpolate-size: allow-keywords;
+}
+
+/* FAQ — a Radix-style accordion built on the native <details> element.
+   Bordered card, hairline dividers, question + a chevron that rotates on open,
+   and a smooth height transition where the browser supports it. */
+.agile-base-faq {
+	background-color: color-mix(in srgb, currentColor 6%, transparent);
+	border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+	border-radius: 12px;
+	box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.35);
+	overflow: clip;
+}
+
+.agile-base-faq .wp-block-details {
+	border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.agile-base-faq .wp-block-details:last-child {
+	border-bottom: 0;
+}
+
+.agile-base-faq summary {
+	list-style: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1em;
+	padding: 1.05em 1.25em;
+	font-weight: 600;
+	transition: background-color 0.15s ease;
+}
+
+.agile-base-faq summary::-webkit-details-marker {
+	display: none;
+}
+
+.agile-base-faq summary:hover {
+	background-color: color-mix(in srgb, currentColor 5%, transparent);
+}
+
+.agile-base-faq summary:focus-visible {
+	outline: 2px solid var(--wp--preset--color--primary);
+	outline-offset: -2px;
+}
+
+/* Chevron, drawn with borders so it inherits the text color. */
+.agile-base-faq summary::after {
+	content: "";
+	flex: none;
+	width: 0.5em;
+	height: 0.5em;
+	border-right: 2px solid currentColor;
+	border-bottom: 2px solid currentColor;
+	transform: translateY(-0.15em) rotate(45deg);
+	transition: transform 0.2s ease;
+	opacity: 0.65;
+}
+
+.agile-base-faq .wp-block-details[open] summary::after {
+	transform: translateY(0.05em) rotate(225deg);
+}
+
+.agile-base-faq .wp-block-details > :not(summary) {
+	margin: -0.25em 1.25em 1.25em;
+	color: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.agile-base-faq .wp-block-details::details-content {
+		height: 0;
+		overflow: hidden;
+		transition: height 0.25s ease, content-visibility 0.25s allow-discrete;
+	}
+
+	.agile-base-faq .wp-block-details[open]::details-content {
+		height: auto;
+	}
+}
+
+/* Cards lift slightly on hover (feature cards + blog query cards). */
+.post-card {
+	transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.post-card:hover {
+	border-color: color-mix(in srgb, var(--wp--preset--color--primary) 60%, currentColor);
+	transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.post-card {
+		transition: none;
+	}
+	.post-card:hover {
+		transform: none;
+	}
+}
+
+/* Stat numbers — visually match the heading style without being headings;
+   they're decorative data points, not document-outline headings. */
+.agile-base-stat-number {
+	font-family: var(--wp--preset--font-family--space-grotesk);
+	font-weight: var(--wp--custom--font-weight--bold);
+	line-height: 1.04;
+	letter-spacing: -0.03em;
+	margin: 0;
+}
+
+/* Testimonial — a bold pull-quote card: accent border, tinted surface,
+   and an oversized decorative quotation mark behind the quote text. */
+.agile-base-testimonial {
+	background-color: color-mix(in srgb, currentColor 6%, transparent);
+	border-left: 6px solid var(--wp--preset--color--primary);
+	border-radius: 0 12px 12px 0;
+	box-shadow: 0 6px 16px -10px rgba(0, 0, 0, 0.35);
+}
+
+.agile-base-quote {
+	position: relative;
+	font-family: var(--wp--preset--font-family--space-grotesk);
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	line-height: 1.15;
+}
+
+.agile-base-quote::before {
+	content: "\201C";
+	position: absolute;
+	top: -0.32em;
+	left: -0.06em;
+	font-size: 4.5em;
+	line-height: 1;
+	color: color-mix(in srgb, var(--wp--preset--color--primary) 40%, transparent);
+}
+
+/* Post meta row — mono, in the "builder" voice, slightly muted. */
+.agile-base-meta,
+.agile-base-meta a {
+	font-family: var(--wp--preset--font-family--space-mono);
+	color: color-mix(in srgb, currentColor 70%, transparent);
+}
+
+/* Single-post previous/next navigation. */
+.agile-base-postnav {
+	margin-top: var(--wp--preset--spacing--large);
+	padding-top: var(--wp--preset--spacing--small);
+	border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+
+.agile-base-postnav .wp-block-post-navigation-link {
+	font-family: var(--wp--preset--font-family--space-grotesk);
+	font-weight: 600;
+	letter-spacing: -0.01em;
+}
+
+.agile-base-postnav .post-navigation-link-next {
+	text-align: right;
+}
+
+/* ---- Velocity: signature elements -------------------------------------- */
+
+/* Subtle full-bleed section band that adapts to the active light/dark style. */
+.agile-base-band {
+	background-color: color-mix(in srgb, currentColor 5%, transparent);
+}
+
+/* Mono eyebrow label — the "builder/code" voice on small caps labels.
+   The accent is mixed with the current text color so it stays legible on
+   both the light and dark backgrounds. */
+.agile-base-eyebrow {
+	font-family: var(--wp--preset--font-family--space-mono);
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+	font-size: var(--wp--preset--font-size--x-small);
+	color: color-mix(in srgb, var(--wp--preset--color--primary) 72%, currentColor);
+}
+
+/* Keep the site title (a level-0 site-title renders as a <p>) free of the
+   in-content paragraph-link underline. */
+.wp-block-site-title a {
+	text-decoration: none;
+}
+
+/* Marker highlight — a violet swipe behind a single word. */
+.agile-base-mark {
+	color: inherit;
+	background-color: transparent;
+	background-image: linear-gradient(transparent 54%, hsla(var(--wp--custom--color--primary) / 0.32) 54%);
+	padding-inline: 0.1em;
+}
+
+/* Static feature strip used by the hero pattern. */
+.agile-base-marquee {
+	border-block: 2px solid currentColor;
+	padding-block: 0.6rem;
+}
+
+.agile-base-marquee__track {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35em 0.75em;
+	justify-content: center;
+	font-family: var(--wp--preset--font-family--space-mono);
+	text-transform: uppercase;
+	letter-spacing: 0.14em;
+	font-size: var(--wp--preset--font-size--small);
+}
+
+.agile-base-marquee__track span {
+	color: color-mix(in srgb, var(--wp--preset--color--primary) 72%, currentColor);
+}
+
+.agile-base-marquee__track span:not(:last-child)::after {
+	color: currentColor;
+	content: "—";
+	margin-inline-start: 0.75em;
+}
+
+/* Buttons: a small, confident lift on interaction. */
+.wp-block-button__link {
+	transition: transform 0.12s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.wp-block-button__link:not(:disabled):hover {
+	transform: translateY(-2px);
+}
+
+.wp-block-button__link:disabled {
+	cursor: not-allowed;
+	opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-button__link {
+		transition: none;
+	}
+	.wp-block-button__link:not(:disabled):hover {
+		transform: none;
+	}
+}
+
+/* Feature card icon badge — a small tinted square that carries the icon. */
+.agile-base-feature-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	margin-bottom: var(--wp--preset--spacing--x-small);
+	color: var(--wp--preset--color--white);
+	background-color: var(--wp--preset--color--primary);
+	border-radius: 10px;
+}
+
+.agile-base-feature-icon svg {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+/* Testimonial avatar — initials on a solid primary circle, no photo required. */
+.agile-base-avatar {
+	display: inline-flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	font-family: var(--wp--preset--font-family--space-grotesk);
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 700;
+	color: var(--wp--preset--color--white);
+	background-color: var(--wp--preset--color--primary);
+	border-radius: 50%;
+}
+
+/* Style guide pattern — color swatches, type-scale rows and spacing bars. */
+.agile-base-swatch-item {
+	width: 6.5rem;
+}
+
+.agile-base-swatch {
+	aspect-ratio: 1 / 1;
+	border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+	border-radius: 8px;
+	margin-bottom: 0.5em;
+}
+
+.agile-base-swatch-label {
+	font-family: var(--wp--preset--font-family--space-mono);
+	font-size: var(--wp--preset--font-size--x-small);
+	color: color-mix(in srgb, currentColor 70%, transparent);
+}
+
+.agile-base-type-scale {
+	border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+	border-radius: 12px;
+	overflow: clip;
+}
+
+.agile-base-type-row {
+	padding: 0.75em 1.25em;
+	border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.agile-base-type-row:last-child {
+	border-bottom: 0;
+}
+
+.agile-base-scale-bar {
+	height: 1.5rem;
+	min-width: 0.25rem;
+	background-color: var(--wp--preset--color--primary);
+	border-radius: 4px;
+}

@@ -1,0 +1,662 @@
+# Copyright (C) 2026 Arischvaran Puvanesvaran
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Agile Base 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/agile-base\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-02T23:23:59+08:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: agile-base\n"
+
+#. Theme Name of the theme
+#: style.css
+#: functions.php:51
+msgid "Agile Base"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://github.com/Arisch24/Agile-Base"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "A clean, fast, full site editing block theme for blogs and simple sites. Ships light and dark style variations, self-hosted fonts, fluid typography and spacing, and editor-ready block patterns."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "Arischvaran Puvanesvaran"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://varanity.com/"
+msgstr ""
+
+#: patterns/call-to-action.php
+msgctxt "Pattern title"
+msgid "Call to Action"
+msgstr ""
+
+#: patterns/call-to-action.php
+msgctxt "Pattern description"
+msgid "A bold call-to-action card with a heading and button."
+msgstr ""
+
+#: patterns/call-to-action.php:24
+msgid "Ready to get started?"
+msgstr ""
+
+#: patterns/call-to-action.php:28
+msgid "Launch your next site with Agile Base and make it yours in an afternoon."
+msgstr ""
+
+#: patterns/call-to-action.php:34
+msgid "Read the blog"
+msgstr ""
+
+#: patterns/comments.php
+msgctxt "Pattern title"
+msgid "Comments"
+msgstr ""
+
+#: patterns/faq.php
+msgctxt "Pattern title"
+msgid "FAQ"
+msgstr ""
+
+#: patterns/faq.php
+msgctxt "Pattern description"
+msgid "A Radix-style accordion of frequently asked questions."
+msgstr ""
+
+#: patterns/faq.php:21
+msgid "Answers"
+msgstr ""
+
+#: patterns/faq.php:25
+msgid "Frequently asked questions"
+msgstr ""
+
+#: patterns/faq.php:33
+msgid "Do I need to know how to code?"
+msgstr ""
+
+#: patterns/faq.php:35
+msgid "No. Agile Base is built for the WordPress Site Editor. You assemble pages from patterns and edit everything visually."
+msgstr ""
+
+#: patterns/faq.php:41
+msgid "Does it work with my plugins?"
+msgstr ""
+
+#: patterns/faq.php:43
+msgid "Agile Base sticks to core blocks and standard theme features, so it plays nicely with the plugins you already use."
+msgstr ""
+
+#: patterns/faq.php:49
+msgid "Can I change the colors and fonts?"
+msgstr ""
+
+#: patterns/faq.php:51
+msgid "Yes. Pick a style variation or open Styles in the editor to adjust colors, typography and spacing across the whole site."
+msgstr ""
+
+#: patterns/faq.php:57
+msgid "Is it good for performance?"
+msgstr ""
+
+#: patterns/faq.php:59
+msgid "Very. Fonts are self-hosted, there is no page builder overhead, and the critical fonts are preloaded for fast first paint."
+msgstr ""
+
+#: patterns/features.php
+msgctxt "Pattern title"
+msgid "Features (Three Columns)"
+msgstr ""
+
+#: patterns/features.php
+msgctxt "Pattern description"
+msgid "A left-aligned section heading with a three-column grid of feature cards."
+msgstr ""
+
+#: patterns/features.php:21
+msgid "Why Agile Base"
+msgstr ""
+
+#: patterns/features.php:25
+msgid "Everything you need to launch"
+msgstr ""
+
+#: patterns/features.php:29
+msgid "Thoughtful defaults and a full pattern library, so you can focus on your content instead of the plumbing."
+msgstr ""
+
+#: patterns/features.php:43
+#: patterns/stats.php:41
+msgid "Block patterns"
+msgstr ""
+
+#: patterns/features.php:47
+msgid "Drop in ready-made sections and assemble full pages in minutes, no code required."
+msgstr ""
+
+#: patterns/features.php:59
+msgid "Style variations"
+msgstr ""
+
+#: patterns/features.php:63
+msgid "Switch between light and dark looks instantly, or fine-tune colors and type in the editor."
+msgstr ""
+
+#: patterns/features.php:75
+msgid "Fast by default"
+msgstr ""
+
+#: patterns/features.php:79
+msgid "Self-hosted fonts, no page builder bloat, and lean markup keep your pages quick to load."
+msgstr ""
+
+#: patterns/hero.php
+msgctxt "Pattern title"
+msgid "Hero"
+msgstr ""
+
+#: patterns/hero.php
+msgctxt "Pattern description"
+msgid "A left-aligned hero with a mono eyebrow, large heading with a marked word and a feature strip."
+msgstr ""
+
+#: patterns/hero.php:21
+msgid "The block theme for builders"
+msgstr ""
+
+#. translators: %s: the highlighted word "proud".
+#: patterns/hero.php:28
+#, php-format
+msgid "Ship a site you are %s of."
+msgstr ""
+
+#: patterns/hero.php:34
+msgid "Agile Base is a fast, no-build block theme. Assemble pages from patterns, flip between light and dark in a click, and launch something that looks nothing like a template."
+msgstr ""
+
+#: patterns/hidden-404.php
+msgctxt "Pattern title"
+msgid "Hidden 404"
+msgstr ""
+
+#: patterns/hidden-404.php:16
+msgid "Error 404"
+msgstr ""
+
+#: patterns/hidden-404.php:20
+msgid "This page took a different sprint."
+msgstr ""
+
+#: patterns/hidden-404.php:24
+msgid "We couldn’t find what you were looking for. Try a search, or head back home."
+msgstr ""
+
+#: patterns/hidden-404.php:32
+msgid "Back home"
+msgstr ""
+
+#: patterns/hidden-blog-heading.php
+msgctxt "Pattern title"
+msgid "Hidden Blog Heading"
+msgstr ""
+
+#: patterns/hidden-blog-heading.php:18
+msgid "The blog"
+msgstr ""
+
+#: patterns/hidden-blog-heading.php:22
+msgid "Latest posts"
+msgstr ""
+
+#: patterns/hidden-footer-credit.php
+msgctxt "Pattern title"
+msgid "Hidden Footer Credit"
+msgstr ""
+
+#. translators: %s: WordPress.org link.
+#: patterns/hidden-footer-credit.php:20
+#, php-format
+msgid "Proudly powered by %s"
+msgstr ""
+
+#: patterns/hidden-no-results.php
+msgctxt "Pattern title"
+msgid "No Results"
+msgstr ""
+
+#: patterns/hidden-no-results.php:16
+msgid "No posts were found. Try a different search?"
+msgstr ""
+
+#: patterns/logos.php
+msgctxt "Pattern title"
+msgid "Logos Strip"
+msgstr ""
+
+#: patterns/logos.php
+msgctxt "Pattern description"
+msgid "A row of brand names to show who you work with."
+msgstr ""
+
+#: patterns/logos.php:19
+msgid "Trusted by teams everywhere"
+msgstr ""
+
+#: patterns/page-home.php
+msgctxt "Pattern title"
+msgid "Page: Home"
+msgstr ""
+
+#: patterns/page-home.php
+msgctxt "Pattern description"
+msgid "A complete landing page: hero, logos, features, stats, testimonial, FAQ and a call to action."
+msgstr ""
+
+#: patterns/posts-list.php
+msgctxt "Pattern title"
+msgid "Posts List"
+msgstr ""
+
+#: patterns/stats.php
+msgctxt "Pattern title"
+msgid "Stats"
+msgstr ""
+
+#: patterns/stats.php
+msgctxt "Pattern description"
+msgid "A colored band of headline numbers."
+msgstr ""
+
+#: patterns/stats.php:29
+msgid "Sites launched"
+msgstr ""
+
+#: patterns/stats.php:53
+msgid "Lighthouse score"
+msgstr ""
+
+#: patterns/style-guide.php
+msgctxt "Pattern title"
+msgid "Style Guide"
+msgstr ""
+
+#: patterns/style-guide.php
+msgctxt "Pattern description"
+msgid "A living showcase of the theme's colors, type scale, fonts, spacing and buttons — all pulled straight from theme.json."
+msgstr ""
+
+#: patterns/style-guide.php:21
+msgid "Design system"
+msgstr ""
+
+#: patterns/style-guide.php:25
+msgid "Style guide"
+msgstr ""
+
+#: patterns/style-guide.php:29
+msgid "Every color, size and space on this page is a live preset from theme.json — change your Styles in the editor and this page updates with it."
+msgstr ""
+
+#: patterns/style-guide.php:39
+msgid "Colors"
+msgstr ""
+
+#: patterns/style-guide.php:43
+msgid "Neutrals"
+msgstr ""
+
+#: patterns/style-guide.php:150
+msgid "Primary"
+msgstr ""
+
+#: patterns/style-guide.php:213
+msgid "Secondary"
+msgstr ""
+
+#: patterns/style-guide.php:276
+msgid "Accent"
+msgstr ""
+
+#: patterns/style-guide.php:343
+msgid "Type scale"
+msgstr ""
+
+#: patterns/style-guide.php:454
+msgid "Fonts"
+msgstr ""
+
+#: patterns/style-guide.php:460
+#: patterns/style-guide.php:471
+#: patterns/style-guide.php:482
+msgid "The quick brown fox jumps over the lazy dog."
+msgstr ""
+
+#: patterns/style-guide.php:463
+msgid "Figtree — body text"
+msgstr ""
+
+#: patterns/style-guide.php:474
+msgid "Space Grotesk — headings"
+msgstr ""
+
+#: patterns/style-guide.php:485
+msgid "Space Mono — labels & code"
+msgstr ""
+
+#: patterns/style-guide.php:495
+msgid "Spacing"
+msgstr ""
+
+#: patterns/style-guide.php:584
+msgid "Buttons"
+msgstr ""
+
+#: patterns/style-guide.php:588
+msgid "Primary button"
+msgstr ""
+
+#: patterns/style-guide.php:588
+msgid "Outline button"
+msgstr ""
+
+#: patterns/testimonial.php
+msgctxt "Pattern title"
+msgid "Testimonial"
+msgstr ""
+
+#: patterns/testimonial.php
+msgctxt "Pattern description"
+msgid "A large left-aligned pull quote with attribution."
+msgstr ""
+
+#: patterns/testimonial.php:21
+msgid "From the field"
+msgstr ""
+
+#. translators: %s: the highlighted word "weekend".
+#: patterns/testimonial.php:28
+#, php-format
+msgid "We rebuilt our whole site in a %s, and our editors actually look forward to publishing now."
+msgstr ""
+
+#: patterns/testimonial.php:42
+msgid "Riley Chen"
+msgstr ""
+
+#: patterns/testimonial.php:46
+msgid "Head of Marketing · Lumen"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Black"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "BlackLight"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "BlackUltraLight"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "BlackDark"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "BlackUltraDark"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "White"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "PrimaryLight"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "PrimaryUltraLight"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "PrimaryDark"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "PrimaryUltraDark"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "SecondaryLight"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "SecondaryUltraLight"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "SecondaryDark"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "SecondaryUltraDark"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Accent"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "AccentLight"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "AccentUltraLight"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "AccentDark"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "AccentUltraDark"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Paper"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Ink"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Surface"
+msgstr ""
+
+#: theme.json
+msgctxt "Shadow name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Shadow name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Shadow name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "xSmall"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "xLarge"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "2xLarge"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "3xLarge"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Figtree"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Space Grotesk"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Space Mono"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "System Sans-serif"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "xSmall"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "xLarge"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "2xLarge"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "3xLarge"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "4xLarge"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "5xLarge"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Page (No Title)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Page (Full Width)"
+msgstr ""
+
+#: styles/dark.json
+msgctxt "Style variation name"
+msgid "Dark"
+msgstr ""

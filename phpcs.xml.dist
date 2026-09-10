@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Agile">
-	<description>Rules for Agile</description>
+<ruleset name="Agile Base">
+	<description>Rules for Agile Base</description>
 
     <arg name="extensions" value="php" />
 
@@ -30,7 +30,6 @@
 		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
         <exclude name="WordPress.PHP.YodaConditions"/>
 		<exclude name="WordPress.WP.I18n.MissingTranslatorsComment"/>
-		<exclude name="WordPress.NamingConventions.PrefixAllGlobals"/>
 		<exclude name="Squiz.Commenting.InlineComment"/>
 		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine"/>
 		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment" />
@@ -40,19 +39,19 @@
 	<!-- Let's also check that everything is properly documented. -->
 	<rule ref="WordPress-Docs"/>
 
-	<config name="minimum_supported_wp_version" value="5.0.0"/>
-	<config name="testVersion" value="7.2"/>
+	<config name="minimum_supported_wp_version" value="6.6"/>
+	<config name="testVersion" value="7.4-"/>
 
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<property name="text_domain" value="Agile"/>
+			<property name="text_domain" value="agile-base"/>
 		</properties>
 	</rule>
 
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="Arisch\Agile"/>
+				<element value="agile_base"/>
 			</property>
 		</properties>
 	</rule>

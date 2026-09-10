@@ -8,86 +8,34 @@ on:
         branches:
             - main
 
+permissions:
+    contents: read
+
 jobs:
-    sass-lint:
-        name: SASS Lint
+    quality:
+        name: Theme quality checks
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3
-
-            - name: Get changed files
-              uses: tj-actions/changed-files@v44.5.5
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
               with:
-                  files: 'assets/sass/**/*.scss'
-
-            - name: Install pnpm
-              uses: pnpm/action-setup@v4
-
-            - name: Install Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: '20'
-                  cache: 'pnpm'
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
-
-            - name: Lint SASS files
-              run: pnpm run lint:sass
-
-    js-lint:
-        name: JS Lint
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
-            - name: Get changed files
-              uses: tj-actions/changed-files@v44.5.5
-              with:
-                  files: 'assets/js/**/*.js'
-
-            - name: Install pnpm
-              uses: pnpm/action-setup@v4
-
-            - name: Install Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: '20'
-                  cache: 'pnpm'
-
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
-
-            - name: Lint JS files
-              run: pnpm run lint:js
-
-    php-lint:
-        name: PHP Lint
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
-
-            - name: Get changed files
-              uses: tj-actions/changed-files@v44.5.5
-              with:
-                  files: '**/*.php'
+                  persist-credentials: false
 
             - name: Install PHP
-              uses: shivammathur/setup-php@v2
+              uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
               with:
                   php-version: '8.3'
+                  coverage: none
+                  tools: composer:v2
 
-            - name: Lint PHP files
-              uses: 10up/wpcs-action@stable
-              with:
-                  enable_warnings: false # Enable checking for warnings (-w)
-                  paths: '.' # Paths to check, space separated
-                  excludes: 'node_modules vendor build languages assets' # Paths to excludes, space separated
-                  standard: 'WordPress-Extra' # Standard to use. Accepts WordPress|WordPress-Core|WordPress-Docs|WordPress-Extra|WordPress-VIP-Go|WordPressVIPMinimum|10up-Default.
-                  repo_branch: 'main' # Branch of Standard repository
-                  use_local_config: 'true' # Use local config if available
-                  only_changed_files: 'true' # Run the linter only on the changed files. Accepts true|false
-                  only_changed_lines: 'false' # Run the linter only on the changed lines. Accepts true|false
+            - name: Check release source
+              run: node tests/release-check.mjs
+
+            - name: Check PHP syntax
+              run: find . -type f -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -print0 | xargs -0 -n1 php -l
+
+            - name: Install Composer dependencies
+              run: composer install --no-interaction --no-progress --prefer-dist
+
+            - name: Run WordPress coding standards
+              run: vendor/bin/phpcs .
