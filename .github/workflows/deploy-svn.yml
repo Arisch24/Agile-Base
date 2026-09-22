@@ -1,0 +1,26 @@
+name: Deploy to WordPress.org
+
+# Mirrors the trigger convention from 10up/action-wordpress-plugin-deploy's
+# "deploy on pushing a new tag" example: push a plain version tag (no "v"
+# prefix, e.g. "1.0.1", matching style.css/readme.txt) and this ships it.
+on:
+    push:
+        tags:
+            - "*"
+
+permissions:
+    contents: read
+
+jobs:
+    deploy:
+        name: SVN deploy
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+            - name: Deploy to themes.svn.wordpress.org
+              env:
+                  SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME }}
+                  SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD }}
+              run: bash bin/deploy-svn.sh
