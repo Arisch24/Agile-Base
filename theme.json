@@ -585,6 +585,7 @@
 				}
 			},
 			"core/post-content": {
+				"css": "& > :is(h2, h3, h4, h5, h6) { margin-top: 1.5em !important; margin-bottom: 0.5em !important; } & > :is(h2, h3, h4, h5, h6) + :is(h2, h3, h4, h5, h6) { margin-top: 0.5em !important; } & > :is(h2, h3, h4, h5, h6):first-child { margin-top: 0 !important; }",
 				"elements": {
 					"link": {
 						"typography": {
