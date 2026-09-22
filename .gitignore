@@ -52,6 +52,12 @@ wpcs/
 ##########
 assets/bower_components/*
 
+# Claude Code design-hook cache (local artifact; config.json is tracked
+# intentionally where a suppression is meant to be shared) #
+##########
+/.impeccable/*
+!/.impeccable/config.json
+
 # Codekit #
 ##########
 /codekit-config.json

@@ -34,6 +34,7 @@ rsync -a --delete \
 	--exclude='composer.json' \
 	--exclude='composer.lock' \
 	--exclude='docs/' \
+	--exclude='.impeccable/' \
 	--exclude='phpcs.xml.dist' \
 	--exclude='tests/' \
 	--exclude='todo.txt' \
@@ -57,6 +58,7 @@ forbidden = {
     f"{slug}/composer.json",
     f"{slug}/composer.lock",
     f"{slug}/docs/",
+    f"{slug}/.impeccable/",
     f"{slug}/phpcs.xml.dist",
     f"{slug}/tests/",
     f"{slug}/todo.txt",
