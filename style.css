@@ -203,6 +203,47 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	color: color-mix(in srgb, currentColor 70%, transparent);
 }
 
+/* Tag list under a post — mono pill chips. The "#" is decorative, so it is
+   hidden from assistive tech where the alt-text form of `content` is supported. */
+.agile-base-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.agile-base-tags .wp-block-post-terms__separator {
+	display: none;
+}
+
+.agile-base-tags a {
+	display: inline-block;
+	padding: 0.3em 0.8em;
+	border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+	border-radius: 999px;
+	font-family: var(--wp--preset--font-family--space-mono);
+	line-height: 1.4;
+	text-decoration: none;
+}
+
+.agile-base-tags a::before {
+	content: "#";
+	content: "#" / "";
+	opacity: 0.55;
+}
+
+.agile-base-tags a:hover,
+.agile-base-tags a:focus-visible {
+	border-color: var(--wp--preset--color--primary);
+	background-color: color-mix(in srgb, var(--wp--preset--color--primary) 14%, transparent);
+	text-decoration: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.agile-base-tags a {
+		transition: background-color 0.15s ease, border-color 0.15s ease;
+	}
+}
+
 /* Single-post previous/next navigation. */
 .agile-base-postnav {
 	margin-top: var(--wp--preset--spacing--large);
