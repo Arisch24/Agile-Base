@@ -34,7 +34,7 @@ SLUG="${SLUG:-agile-base}"
 echo "ℹ SLUG is $SLUG"
 
 if [[ -z "$VERSION" ]]; then
-	if [[ -n "${GITHUB_REF:-}" ]]; then
+	if [[ "${GITHUB_REF:-}" == refs/tags/* ]]; then
 		VERSION="${GITHUB_REF#refs/tags/}"
 		VERSION="${VERSION#v}"
 	else

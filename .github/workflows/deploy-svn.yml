@@ -7,6 +7,19 @@ on:
     push:
         tags:
             - "*"
+    # Manual trigger, defaulting to a dry run -- lets you verify the SVN
+    # checkout, credentials, and file sync from the Actions tab before ever
+    # pushing a real tag. Run this first.
+    workflow_dispatch:
+        inputs:
+            dry_run:
+                description: "Dry run (do not commit to SVN)"
+                type: boolean
+                default: true
+            version:
+                description: "Version to deploy (defaults to style.css's Version when triggered manually)"
+                type: string
+                default: ""
 
 permissions:
     contents: read
@@ -23,4 +36,9 @@ jobs:
               env:
                   SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME }}
                   SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD }}
-              run: bash bin/deploy-svn.sh
+              run: |
+                  args=("${{ inputs.version }}")
+                  if [ "${{ inputs.dry_run }}" = "true" ]; then
+                    args+=("--dry-run")
+                  fi
+                  bash bin/deploy-svn.sh "${args[@]}"
