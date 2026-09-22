@@ -1,23 +1,22 @@
 name: Deploy to WordPress.org
 
-# Mirrors the trigger convention from 10up/action-wordpress-plugin-deploy's
-# "deploy on pushing a new tag" example: push a plain version tag (no "v"
-# prefix, e.g. "1.0.1", matching style.css/readme.txt) and this ships it.
 on:
+    # The real deploy. Push a plain version tag (no "v" prefix, e.g.
+    # "1.0.1", matching style.css/readme.txt) and this ships it via
+    # Codeinwp/action-wordpress-theme-deploy -- the same action Neve
+    # (Codeinwp's own theme, millions of installs) uses in production.
     push:
         tags:
             - "*"
-    # Manual trigger, defaulting to a dry run -- lets you verify the SVN
-    # checkout, credentials, and file sync from the Actions tab before ever
-    # pushing a real tag. Run this first.
+    # Manual-only pre-flight check. Codeinwp's action has no dry-run
+    # mode -- it commits to SVN unconditionally -- so this runs our own
+    # script in --dry-run instead, against the same live repo, to verify
+    # the checkout/credentials/file-set before ever pushing a real tag.
+    # This job never runs on a tag push and never commits anything.
     workflow_dispatch:
         inputs:
-            dry_run:
-                description: "Dry run (do not commit to SVN)"
-                type: boolean
-                default: true
             version:
-                description: "Version to deploy (defaults to style.css's Version when triggered manually)"
+                description: "Version to check (defaults to style.css's Version)"
                 type: string
                 default: ""
 
@@ -25,20 +24,42 @@ permissions:
     contents: read
 
 jobs:
+    preflight:
+        if: github.event_name == 'workflow_dispatch'
+        name: Dry-run check
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+            - name: Dry-run against themes.svn.wordpress.org
+              env:
+                  SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME }}
+                  SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD }}
+              run: bash bin/deploy-svn.sh "${{ inputs.version }}" --dry-run
+
     deploy:
+        if: github.event_name == 'push'
         name: SVN deploy
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-            - name: Deploy to themes.svn.wordpress.org
+            # Codeinwp's action assumes svn is already on the runner; it
+            # isn't on ubuntu-latest by default (confirmed: our own script's
+            # auto-install step was the thing that actually installed it
+            # during testing).
+            - name: Install SVN
+              run: sudo apt-get update -y && sudo apt-get install -y subversion
+
+            - name: WordPress Theme Deploy
+              uses: Codeinwp/action-wordpress-theme-deploy@b38502ae1fee6877127b166e53c58db499ea8a16 # primary, 2026-09-22
               env:
                   SVN_USERNAME: ${{ secrets.WPORG_SVN_USERNAME }}
                   SVN_PASSWORD: ${{ secrets.WPORG_SVN_PASSWORD }}
-              run: |
-                  args=("${{ inputs.version }}")
-                  if [ "${{ inputs.dry_run }}" = "true" ]; then
-                    args+=("--dry-run")
-                  fi
-                  bash bin/deploy-svn.sh "${args[@]}"
+                  # Required: the GitHub repo is "Agile-Base", but the actual
+                  # WordPress.org slug is lowercase "agile-base" -- this
+                  # action defaults SLUG to the repo name otherwise, which
+                  # would check out the wrong (nonexistent) SVN path.
+                  SLUG: agile-base
