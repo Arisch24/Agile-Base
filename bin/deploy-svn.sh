@@ -2,16 +2,29 @@
 #
 # Deploy this theme to the WordPress.org theme SVN repository.
 #
-# Adapted from 10up/action-wordpress-plugin-deploy (MIT License,
-# Copyright (c) 2019 Helen Hou-Sandi -- https://github.com/10up/action-wordpress-plugin-deploy),
-# retargeted from plugins.svn.wordpress.org to themes.svn.wordpress.org
-# (hardcoded in the original, not an input) and simplified for a
-# no-build theme: no .distignore/BUILD_DIR branching, always exports
-# via `git archive` + .gitattributes export-ignore.
+# WordPress.org themes do NOT use the plugin convention (trunk/tags/
+# assets). Confirmed against the live repo and the Theme Handbook
+# (https://developer.wordpress.org/themes/releasing-your-theme/updating-your-theme/):
+# each release is its own complete, immutable top-level directory
+# named exactly after its version (e.g. "1.0.1/"), containing the full
+# theme. There is no trunk to update in place -- WordPress.org reads
+# the live version from readme.txt's Stable tag and serves whichever
+# version-named directory matches. Once a commit lands it cannot be
+# edited or removed; a mistake needs a new version directory, not a
+# fix to the old one -- so this always supports --dry-run, and CI
+# defaults to it (see .github/workflows/deploy-svn.yml).
 #
-# Not using `pipefail` is deliberate, matching the original: the later
-# `grep` for deleted files is expected to not match most of the time,
-# which exits non-zero even though that's not an error here.
+# An earlier version of this script was adapted from
+# 10up/action-wordpress-plugin-deploy (MIT License, Copyright (c) 2019
+# Helen Hou-Sandi), which is plugin-only -- plugins.svn.wordpress.org
+# is hardcoded in its deploy.sh, not an input, so it can't target a
+# theme's SVN repo even retargeted. A first attempt here assumed
+# themes shared the plugin trunk/tags layout; a dry run against the
+# real repo showed that assumption was wrong before anything was
+# committed. What's left from that version: SVN auto-install, the
+# `git archive` + .gitattributes export approach, and the CLI/env-var
+# shape (VERSION/SLUG/DRY_RUN, `set -eo` without pipefail since the
+# `svn status | grep` step is expected to not match most of the time).
 set -eo
 
 command_exists() { command -v "$1" >/dev/null 2>&1; }
@@ -67,63 +80,37 @@ else
 	command_exists svn || { echo "Failed to install SVN." >&2; exit 1; }
 fi
 
-ASSETS_DIR="${ASSETS_DIR:-.wordpress-org}"
 SVN_URL="https://themes.svn.wordpress.org/${SLUG}/"
 SVN_DIR="${HOME}/svn-${SLUG}"
 
-echo "➤ Checking out .org repository..."
+echo "➤ Checking out .org repository (shallow -- just the version list)..."
+rm -rf "$SVN_DIR"
 svn checkout --depth immediates "$SVN_URL" "$SVN_DIR"
 cd "$SVN_DIR"
-svn update --set-depth infinity assets
-svn update --set-depth infinity trunk
-svn update --set-depth immediates tags
 
-if [[ -d "tags/$VERSION" ]]; then
-	echo "ℹ Version $VERSION of $SLUG was already published"
+echo "ℹ Published versions: $(ls -1 | tr '\n' ' ')"
+
+if [[ -d "$VERSION" ]]; then
+	echo "ℹ Version $VERSION of $SLUG was already published -- nothing to do"
 	exit
 fi
 
 echo "➤ Exporting a clean copy of the theme (git archive + .gitattributes export-ignore)..."
-TMP_DIR="${HOME}/archivetmp-${SLUG}"
-rm -rf "$TMP_DIR"
-mkdir "$TMP_DIR"
+mkdir "$VERSION"
 git -C "$GITHUB_WORKSPACE" config --global --add safe.directory "$GITHUB_WORKSPACE" 2>/dev/null || true
-git -C "$GITHUB_WORKSPACE" archive HEAD | tar x --directory="$TMP_DIR"
-
-cd "$SVN_DIR"
-echo "➤ Syncing into trunk..."
-rsync -rc "$TMP_DIR/" trunk/ --delete --delete-excluded
-
-if [[ -d "$GITHUB_WORKSPACE/$ASSETS_DIR/" ]]; then
-	echo "➤ Syncing WordPress.org listing assets (banner/screenshots)..."
-	rsync -rc "$GITHUB_WORKSPACE/$ASSETS_DIR/" assets/ --delete
-else
-	echo "ℹ No $ASSETS_DIR directory found; skipping listing-asset copy"
-fi
+git -C "$GITHUB_WORKSPACE" archive HEAD | tar x --directory="$SVN_DIR/$VERSION"
 
 echo "➤ Preparing files..."
-svn add . --force >/dev/null
-svn status | grep '^!' | sed 's/! *//' | xargs -I% svn rm %@ >/dev/null
+svn add "$VERSION" --force >/dev/null
 
-echo "➤ Copying tag..."
-svn cp "trunk" "tags/$VERSION"
-
-for ext_type in "png image/png" "jpg image/jpeg" "gif image/gif" "svg image/svg+xml"; do
-	ext="${ext_type%% *}"
-	mime="${ext_type#* }"
-	if [[ -d "$SVN_DIR/assets" ]] && find "$SVN_DIR/assets" -maxdepth 1 -name "*.$ext" -print -quit | grep -q .; then
-		svn propset svn:mime-type "$mime" "$SVN_DIR/assets/"*."$ext" || true
-	fi
-done
-
-svn update
 svn status
 
 if $DRY_RUN; then
-	echo "➤ Dry run: files not committed."
+	echo "➤ Dry run: files not committed. The above is exactly what would ship."
 else
 	echo "➤ Committing files..."
-	svn commit -m "Update to version $VERSION from GitHub" --no-auth-cache --non-interactive \
+	svn commit -m "Release $VERSION" --no-auth-cache --non-interactive \
 		--username "$SVN_USERNAME" --password "$SVN_PASSWORD"
-	echo "✓ Theme deployed!"
+	echo "✓ Theme deployed! https://themes.svn.wordpress.org/$SLUG/$VERSION/"
+	echo "  Remember: readme.txt's Stable tag must equal $VERSION for WordPress.org to serve this as the current version."
 fi
