@@ -652,6 +652,11 @@
 			"name": "page-full-width",
 			"title": "Page (Full Width)",
 			"postTypes": [ "page" ]
+		},
+		{
+			"name": "single-wide",
+			"title": "Post (Wide)",
+			"postTypes": [ "post" ]
 		}
 	]
 }

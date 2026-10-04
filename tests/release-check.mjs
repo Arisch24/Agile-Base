@@ -89,4 +89,14 @@ assert.match(singleTemplate, /"slug":"agile-base\/hidden-post-header"/);
 assert.doesNotMatch(singleTemplate, /wp:post-author(?![-\w])/);
 assert.doesNotMatch(singleTemplate, /wp:post-title/);
 
+// Phase 1: Post (Wide).
+const themeJson = JSON.parse(read('theme.json'));
+const customTemplate = (name) => themeJson.customTemplates.find((t) => t.name === name);
+const singleWide = read('templates/single-wide.html');
+assert.match(singleWide, /"slug":"agile-base\/hidden-post-header"/);
+assert.match(singleWide, /"tagName":"main"[^\n]*"contentSize":"var\(--wp--style--global--wide-size\)"/);
+assert.match(singleWide, /wp:post-content \{[^\n]*"contentSize":"var\(--wp--style--global--wide-size\)"/);
+assert.match(singleWide, /"slug":"agile-base\/comments"/);
+assert.deepEqual(customTemplate('single-wide'), { name: 'single-wide', title: 'Post (Wide)', postTypes: ['post'] });
+
 console.log('release source checks passed');
