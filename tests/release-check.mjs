@@ -99,4 +99,12 @@ assert.match(singleWide, /wp:post-content \{[^\n]*"contentSize":"var\(--wp--styl
 assert.match(singleWide, /"slug":"agile-base\/comments"/);
 assert.deepEqual(customTemplate('single-wide'), { name: 'single-wide', title: 'Post (Wide)', postTypes: ['post'] });
 
+// Phase 1: Blank Canvas.
+const blankTemplate = read('templates/page-blank.html');
+assert.match(blankTemplate, /<main class="wp-block-group/);
+assert.equal(blankTemplate.match(/<main\b/g).length, 1);
+assert.doesNotMatch(blankTemplate, /wp:template-part/);
+assert.match(blankTemplate, /wp:post-content \{[^\n]*"align":"full"/);
+assert.deepEqual(customTemplate('page-blank'), { name: 'page-blank', title: 'Blank Canvas', postTypes: ['page'] });
+
 console.log('release source checks passed');

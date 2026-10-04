@@ -657,6 +657,11 @@
 			"name": "single-wide",
 			"title": "Post (Wide)",
 			"postTypes": [ "post" ]
+		},
+		{
+			"name": "page-blank",
+			"title": "Blank Canvas",
+			"postTypes": [ "page" ]
 		}
 	]
 }
