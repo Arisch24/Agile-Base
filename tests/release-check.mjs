@@ -76,4 +76,17 @@ for (const excluded of [
   assert.match(attributes, new RegExp(excluded.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 }
 
+// Phase 1: shared post header.
+const postHeader = read('patterns/hidden-post-header.php');
+const singleTemplate = read('templates/single.html');
+assert.match(postHeader, /^ \* Slug: agile-base\/hidden-post-header$/m);
+assert.match(postHeader, /^ \* Inserter: no$/m);
+assert.match(postHeader, /wp:avatar/);
+assert.match(postHeader, /wp:post-author-name/);
+assert.match(postHeader, /wp:post-title \{[^\n]*"level":1/);
+assert.doesNotMatch(postHeader, /wp:post-author(?![-\w])/);
+assert.match(singleTemplate, /"slug":"agile-base\/hidden-post-header"/);
+assert.doesNotMatch(singleTemplate, /wp:post-author(?![-\w])/);
+assert.doesNotMatch(singleTemplate, /wp:post-title/);
+
 console.log('release source checks passed');
