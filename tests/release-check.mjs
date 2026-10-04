@@ -107,4 +107,13 @@ assert.doesNotMatch(blankTemplate, /wp:template-part/);
 assert.match(blankTemplate, /wp:post-content \{[^\n]*"align":"full"/);
 assert.deepEqual(customTemplate('page-blank'), { name: 'page-blank', title: 'Blank Canvas', postTypes: ['page'] });
 
+// Phase 1: author archive.
+const authorTemplate = read('templates/author.html');
+assert.equal(authorTemplate.match(/<main\b/g).length, 1);
+assert.match(authorTemplate, /wp:avatar/);
+assert.match(authorTemplate, /wp:query-title \{[^\n]*"type":"archive"[^\n]*"showPrefix":false/);
+assert.match(authorTemplate, /wp:post-author-biography/);
+assert.match(authorTemplate, /"slug":"agile-base\/posts-list"/);
+assert.doesNotMatch(authorTemplate, /wp:post-author(?![-\w])/);
+
 console.log('release source checks passed');
