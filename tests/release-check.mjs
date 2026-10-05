@@ -116,9 +116,10 @@ assert.match(authorTemplate, /wp:post-author-biography/);
 assert.match(authorTemplate, /"slug":"agile-base\/posts-list"/);
 assert.doesNotMatch(authorTemplate, /wp:post-author(?![-\w])/);
 
-// Phase 2: release 1.2.0, preserving the Phase 1 changelog.
-assert.match(style, /^Version: 1\.2\.0$/m);
-assert.match(readme, /^Stable tag: 1\.2\.0$/m);
+// Phase 3: release 1.3.0, preserving earlier changelogs.
+assert.match(style, /^Version: 1\.3\.0$/m);
+assert.match(readme, /^Stable tag: 1\.3\.0$/m);
+assert.match(readme, /^= 1\.3\.0 =$/m);
 assert.match(readme, /^= 1\.2\.0 =$/m);
 assert.match(readme, /^= 1\.1\.0 =$/m);
 
@@ -158,5 +159,52 @@ assert.match(footerColumns, /wp:search/);
 assert.match(footerColumns, /"slug":"agile-base\/hidden-footer-credit"/);
 assert.doesNotMatch(footerColumns, RAW_ENGLISH);
 assert.deepEqual(templatePart('footer-columns'), { name: 'footer-columns', title: 'Footer (Columns)', area: 'footer' });
+
+// Phase 3: Team section.
+const teamSection = read('patterns/team.php');
+assert.match(teamSection, /^ \* Slug: agile-base\/team$/m);
+assert.match(teamSection, /^ \* Categories: agile-base, team$/m);
+assert.doesNotMatch(teamSection, /^ \* Inserter: no$/m);
+assert.equal((teamSection.match(/class="agile-base-avatar"/g) || []).length, 4);
+assert.match(teamSection, /"layout":\{"type":"grid","minimumColumnWidth":"14rem"\}/);
+assert.doesNotMatch(teamSection, /<h1|"level":1/);
+assert.doesNotMatch(teamSection, RAW_ENGLISH);
+
+// Phase 3: Pricing section.
+const pricingSection = read('patterns/pricing.php');
+assert.match(pricingSection, /^ \* Slug: agile-base\/pricing$/m);
+assert.match(pricingSection, /^ \* Categories: agile-base, call-to-action$/m);
+assert.equal((pricingSection.match(/<!-- wp:column \{/g) || []).length, 3);
+assert.equal((pricingSection.match(/<!-- wp:list -->/g) || []).length, 3);
+assert.doesNotMatch(pricingSection, /<a\b/);
+assert.doesNotMatch(pricingSection, /<h1|"level":1/);
+assert.doesNotMatch(pricingSection, RAW_ENGLISH);
+
+// Phase 3: page starter patterns.
+const assertPagePattern = (slug, category) => {
+  const source = read(`patterns/${slug}.php`);
+  assert.match(source, new RegExp(`^ \\* Slug: agile-base/${slug}$`, 'm'));
+  assert.match(source, new RegExp(`^ \\* Categories: agile-base, ${category}$`, 'm'));
+  assert.match(source, /^ \* Block Types: core\/post-content$/m);
+  assert.match(source, /^ \* Post Types: page$/m);
+  assert.match(source, /Page \(Full Width\)/);
+  assert.doesNotMatch(source, /<h1|"level":1/);
+  assert.doesNotMatch(source, /agile-base\/hero/);
+  assert.doesNotMatch(source, /<a(?![^>]*href=)/);
+  assert.doesNotMatch(source, RAW_ENGLISH);
+  return source;
+};
+const pageSlugs = (source) => [...source.matchAll(/wp:pattern \{"slug":"agile-base\/([a-z-]+)"\}/g)].map((m) => m[1]);
+
+assert.deepEqual(pageSlugs(assertPagePattern('page-about', 'about')), ['stats', 'team', 'testimonial', 'call-to-action']);
+assert.deepEqual(pageSlugs(assertPagePattern('page-team', 'team')), ['team', 'call-to-action']);
+
+assert.deepEqual(pageSlugs(assertPagePattern('page-services', 'services')), ['features', 'testimonial', 'faq', 'call-to-action']);
+assert.deepEqual(pageSlugs(assertPagePattern('page-pricing', 'call-to-action')), ['pricing', 'faq', 'call-to-action']);
+
+const pageContact = assertPagePattern('page-contact', 'contact');
+assert.deepEqual(pageSlugs(pageContact), ['faq']);
+assert.match(pageContact, /href="mailto:hello@example\.com"/);
+assert.doesNotMatch(pageContact, /<form|wp:jetpack|contact-form/);
 
 console.log('release source checks passed');
