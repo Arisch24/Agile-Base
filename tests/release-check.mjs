@@ -117,8 +117,9 @@ assert.match(authorTemplate, /"slug":"agile-base\/posts-list"/);
 assert.doesNotMatch(authorTemplate, /wp:post-author(?![-\w])/);
 
 // Phase 3: release 1.3.0, preserving earlier changelogs.
-assert.match(style, /^Version: 1\.3\.0$/m);
-assert.match(readme, /^Stable tag: 1\.3\.0$/m);
+assert.match(style, /^Version: 1\.4\.0$/m);
+assert.match(readme, /^Stable tag: 1\.4\.0$/m);
+assert.match(readme, /^= 1\.4\.0 =$/m);
 assert.match(readme, /^= 1\.3\.0 =$/m);
 assert.match(readme, /^= 1\.2\.0 =$/m);
 assert.match(readme, /^= 1\.1\.0 =$/m);
