@@ -20,6 +20,8 @@ rsync -a --delete \
 	--exclude='.git/' \
 	--exclude='.github/' \
 	--exclude='.agents/' \
+	--exclude='.aws/' \
+	--exclude='.superpowers/' \
 	--exclude='.claude/' \
 	--exclude='.codex/' \
 	--exclude='.editorconfig' \
@@ -31,6 +33,7 @@ rsync -a --delete \
 	--exclude='CLAUDE.md' \
 	--exclude='README.md' \
 	--exclude='bin/' \
+	--exclude='build/' \
 	--exclude='composer.json' \
 	--exclude='composer.lock' \
 	--exclude='docs/' \
@@ -51,10 +54,13 @@ import zipfile
 archive, slug = sys.argv[1:]
 forbidden = {
     f"{slug}/.agents/",
+    f"{slug}/.aws/",
+    f"{slug}/.superpowers/",
     f"{slug}/.claude/",
     f"{slug}/.codex/",
     f"{slug}/.github/",
     f"{slug}/bin/",
+    f"{slug}/build/",
     f"{slug}/composer.json",
     f"{slug}/composer.lock",
     f"{slug}/docs/",
