@@ -207,4 +207,20 @@ assert.deepEqual(pageSlugs(pageContact), ['faq']);
 assert.match(pageContact, /href="mailto:hello@example\.com"/);
 assert.doesNotMatch(pageContact, /<form|wp:jetpack|contact-form/);
 
+// Phase 4: Archive (List) design.
+const archiveList = read('patterns/template-archive-list.php');
+assert.match(archiveList, /^ \* Slug: agile-base\/template-archive-list$/m);
+assert.match(archiveList, /^ \* Template Types: archive, category, tag, author, date$/m);
+assert.match(archiveList, /^ \* Inserter: no$/m);
+assert.match(archiveList, /wp:template-part \{"slug":"header","tagName":"header","area":"header"\}/);
+assert.match(archiveList, /wp:template-part \{"slug":"footer","tagName":"footer","area":"footer"\}/);
+assert.equal(archiveList.match(/<main\b/g).length, 1);
+assert.match(archiveList, /wp:query \{[^\n]*"inherit":true/);
+assert.match(archiveList, /wp:query-pagination /);
+assert.match(archiveList, /"slug":"agile-base\/hidden-no-results"/);
+assert.match(archiveList, /className":"agile-base-list-item"/);
+assert.doesNotMatch(archiveList, /wp:post-featured-image|wp:post-author(?![-\w])/);
+assert.doesNotMatch(archiveList, RAW_ENGLISH);
+assert.match(stylesheet, /\.agile-base-list-item \{/);
+
 console.log('release source checks passed');

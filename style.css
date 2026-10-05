@@ -416,3 +416,9 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	background-color: var(--wp--preset--color--primary);
 	border-radius: 4px;
 }
+
+/* Archive (List) and 404 (Search First) designs: a divider between rows that
+   blends with the current text color, so it suits the light and dark styles. */
+.agile-base-list-item {
+	border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+}
