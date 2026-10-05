@@ -223,4 +223,20 @@ assert.doesNotMatch(archiveList, /wp:post-featured-image|wp:post-author(?![-\w])
 assert.doesNotMatch(archiveList, RAW_ENGLISH);
 assert.match(stylesheet, /\.agile-base-list-item \{/);
 
+// Phase 4: 404 (Search First) design.
+const notFoundSearch = read('patterns/template-404-search.php');
+assert.match(notFoundSearch, /^ \* Slug: agile-base\/template-404-search$/m);
+assert.match(notFoundSearch, /^ \* Template Types: 404$/m);
+assert.match(notFoundSearch, /^ \* Inserter: no$/m);
+assert.match(notFoundSearch, /wp:template-part \{"slug":"header","tagName":"header","area":"header"\}/);
+assert.match(notFoundSearch, /wp:template-part \{"slug":"footer","tagName":"footer","area":"footer"\}/);
+assert.equal(notFoundSearch.match(/<main\b/g).length, 1);
+assert.equal(notFoundSearch.match(/<h1\b/g).length, 1);
+assert.match(notFoundSearch, /wp:search /);
+assert.match(notFoundSearch, /wp:query \{[^\n]*"perPage":3[^\n]*"inherit":false/);
+assert.match(notFoundSearch, /wp:query-no-results/);
+assert.match(notFoundSearch, /home_url\( '\/' \)/);
+assert.doesNotMatch(notFoundSearch, /href="\/"/);
+assert.doesNotMatch(notFoundSearch, RAW_ENGLISH);
+
 console.log('release source checks passed');
