@@ -637,8 +637,23 @@
 			"area": "header"
 		},
 		{
+			"name": "header-centered",
+			"title": "Header (Centered)",
+			"area": "header"
+		},
+		{
+			"name": "header-minimal",
+			"title": "Header (Minimal)",
+			"area": "header"
+		},
+		{
 			"name": "footer",
 			"title": "Footer",
+			"area": "footer"
+		},
+		{
+			"name": "footer-columns",
+			"title": "Footer (Columns)",
 			"area": "footer"
 		}
 	],

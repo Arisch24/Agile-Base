@@ -27,7 +27,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<!-- wp:post-excerpt {"excerptLength":20} /-->
 
-			<!-- wp:post-author {"showAvatar":true,"avatarSize":32,"showBio":false,"fontSize":"small"} /-->
+			<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+			<div class="wp-block-group">
+				<!-- wp:avatar {"size":32,"style":{"border":{"radius":"9999px"}}} /-->
+
+				<!-- wp:post-author-name {"fontSize":"small"} /-->
+			</div>
+			<!-- /wp:group -->
 		</div>
 		<!-- /wp:group -->
 	<!-- /wp:post-template -->

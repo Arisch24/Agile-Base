@@ -121,4 +121,41 @@ assert.match(style, /^Version: 1\.1\.0$/m);
 assert.match(readme, /^Stable tag: 1\.1\.0$/m);
 assert.match(readme, /^= 1\.1\.0 =$/m);
 
+// Phase 2: no deprecated Post Author block in the posts list.
+const RAW_ENGLISH = />\s*[A-Z][a-z]+\s+[a-z]+/;
+const postsList = read('patterns/posts-list.php');
+assert.doesNotMatch(postsList, /wp:post-author(?![-\w])/);
+assert.match(postsList, /wp:avatar \{"size":32/);
+assert.match(postsList, /wp:post-author-name/);
+
+// Phase 2: Header (Centered).
+const themeJsonParts = JSON.parse(read('theme.json')).templateParts;
+const templatePart = (name) => themeJsonParts.find((p) => p.name === name);
+const headerCentered = read('parts/header-centered.html');
+assert.match(headerCentered, /wp:site-logo/);
+assert.match(headerCentered, /wp:site-title/);
+assert.match(headerCentered, /wp:navigation \{"ariaLabel":"Primary","overlayMenu":"mobile"[^\n]*"justifyContent":"center"/);
+assert.match(headerCentered, /"orientation":"vertical","justifyContent":"center"/);
+assert.deepEqual(templatePart('header-centered'), { name: 'header-centered', title: 'Header (Centered)', area: 'header' });
+
+// Phase 2: Header (Minimal).
+const headerMinimal = read('parts/header-minimal.html');
+assert.doesNotMatch(headerMinimal, /wp:site-logo/);
+assert.match(headerMinimal, /wp:site-title/);
+assert.match(headerMinimal, /wp:navigation \{"ariaLabel":"Primary","overlayMenu":"always"/);
+assert.match(headerMinimal, /var:preset\|spacing\|x-small/);
+assert.deepEqual(templatePart('header-minimal'), { name: 'header-minimal', title: 'Header (Minimal)', area: 'header' });
+
+// Phase 2: Footer (Columns).
+const footerColumnsPart = read('parts/footer-columns.html');
+const footerColumns = read('patterns/hidden-footer-columns.php');
+assert.equal(footerColumnsPart.trim(), '<!-- wp:pattern {"slug":"agile-base/hidden-footer-columns"} /-->');
+assert.match(footerColumns, /^ \* Slug: agile-base\/hidden-footer-columns$/m);
+assert.match(footerColumns, /^ \* Inserter: no$/m);
+assert.match(footerColumns, /wp:navigation \{"ariaLabel":"Footer"/);
+assert.match(footerColumns, /wp:search/);
+assert.match(footerColumns, /"slug":"agile-base\/hidden-footer-credit"/);
+assert.doesNotMatch(footerColumns, RAW_ENGLISH);
+assert.deepEqual(templatePart('footer-columns'), { name: 'footer-columns', title: 'Footer (Columns)', area: 'footer' });
+
 console.log('release source checks passed');
