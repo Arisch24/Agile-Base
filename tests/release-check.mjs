@@ -95,4 +95,10 @@ assert.match(functions, /add_editor_style\( array\( 'style\.css', 'assets\/style
 assert.match(singleTagsTemplate, /<!-- wp:post-terms \{"term":"post_tag","style":\{"spacing":\{"margin":\{"top":"var:preset\|spacing\|medium"\}\}\}\} \/-->/);
 assert.doesNotMatch(singleTagsTemplate, /agile-base-tags/);
 
+// Tag pills: Styles panel options (Pill is the default, Plain opts out).
+assert.match(functions, /function agile_base_register_block_styles\(\): void \{/);
+assert.match(functions, /'name'\s*=>\s*'pill',\s*'label'\s*=>\s*__\( 'Pill', 'agile-base' \),\s*'is_default'\s*=>\s*true,/);
+assert.match(functions, /'name'\s*=>\s*'plain',\s*'label'\s*=>\s*__\( 'Plain', 'agile-base' \),/);
+assert.ok(postTermsCss.includes(':not(.is-style-plain)'), 'Plain must switch the pills off');
+
 console.log('release source checks passed');

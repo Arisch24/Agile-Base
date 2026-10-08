@@ -6,8 +6,9 @@
  * the "Plain" style for a Tags block (Styles panel) adds .is-style-plain and
  * turns this off. Category lists are not affected.
  *
- * Every selector is wrapped in :where() so it has zero specificity: colors,
- * fonts, sizes and spacing set on the block or in Styles → Blocks always win.
+ * :where() gives the tag-list portion zero specificity. Descendant suffixes
+ * retain their own specificity, up to (0,1,1) for the link states, while
+ * block-level typography and spacing settings can override the defaults.
  *
  * Loaded only on pages that render a terms block
  * (agile_base_enqueue_block_styles() in functions.php), and in the editor.

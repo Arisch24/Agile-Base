@@ -87,6 +87,37 @@ if ( ! function_exists( 'agile_base_enqueue_block_styles' ) ) :
 endif;
 add_action( 'init', 'agile_base_enqueue_block_styles' );
 
+if ( ! function_exists( 'agile_base_register_block_styles' ) ) :
+	/**
+	 * Register block style variations.
+	 *
+	 * Tag lists are pills by default (assets/styles/core-post-terms.css).
+	 * "Pill" is marked as the default so the Styles panel shows it selected,
+	 * and "Plain" switches a Tags block back to WordPress's regular list.
+	 *
+	 * @return void
+	 */
+	function agile_base_register_block_styles(): void {
+		register_block_style(
+			'core/post-terms',
+			array(
+				'name'       => 'pill',
+				'label'      => __( 'Pill', 'agile-base' ),
+				'is_default' => true,
+			)
+		);
+
+		register_block_style(
+			'core/post-terms',
+			array(
+				'name'  => 'plain',
+				'label' => __( 'Plain', 'agile-base' ),
+			)
+		);
+	}
+endif;
+add_action( 'init', 'agile_base_register_block_styles' );
+
 if ( ! function_exists( 'agile_base_enqueue_assets' ) ) :
 	/**
 	 * Enqueue front-end styles and scripts.
