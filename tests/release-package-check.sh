@@ -12,6 +12,7 @@ rg -Fq -- "--exclude='*.zip'" "$SCRIPT"
 rg -Fq -- "name.lower().endswith('.zip')" "$SCRIPT"
 
 NESTED_ZIP="$(mktemp --tmpdir="$THEME_DIR/assets" --suffix=.zip package-check.XXXXXX)"
+mkdir -p "$THEME_DIR/build"
 OUTPUT="$(mktemp --tmpdir="$THEME_DIR/build" --suffix=.zip package-check.XXXXXX)"
 trap 'rm -f -- "$NESTED_ZIP" "$OUTPUT"' EXIT
 
