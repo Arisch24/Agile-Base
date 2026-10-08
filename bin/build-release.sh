@@ -6,7 +6,7 @@ set -euo pipefail
 THEME_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 THEME_SLUG="agile-base"
 VERSION="$(sed -n 's/^Version:[[:space:]]*//p' "$THEME_DIR/style.css" | head -n 1)"
-OUTPUT="${1:-$(dirname "$THEME_DIR")/${THEME_SLUG}-${VERSION}.zip}"
+OUTPUT="${1:-$THEME_DIR/build/${THEME_SLUG}-${VERSION}.zip}"
 STAGING_ROOT="$(mktemp -d)"
 
 cleanup() {
