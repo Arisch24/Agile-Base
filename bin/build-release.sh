@@ -22,6 +22,8 @@ rsync -a --delete \
 	--exclude='.agents/' \
 	--exclude='.claude/' \
 	--exclude='.codex/' \
+	--exclude='.aws/' \
+	--exclude='.superpowers/' \
 	--exclude='.editorconfig' \
 	--exclude='.gitattributes' \
 	--exclude='.gitignore' \
@@ -31,6 +33,7 @@ rsync -a --delete \
 	--exclude='CLAUDE.md' \
 	--exclude='README.md' \
 	--exclude='bin/' \
+	--exclude='build/' \
 	--exclude='composer.json' \
 	--exclude='composer.lock' \
 	--exclude='docs/' \
@@ -40,6 +43,7 @@ rsync -a --delete \
 	--exclude='todo.txt' \
 	--exclude='vendor/' \
 	--exclude='node_modules/' \
+	--exclude='*.zip' \
 	"$THEME_DIR/" "$STAGING_ROOT/$THEME_SLUG/"
 
 python3 -m zipfile -c "$OUTPUT" "$STAGING_ROOT/$THEME_SLUG"
@@ -53,8 +57,11 @@ forbidden = {
     f"{slug}/.agents/",
     f"{slug}/.claude/",
     f"{slug}/.codex/",
+    f"{slug}/.aws/",
+    f"{slug}/.superpowers/",
     f"{slug}/.github/",
     f"{slug}/bin/",
+    f"{slug}/build/",
     f"{slug}/composer.json",
     f"{slug}/composer.lock",
     f"{slug}/docs/",
@@ -70,7 +77,7 @@ with zipfile.ZipFile(archive) as release:
     names = release.namelist()
     if not names or any(not name.startswith(f"{slug}/") for name in names):
         raise SystemExit("error: release ZIP has an invalid root directory")
-    if any(any(name == item or name.startswith(item) for item in forbidden) for name in names):
+    if any(any(name == item or name.startswith(item) for item in forbidden) or name.lower().endswith('.zip') for name in names):
         raise SystemExit("error: release ZIP contains development-only files")
     bad = release.testzip()
     if bad:
