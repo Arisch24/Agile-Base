@@ -1,0 +1,57 @@
+/**
+ * Tags block (core/post-terms): pills by default.
+ *
+ * Every tag list is shown as mono pill chips, with no class needed, so the look
+ * also applies to templates a site owner customized in the Site Editor. Choosing
+ * the "Plain" style for a Tags block (Styles panel) adds .is-style-plain and
+ * turns this off. Category lists are not affected.
+ *
+ * :where() gives the tag-list portion zero specificity. Descendant suffixes
+ * retain their own specificity, up to (0,1,1) for the link states, while
+ * block-level typography and spacing settings can override the defaults.
+ *
+ * Loaded only on pages that render a terms block
+ * (agile_base_enqueue_block_styles() in functions.php), and in the editor.
+ *
+ * The "#" is decorative, so it is hidden from assistive tech where the
+ * alt-text form of `content` is supported.
+ */
+:where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	font-family: var(--wp--preset--font-family--space-mono);
+	font-size: var(--wp--preset--font-size--small);
+}
+
+:where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) .wp-block-post-terms__separator {
+	display: none;
+}
+
+:where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a {
+	display: inline-block;
+	padding: 0.3em 0.8em;
+	border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+	border-radius: 999px;
+	line-height: 1.4;
+	text-decoration: none;
+}
+
+:where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a::before {
+	content: "#";
+	content: "#" / "";
+	opacity: 0.55;
+}
+
+:where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a:hover,
+:where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a:focus-visible {
+	border-color: var(--wp--preset--color--primary);
+	background-color: color-mix(in srgb, var(--wp--preset--color--primary) 14%, transparent);
+	text-decoration: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	:where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a {
+		transition: background-color 0.15s ease, border-color 0.15s ease;
+	}
+}

@@ -76,4 +76,34 @@ for (const excluded of [
   assert.match(attributes, new RegExp(excluded.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 }
 
+// Tag pills: the default look of every tag list (no class needed).
+const postTermsCss = read('assets/styles/core-post-terms.css');
+const singleTagsTemplate = read('templates/single.html');
+const PILL = ':where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain))';
+for (const part of ['', ' .wp-block-post-terms__separator', ' a', ' a::before', ' a:hover', ' a:focus-visible']) {
+  assert.ok(postTermsCss.includes(PILL + part), `pill selector missing for "${part || 'container'}"`);
+}
+assert.match(postTermsCss, /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\) \{[^}]*font-family: var\(--wp--preset--font-family--space-mono\);[^}]*font-size: var\(--wp--preset--font-size--small\);/);
+assert.match(postTermsCss, /content: "#" \/ "";/);
+assert.doesNotMatch(postTermsCss, /agile-base-tags|taxonomy-category|\.single /);
+for (const line of postTermsCss.split('\n').filter((l) => /\{\s*$/.test(l) && !l.startsWith('@media'))) {
+  assert.match(line.trim(), /^:where\(/, `unwrapped selector: ${line.trim()}`);
+}
+assert.doesNotMatch(stylesheet, /agile-base-tags/);
+assert.match(functions, /wp_enqueue_block_style\(/);
+assert.match(functions, /add_editor_style\( array\( 'style\.css', 'assets\/styles\/core-post-terms\.css' \) \)/);
+assert.match(singleTagsTemplate, /<!-- wp:post-terms \{"term":"post_tag","style":\{"spacing":\{"margin":\{"top":"var:preset\|spacing\|medium"\}\}\}\} \/-->/);
+assert.doesNotMatch(singleTagsTemplate, /agile-base-tags/);
+
+// Tag pills: Styles panel options (Pill is the default, Plain opts out).
+assert.match(functions, /function agile_base_register_block_styles\(\): void \{/);
+assert.match(functions, /'name'\s*=>\s*'pill',\s*'label'\s*=>\s*__\( 'Pill', 'agile-base' \),\s*'is_default'\s*=>\s*true,/);
+assert.match(functions, /'name'\s*=>\s*'plain',\s*'label'\s*=>\s*__\( 'Plain', 'agile-base' \),/);
+assert.ok(postTermsCss.includes(':not(.is-style-plain)'), 'Plain must switch the pills off');
+
+// Hotfix 1.0.2.
+assert.match(style, /^Version: 1\.0\.2$/m);
+assert.match(readme, /^Stable tag: 1\.0\.2$/m);
+assert.match(readme, /^= 1\.0\.2 =$/m);
+
 console.log('release source checks passed');
