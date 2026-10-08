@@ -101,4 +101,9 @@ assert.match(functions, /'name'\s*=>\s*'pill',\s*'label'\s*=>\s*__\( 'Pill', 'ag
 assert.match(functions, /'name'\s*=>\s*'plain',\s*'label'\s*=>\s*__\( 'Plain', 'agile-base' \),/);
 assert.ok(postTermsCss.includes(':not(.is-style-plain)'), 'Plain must switch the pills off');
 
+// Hotfix 1.0.2.
+assert.match(style, /^Version: 1\.0\.2$/m);
+assert.match(readme, /^Stable tag: 1\.0\.2$/m);
+assert.match(readme, /^= 1\.0\.2 =$/m);
+
 console.log('release source checks passed');
