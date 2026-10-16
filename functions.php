@@ -24,7 +24,9 @@ if ( ! function_exists( 'agile_base_setup' ) ) :
 		add_theme_support( 'wp-block-styles' );
 		add_theme_support( 'responsive-embeds' );
 		add_theme_support( 'editor-styles' );
-		add_editor_style( 'style.css' );
+		// Block styles are loaded on demand on the front end, which skips the
+		// editor, so the per-block stylesheet is added to the editor here.
+		add_editor_style( array( 'style.css', 'assets/styles/core-post-terms.css' ) );
 
 		add_theme_support(
 			'custom-logo',
@@ -53,6 +55,68 @@ if ( ! function_exists( 'agile_base_register_pattern_category' ) ) :
 	}
 endif;
 add_action( 'init', 'agile_base_register_pattern_category' );
+
+if ( ! function_exists( 'agile_base_enqueue_block_styles' ) ) :
+	/**
+	 * Load each assets/styles/core-<block>.css file only on pages that render
+	 * that block. For example, core-post-terms.css is attached to core/post-terms.
+	 *
+	 * @return void
+	 */
+	function agile_base_enqueue_block_styles(): void {
+		$files = glob( get_theme_file_path( 'assets/styles/core-*.css' ) );
+
+		if ( ! $files ) {
+			return;
+		}
+
+		foreach ( $files as $file ) {
+			$filename = basename( $file, '.css' );
+
+			wp_enqueue_block_style(
+				preg_replace( '/^core-/', 'core/', $filename ),
+				array(
+					'handle' => "agile-base-block-{$filename}",
+					'src'    => get_theme_file_uri( "assets/styles/{$filename}.css" ),
+					'path'   => get_theme_file_path( "assets/styles/{$filename}.css" ),
+					'ver'    => wp_get_theme()->get( 'Version' ),
+				)
+			);
+		}
+	}
+endif;
+add_action( 'init', 'agile_base_enqueue_block_styles' );
+
+if ( ! function_exists( 'agile_base_register_block_styles' ) ) :
+	/**
+	 * Register block style variations.
+	 *
+	 * Tag lists are pills by default (assets/styles/core-post-terms.css).
+	 * "Pill" is marked as the default so the Styles panel shows it selected,
+	 * and "Plain" switches a Tags block back to WordPress's regular list.
+	 *
+	 * @return void
+	 */
+	function agile_base_register_block_styles(): void {
+		register_block_style(
+			'core/post-terms',
+			array(
+				'name'       => 'pill',
+				'label'      => __( 'Pill', 'agile-base' ),
+				'is_default' => true,
+			)
+		);
+
+		register_block_style(
+			'core/post-terms',
+			array(
+				'name'  => 'plain',
+				'label' => __( 'Plain', 'agile-base' ),
+			)
+		);
+	}
+endif;
+add_action( 'init', 'agile_base_register_block_styles' );
 
 if ( ! function_exists( 'agile_base_enqueue_assets' ) ) :
 	/**
