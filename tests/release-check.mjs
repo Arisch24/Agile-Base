@@ -24,8 +24,8 @@ assert.match(style, /^Tested up to: 7\.1$/m);
 assert.match(readme, /^Requires at least: 6\.6$/m);
 assert.match(readme, /^Tested up to: 7\.1$/m);
 
-assert.match(frontPage, /wp:post-content/);
-assert.doesNotMatch(frontPage, /agile-base\/page-home/);
+assert.match(frontPage, /agile-base\/page-home/);
+assert.doesNotMatch(frontPage, /wp:post-content/);
 assert.match(noTitle, /wp:post-title[^\n]+"level":1[^\n]+screen-reader-text/);
 assert.match(notFound, /agile-base\/hidden-404/);
 assert.doesNotMatch(notFound, /href="\/"/);
@@ -97,6 +97,8 @@ assert.match(singleWide, /"slug":"agile-base\/hidden-post-header"/);
 assert.match(singleWide, /"tagName":"main"[^\n]*"contentSize":"var\(--wp--style--global--wide-size\)"/);
 assert.match(singleWide, /wp:post-content \{[^\n]*"contentSize":"var\(--wp--style--global--wide-size\)"/);
 assert.match(singleWide, /"slug":"agile-base\/comments"/);
+assert.match(singleWide, /<!-- wp:post-terms \{"term":"post_tag","style":\{"spacing":\{"margin":\{"top":"var:preset\|spacing\|medium"\}\}\}\} \/-->/);
+assert.doesNotMatch(singleWide, /agile-base-tags/);
 assert.deepEqual(customTemplate('single-wide'), { name: 'single-wide', title: 'Post (Wide)', postTypes: ['post'] });
 
 // Phase 1: Blank Canvas.
@@ -239,5 +241,38 @@ assert.match(notFoundSearch, /wp:query-no-results/);
 assert.match(notFoundSearch, /home_url\( '\/' \)/);
 assert.doesNotMatch(notFoundSearch, /href="\/"/);
 assert.doesNotMatch(notFoundSearch, RAW_ENGLISH);
+
+// Tag pills: the default look of every tag list (no class needed).
+const postTermsCss = read('assets/styles/core-post-terms.css');
+const singleTagsTemplate = read('templates/single.html');
+const PILL = ':where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain))';
+for (const part of ['', ' .wp-block-post-terms__separator', ' a', ' a::before', ' a:hover', ' a:focus-visible']) {
+  assert.ok(postTermsCss.includes(PILL + part), `pill selector missing for "${part || 'container'}"`);
+}
+assert.match(postTermsCss, /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\) \{[^}]*font-family: var\(--wp--preset--font-family--space-mono\);[^}]*font-size: var\(--wp--preset--font-size--small\);/);
+assert.match(postTermsCss, /content: "#" \/ "";/);
+assert.doesNotMatch(postTermsCss, /agile-base-tags|taxonomy-category|\.single /);
+for (const line of postTermsCss.split('\n').filter((l) => /\{\s*$/.test(l) && !l.startsWith('@media'))) {
+  assert.match(line.trim(), /^:where\(/, `unwrapped selector: ${line.trim()}`);
+}
+assert.doesNotMatch(stylesheet, /agile-base-tags/);
+assert.match(functions, /wp_enqueue_block_style\(/);
+assert.match(functions, /add_editor_style\( array\( 'style\.css', 'assets\/styles\/core-post-terms\.css' \) \)/);
+assert.match(singleTagsTemplate, /<!-- wp:post-terms \{"term":"post_tag","style":\{"spacing":\{"margin":\{"top":"var:preset\|spacing\|medium"\}\}\}\} \/-->/);
+assert.doesNotMatch(singleTagsTemplate, /agile-base-tags/);
+
+// Tag pills: Styles panel options (Pill is the default, Plain opts out).
+assert.match(functions, /function agile_base_register_block_styles\(\): void \{/);
+assert.match(functions, /'name'\s*=>\s*'pill',\s*'label'\s*=>\s*__\( 'Pill', 'agile-base' \),\s*'is_default'\s*=>\s*true,/);
+assert.match(functions, /'name'\s*=>\s*'plain',\s*'label'\s*=>\s*__\( 'Plain', 'agile-base' \),/);
+assert.ok(postTermsCss.includes(':not(.is-style-plain)'), 'Plain must switch the pills off');
+
+// Hotfix 1.0.2.
+assert.match(readme, /^= 1\.0\.2 =$/m);
+
+// Hotfix 1.0.3: post cards fill the width instead of a fixed two-column grid.
+assert.match(postsList, /<!-- wp:post-template [^\n]*"layout":\{"type":"default"\}/);
+assert.doesNotMatch(postsList, /"columnCount"/);
+assert.match(readme, /^= 1\.0\.3 =$/m);
 
 console.log('release source checks passed');
