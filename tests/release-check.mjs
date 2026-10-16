@@ -24,8 +24,8 @@ assert.match(style, /^Tested up to: 7\.1$/m);
 assert.match(readme, /^Requires at least: 6\.6$/m);
 assert.match(readme, /^Tested up to: 7\.1$/m);
 
-assert.match(frontPage, /wp:post-content/);
-assert.doesNotMatch(frontPage, /agile-base\/page-home/);
+assert.match(frontPage, /agile-base\/page-home/);
+assert.doesNotMatch(frontPage, /wp:post-content/);
 assert.match(noTitle, /wp:post-title[^\n]+"level":1[^\n]+screen-reader-text/);
 assert.match(notFound, /agile-base\/hidden-404/);
 assert.doesNotMatch(notFound, /href="\/"/);
@@ -102,8 +102,14 @@ assert.match(functions, /'name'\s*=>\s*'plain',\s*'label'\s*=>\s*__\( 'Plain', '
 assert.ok(postTermsCss.includes(':not(.is-style-plain)'), 'Plain must switch the pills off');
 
 // Hotfix 1.0.2.
-assert.match(style, /^Version: 1\.0\.2$/m);
-assert.match(readme, /^Stable tag: 1\.0\.2$/m);
 assert.match(readme, /^= 1\.0\.2 =$/m);
+
+// Hotfix 1.0.3: post cards fill the width instead of a fixed two-column grid.
+const postsList = read('patterns/posts-list.php');
+assert.match(postsList, /<!-- wp:post-template [^\n]*"layout":\{"type":"default"\}/);
+assert.doesNotMatch(postsList, /"columnCount"/);
+assert.match(style, /^Version: 1\.0\.3$/m);
+assert.match(readme, /^Stable tag: 1\.0\.3$/m);
+assert.match(readme, /^= 1\.0\.3 =$/m);
 
 console.log('release source checks passed');

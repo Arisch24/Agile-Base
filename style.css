@@ -7,7 +7,7 @@ Description: A clean, fast, full site editing block theme for blogs and simple s
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Version: 1.0.2
+Version: 1.0.3
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: agile-base
@@ -47,7 +47,7 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	z-index: 100000;
 }
 
-/* Post cards in the query grid. Surface + shadow adapt to the active light/dark style. */
+/* Post cards in the query loop. Surface + shadow adapt to the active light/dark style. */
 .post-card {
 	height: 100%;
 	padding: var(--wp--preset--spacing--small);
