@@ -76,6 +76,60 @@ for (const excluded of [
   assert.match(attributes, new RegExp(excluded.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
 }
 
+// Phase 1: shared post header.
+const postHeader = read('patterns/hidden-post-header.php');
+const singleTemplate = read('templates/single.html');
+assert.match(postHeader, /^ \* Slug: agile-base\/hidden-post-header$/m);
+assert.match(postHeader, /^ \* Inserter: no$/m);
+assert.match(postHeader, /wp:avatar/);
+assert.match(postHeader, /wp:post-author-name/);
+assert.match(postHeader, /wp:post-title \{[^\n]*"level":1/);
+assert.doesNotMatch(postHeader, /wp:post-author(?![-\w])/);
+assert.match(singleTemplate, /"slug":"agile-base\/hidden-post-header"/);
+assert.doesNotMatch(singleTemplate, /wp:post-author(?![-\w])/);
+assert.doesNotMatch(singleTemplate, /wp:post-title/);
+
+// Phase 1: Post (Wide).
+const themeJson = JSON.parse(read('theme.json'));
+const customTemplate = (name) => themeJson.customTemplates.find((t) => t.name === name);
+const singleWide = read('templates/single-wide.html');
+assert.match(singleWide, /"slug":"agile-base\/hidden-post-header"/);
+assert.match(singleWide, /"tagName":"main"[^\n]*"contentSize":"var\(--wp--style--global--wide-size\)"/);
+assert.match(singleWide, /wp:post-content \{[^\n]*"contentSize":"var\(--wp--style--global--wide-size\)"/);
+assert.match(singleWide, /"slug":"agile-base\/comments"/);
+assert.match(singleWide, /<!-- wp:post-terms \{"term":"post_tag","style":\{"spacing":\{"margin":\{"top":"var:preset\|spacing\|medium"\}\}\}\} \/-->/);
+assert.doesNotMatch(singleWide, /agile-base-tags/);
+assert.deepEqual(customTemplate('single-wide'), { name: 'single-wide', title: 'Post (Wide)', postTypes: ['post'] });
+
+// Phase 1: Blank Canvas.
+const blankTemplate = read('templates/page-blank.html');
+assert.match(blankTemplate, /<main class="wp-block-group/);
+assert.equal(blankTemplate.match(/<main\b/g).length, 1);
+assert.doesNotMatch(blankTemplate, /wp:template-part/);
+assert.match(blankTemplate, /wp:post-content \{[^\n]*"align":"full"/);
+assert.deepEqual(customTemplate('page-blank'), { name: 'page-blank', title: 'Blank Canvas', postTypes: ['page'] });
+
+// Phase 1: author archive.
+const authorTemplate = read('templates/author.html');
+assert.equal(authorTemplate.match(/<main\b/g).length, 1);
+assert.match(authorTemplate, /wp:avatar/);
+assert.match(authorTemplate, /wp:query-title \{[^\n]*"type":"archive"[^\n]*"showPrefix":false/);
+assert.match(authorTemplate, /wp:post-author-biography/);
+assert.doesNotMatch(authorTemplate, /wp:post-author(?![-\w])/);
+// The header wraps so long names and phones stack instead of overflowing.
+assert.match(authorTemplate, /"className":"agile-base-author"[^\n]*"flexWrap":"wrap"/);
+assert.match(style, /\.agile-base-author__text \{[^}]*flex: 1 1 20rem;/);
+// Every post is by this author, so the cards show the date, not a byline.
+const authorLoop = authorTemplate.slice(authorTemplate.indexOf('<!-- wp:post-template'), authorTemplate.indexOf('<!-- /wp:post-template'));
+assert.match(authorLoop, /wp:post-date \{[^\n]*"className":"agile-base-meta"/);
+assert.doesNotMatch(authorLoop, /wp:avatar|wp:post-author/);
+assert.match(authorTemplate, /wp:query \{[^\n]*"inherit":true/);
+
+// Phase 1: release 1.1.0.
+assert.match(style, /^Version: 1\.1\.0$/m);
+assert.match(readme, /^Stable tag: 1\.1\.0$/m);
+assert.match(readme, /^= 1\.1\.0 =$/m);
+
 // Tag pills: the default look of every tag list (no class needed).
 const postTermsCss = read('assets/styles/core-post-terms.css');
 const singleTagsTemplate = read('templates/single.html');
@@ -108,8 +162,6 @@ assert.match(readme, /^= 1\.0\.2 =$/m);
 const postsList = read('patterns/posts-list.php');
 assert.match(postsList, /<!-- wp:post-template [^\n]*"layout":\{"type":"default"\}/);
 assert.doesNotMatch(postsList, /"columnCount"/);
-assert.match(style, /^Version: 1\.0\.3$/m);
-assert.match(readme, /^Stable tag: 1\.0\.3$/m);
 assert.match(readme, /^= 1\.0\.3 =$/m);
 
 console.log('release source checks passed');

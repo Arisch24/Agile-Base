@@ -1,0 +1,55 @@
+<!-- wp:template-part {"slug":"header","tagName":"header","area":"header"} /-->
+
+<!-- wp:group {"tagName":"main","style":{"spacing":{"margin":{"top":"var:preset|spacing|large","bottom":"var:preset|spacing|x-large"}}},"layout":{"type":"constrained"}} -->
+<main class="wp-block-group" style="margin-top:var(--wp--preset--spacing--large);margin-bottom:var(--wp--preset--spacing--x-large)">
+	<!-- wp:group {"className":"agile-base-author","style":{"spacing":{"blockGap":"var:preset|spacing|small","margin":{"bottom":"var:preset|spacing|large"}}},"layout":{"type":"flex","flexWrap":"wrap","verticalAlignment":"center"}} -->
+	<div class="wp-block-group agile-base-author" style="margin-bottom:var(--wp--preset--spacing--large)">
+		<!-- wp:avatar {"size":96,"style":{"border":{"radius":"9999px"}}} /-->
+
+		<!-- wp:group {"className":"agile-base-author__text","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}},"layout":{"type":"flex","orientation":"vertical"}} -->
+		<div class="wp-block-group agile-base-author__text">
+			<!-- wp:query-title {"type":"archive","showPrefix":false,"level":1,"fontSize":"4-x-large"} /-->
+
+			<!-- wp:post-author-biography {"className":"agile-base-author__bio","fontSize":"medium"} /-->
+		</div>
+		<!-- /wp:group -->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:query {"queryId":1,"query":{"perPage":10,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","inherit":true},"layout":{"type":"default"}} -->
+	<div class="wp-block-query">
+		<!-- wp:post-template {"style":{"spacing":{"blockGap":"var:preset|spacing|medium"}},"layout":{"type":"default"}} -->
+			<!-- wp:group {"className":"post-card","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}},"layout":{"type":"constrained"}} -->
+			<div class="wp-block-group post-card">
+				<!-- wp:post-featured-image {"aspectRatio":"16/9","style":{"border":{"radius":"6px"}}} /-->
+
+				<!-- wp:post-terms {"term":"category","fontSize":"small"} /-->
+
+				<!-- wp:post-title {"isLink":true,"fontSize":"large"} /-->
+
+				<!-- wp:post-excerpt {"excerptLength":20} /-->
+
+				<!-- wp:post-date {"className":"agile-base-meta","fontSize":"small"} /-->
+			</div>
+			<!-- /wp:group -->
+		<!-- /wp:post-template -->
+
+		<!-- wp:spacer {"height":"var:preset|spacing|large"} -->
+		<div style="height:var(--wp--preset--spacing--large)" aria-hidden="true" class="wp-block-spacer"></div>
+		<!-- /wp:spacer -->
+
+		<!-- wp:query-pagination {"paginationArrow":"arrow","layout":{"type":"flex","justifyContent":"space-between"}} -->
+			<!-- wp:query-pagination-previous /-->
+			<!-- wp:query-pagination-numbers /-->
+			<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
+
+		<!-- wp:query-no-results -->
+			<!-- wp:pattern {"slug":"agile-base/hidden-no-results"} /-->
+		<!-- /wp:query-no-results -->
+	</div>
+	<!-- /wp:query -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer","area":"footer"} /-->

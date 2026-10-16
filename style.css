@@ -7,7 +7,7 @@ Description: A clean, fast, full site editing block theme for blogs and simple s
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Version: 1.0.3
+Version: 1.1.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: agile-base
@@ -201,6 +201,23 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 .agile-base-meta a {
 	font-family: var(--wp--preset--font-family--space-mono);
 	color: color-mix(in srgb, currentColor 70%, transparent);
+}
+
+/* Author archive header: avatar beside the name and bio, wrapping under the
+   avatar when there is no room for both (phones, long names). */
+.agile-base-author .wp-block-avatar {
+	flex: none;
+}
+
+.agile-base-author__text {
+	flex: 1 1 20rem;
+	min-width: 0;
+	overflow-wrap: break-word;
+}
+
+.agile-base-author__bio {
+	max-width: 60ch;
+	color: color-mix(in srgb, currentColor 75%, transparent);
 }
 
 /* Single-post previous/next navigation. */
