@@ -24,6 +24,14 @@ and spacing — all configured through theme.json with no build step or page bui
 * Add: "Post (Wide)" post template using the wide content width.
 * Change: the post author line now uses the Avatar and Author Name blocks (the Post Author block is deprecated).
 
+= 1.0.3 =
+* Fix: the homepage now shows the theme's landing page. When "Your homepage displays" was set to "Your latest posts" (the WordPress default), it showed the body of a single post instead.
+* Fix: post lists use one full-width column, so a blog with a single post no longer shows it at half width beside an empty column.
+
+= 1.0.2 =
+* Fix: tags now show as pills everywhere, including Single Posts templates customized in the Site Editor.
+* Add: "Pill" and "Plain" styles for the Tags block. Pill is the default; choose Plain in the block's Styles panel for a regular list.
+
 = 1.0.1 =
 * Fix: headings in post content sitting flush against a preceding list, with no spacing above.
 * Add: a tag list on single posts.
