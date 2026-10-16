@@ -6,7 +6,7 @@ set -euo pipefail
 THEME_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 THEME_SLUG="agile-base"
 VERSION="$(sed -n 's/^Version:[[:space:]]*//p' "$THEME_DIR/style.css" | head -n 1)"
-OUTPUT="${1:-$(dirname "$THEME_DIR")/${THEME_SLUG}-${VERSION}.zip}"
+OUTPUT="${1:-$THEME_DIR/build/${THEME_SLUG}-${VERSION}.zip}"
 STAGING_ROOT="$(mktemp -d)"
 
 cleanup() {
@@ -20,10 +20,10 @@ rsync -a --delete \
 	--exclude='.git/' \
 	--exclude='.github/' \
 	--exclude='.agents/' \
-	--exclude='.aws/' \
-	--exclude='.superpowers/' \
 	--exclude='.claude/' \
 	--exclude='.codex/' \
+	--exclude='.aws/' \
+	--exclude='.superpowers/' \
 	--exclude='.editorconfig' \
 	--exclude='.gitattributes' \
 	--exclude='.gitignore' \
@@ -43,6 +43,7 @@ rsync -a --delete \
 	--exclude='todo.txt' \
 	--exclude='vendor/' \
 	--exclude='node_modules/' \
+	--exclude='*.zip' \
 	"$THEME_DIR/" "$STAGING_ROOT/$THEME_SLUG/"
 
 python3 -m zipfile -c "$OUTPUT" "$STAGING_ROOT/$THEME_SLUG"
@@ -54,10 +55,10 @@ import zipfile
 archive, slug = sys.argv[1:]
 forbidden = {
     f"{slug}/.agents/",
-    f"{slug}/.aws/",
-    f"{slug}/.superpowers/",
     f"{slug}/.claude/",
     f"{slug}/.codex/",
+    f"{slug}/.aws/",
+    f"{slug}/.superpowers/",
     f"{slug}/.github/",
     f"{slug}/bin/",
     f"{slug}/build/",
@@ -76,7 +77,7 @@ with zipfile.ZipFile(archive) as release:
     names = release.namelist()
     if not names or any(not name.startswith(f"{slug}/") for name in names):
         raise SystemExit("error: release ZIP has an invalid root directory")
-    if any(any(name == item or name.startswith(item) for item in forbidden) for name in names):
+    if any(any(name == item or name.startswith(item) for item in forbidden) or name.lower().endswith('.zip') for name in names):
         raise SystemExit("error: release ZIP contains development-only files")
     bad = release.testzip()
     if bad:
