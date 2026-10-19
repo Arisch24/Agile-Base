@@ -21,6 +21,7 @@ and spacing — all configured through theme.json with no build step or page bui
 = 1.3.0 =
 * Add: ready-made page layouts for About, Services, Pricing, Team and Contact, offered when you create a new page.
 * Add: "Team" and "Pricing" block patterns.
+* Fix: the homepage's feature cards and "Read the blog" button no longer show "Block contains unexpected or invalid content" in the Site Editor.
 
 = 1.2.0 =
 * Add: "Header (Centered)" and "Header (Minimal)" template parts. Swap them in from Appearance → Editor.
