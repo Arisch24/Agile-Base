@@ -3,7 +3,7 @@ Contributors: arisch24
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.1.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, custom-colors, custom-logo, featured-images, threaded-comments, translation-ready
@@ -17,6 +17,12 @@ templates, light and dark style variations, self-hosted fonts, and fluid typogra
 and spacing — all configured through theme.json with no build step or page builder.
 
 == Changelog ==
+
+= 1.1.0 =
+* Add: Author archive template with the author's avatar and biography.
+* Add: "Blank Canvas" page template with no header or footer, for landing pages.
+* Add: "Post (Wide)" post template using the wide content width.
+* Change: the post author line now uses the Avatar and Author Name blocks (the Post Author block is deprecated).
 
 = 1.0.3 =
 * Fix: the homepage now shows the theme's landing page. When "Your homepage displays" was set to "Your latest posts" (the WordPress default), it showed the body of a single post instead.
