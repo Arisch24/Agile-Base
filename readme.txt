@@ -19,24 +19,17 @@ and spacing — all configured through theme.json with no build step or page bui
 == Changelog ==
 
 = 1.4.0 =
-* Add: "Archive (List)" design for archive pages: compact rows without images. Apply it from Appearance → Editor.
-* Add: "404 (Search First)" design for the not-found page, with search and your latest posts.
-
-= 1.3.0 =
-* Add: ready-made page layouts for About, Services, Pricing, Team and Contact, offered when you create a new page.
-* Add: "Team" and "Pricing" block patterns.
-* Fix: the homepage's feature cards and "Read the blog" button no longer show "Block contains unexpected or invalid content" in the Site Editor.
-
-= 1.2.0 =
-* Add: "Header (Centered)" and "Header (Minimal)" template parts. Swap them in from Appearance → Editor.
-* Add: "Footer (Columns)" template part with a footer menu and search.
-* Change: post cards in the blog list now use the Avatar and Author Name blocks (the Post Author block is deprecated).
-
-= 1.1.0 =
 * Add: Author archive template with the author's avatar and biography.
 * Add: "Blank Canvas" page template with no header or footer, for landing pages.
 * Add: "Post (Wide)" post template using the wide content width.
-* Change: the post author line now uses the Avatar and Author Name blocks (the Post Author block is deprecated).
+* Add: "Header (Centered)" and "Header (Minimal)" template parts. Swap them in from Appearance → Editor.
+* Add: "Footer (Columns)" template part with a footer menu and search.
+* Add: ready-made page layouts for About, Services, Pricing, Team and Contact, offered when you create a new page.
+* Add: "Team" and "Pricing" block patterns.
+* Add: "Archive (List)" design for archive pages: compact rows without images. Apply it from Appearance → Editor.
+* Add: "404 (Search First)" design for the not-found page, with search and your latest posts.
+* Change: the post author line and the post cards in the blog list now use the Avatar and Author Name blocks (the Post Author block is deprecated).
+* Fix: the homepage's feature cards and "Read the blog" button no longer show "Block contains unexpected or invalid content" in the Site Editor.
 
 = 1.0.3 =
 * Fix: the homepage now shows the theme's landing page. When "Your homepage displays" was set to "Your latest posts" (the WordPress default), it showed the body of a single post instead.

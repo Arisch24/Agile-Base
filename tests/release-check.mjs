@@ -125,13 +125,11 @@ assert.match(authorLoop, /wp:post-date \{[^\n]*"className":"agile-base-meta"/);
 assert.doesNotMatch(authorLoop, /wp:avatar|wp:post-author/);
 assert.match(authorTemplate, /wp:query \{[^\n]*"inherit":true/);
 
-// Phase 3: release 1.3.0, preserving earlier changelogs.
+// Release 1.4.0 ships phases 1-4 together; 1.1.0-1.3.0 were never released.
 assert.match(style, /^Version: 1\.4\.0$/m);
 assert.match(readme, /^Stable tag: 1\.4\.0$/m);
 assert.match(readme, /^= 1\.4\.0 =$/m);
-assert.match(readme, /^= 1\.3\.0 =$/m);
-assert.match(readme, /^= 1\.2\.0 =$/m);
-assert.match(readme, /^= 1\.1\.0 =$/m);
+assert.doesNotMatch(readme, /^= 1\.[123]\.0 =$/m);
 
 // Phase 2: no deprecated Post Author block in the posts list.
 const RAW_ENGLISH = />\s*[A-Z][a-z]+\s+[a-z]+/;
