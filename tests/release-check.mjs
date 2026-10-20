@@ -125,12 +125,11 @@ assert.match(authorLoop, /wp:post-date \{[^\n]*"className":"agile-base-meta"/);
 assert.doesNotMatch(authorLoop, /wp:avatar|wp:post-author/);
 assert.match(authorTemplate, /wp:query \{[^\n]*"inherit":true/);
 
-// Phase 3: release 1.3.0, preserving earlier changelogs.
-assert.match(style, /^Version: 1\.3\.0$/m);
-assert.match(readme, /^Stable tag: 1\.3\.0$/m);
-assert.match(readme, /^= 1\.3\.0 =$/m);
-assert.match(readme, /^= 1\.2\.0 =$/m);
-assert.match(readme, /^= 1\.1\.0 =$/m);
+// Release 1.4.0 ships phases 1-4 together; 1.1.0-1.3.0 were never released.
+assert.match(style, /^Version: 1\.4\.0$/m);
+assert.match(readme, /^Stable tag: 1\.4\.0$/m);
+assert.match(readme, /^= 1\.4\.0 =$/m);
+assert.doesNotMatch(readme, /^= 1\.[123]\.0 =$/m);
 
 // Phase 2: no deprecated Post Author block in the posts list.
 const RAW_ENGLISH = />\s*[A-Z][a-z]+\s+[a-z]+/;
@@ -215,6 +214,38 @@ const pageContact = assertPagePattern('page-contact', 'contact');
 assert.deepEqual(pageSlugs(pageContact), ['faq']);
 assert.match(pageContact, /href="mailto:hello@example\.com"/);
 assert.doesNotMatch(pageContact, /<form|wp:jetpack|contact-form/);
+
+// Phase 4: Archive (List) design.
+const archiveList = read('patterns/template-archive-list.php');
+assert.match(archiveList, /^ \* Slug: agile-base\/template-archive-list$/m);
+assert.match(archiveList, /^ \* Template Types: archive, category, tag, author, date$/m);
+assert.match(archiveList, /^ \* Inserter: no$/m);
+assert.match(archiveList, /wp:template-part \{"slug":"header","tagName":"header","area":"header"\}/);
+assert.match(archiveList, /wp:template-part \{"slug":"footer","tagName":"footer","area":"footer"\}/);
+assert.equal(archiveList.match(/<main\b/g).length, 1);
+assert.match(archiveList, /wp:query \{[^\n]*"inherit":true/);
+assert.match(archiveList, /wp:query-pagination /);
+assert.match(archiveList, /"slug":"agile-base\/hidden-no-results"/);
+assert.match(archiveList, /className":"agile-base-list-item"/);
+assert.doesNotMatch(archiveList, /wp:post-featured-image|wp:post-author(?![-\w])/);
+assert.doesNotMatch(archiveList, RAW_ENGLISH);
+assert.match(stylesheet, /\.agile-base-list-item \{/);
+
+// Phase 4: 404 (Search First) design.
+const notFoundSearch = read('patterns/template-404-search.php');
+assert.match(notFoundSearch, /^ \* Slug: agile-base\/template-404-search$/m);
+assert.match(notFoundSearch, /^ \* Template Types: 404$/m);
+assert.match(notFoundSearch, /^ \* Inserter: no$/m);
+assert.match(notFoundSearch, /wp:template-part \{"slug":"header","tagName":"header","area":"header"\}/);
+assert.match(notFoundSearch, /wp:template-part \{"slug":"footer","tagName":"footer","area":"footer"\}/);
+assert.equal(notFoundSearch.match(/<main\b/g).length, 1);
+assert.equal(notFoundSearch.match(/<h1\b/g).length, 1);
+assert.match(notFoundSearch, /wp:search /);
+assert.match(notFoundSearch, /wp:query \{[^\n]*"perPage":3[^\n]*"inherit":false/);
+assert.match(notFoundSearch, /wp:query-no-results/);
+assert.match(notFoundSearch, /home_url\( '\/' \)/);
+assert.doesNotMatch(notFoundSearch, /href="\/"/);
+assert.doesNotMatch(notFoundSearch, RAW_ENGLISH);
 
 // Tag pills: the default look of every tag list (no class needed).
 const postTermsCss = read('assets/styles/core-post-terms.css');
