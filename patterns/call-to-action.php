@@ -31,7 +31,7 @@ $agile_base_blog_url      = $agile_base_posts_page_id ? get_permalink( $agile_ba
 		<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
 		<div class="wp-block-buttons">
 			<!-- wp:button {"backgroundColor":"white","textColor":"ink","style":{"border":{"color":"var:preset|color|white"}}} -->
-			<div class="wp-block-button"><a class="wp-block-button__link has-ink-color has-white-background-color has-text-color has-background has-border-color has-white-border-color wp-element-button" href="<?php echo esc_url( $agile_base_blog_url ); ?>"><?php esc_html_e( 'Read the blog', 'agile-base' ); ?></a></div>
+			<div class="wp-block-button"><a class="wp-block-button__link has-ink-color has-white-background-color has-text-color has-background has-border-color wp-element-button" href="<?php echo esc_url( $agile_base_blog_url ); ?>" style="border-color:var(--wp--preset--color--white)"><?php esc_html_e( 'Read the blog', 'agile-base' ); ?></a></div>
 			<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->
