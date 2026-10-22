@@ -126,8 +126,6 @@ assert.doesNotMatch(authorLoop, /wp:avatar|wp:post-author/);
 assert.match(authorTemplate, /wp:query \{[^\n]*"inherit":true/);
 
 // Release 1.4.0 ships phases 1-4 together; 1.1.0-1.3.0 were never released.
-assert.match(style, /^Version: 1\.4\.0$/m);
-assert.match(readme, /^Stable tag: 1\.4\.0$/m);
 assert.match(readme, /^= 1\.4\.0 =$/m);
 assert.doesNotMatch(readme, /^= 1\.[123]\.0 =$/m);
 
@@ -279,5 +277,10 @@ assert.match(readme, /^= 1\.0\.2 =$/m);
 assert.match(postsList, /<!-- wp:post-template [^\n]*"layout":\{"type":"default"\}/);
 assert.doesNotMatch(postsList, /"columnCount"/);
 assert.match(readme, /^= 1\.0\.3 =$/m);
+
+// Hotfix 1.4.1: a screenshot of the homepage as it ships.
+assert.match(style, /^Version: 1\.4\.1$/m);
+assert.match(readme, /^Stable tag: 1\.4\.1$/m);
+assert.match(readme, /^= 1\.4\.1 =$/m);
 
 console.log('release source checks passed');
