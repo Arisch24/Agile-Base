@@ -3,17 +3,38 @@
 // to these names, so they must keep working through the 2.0 redesign. Values
 // and looks may change; the names may not disappear.
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const read = (file) => readFileSync(`${ROOT}${file}`, 'utf8');
 const exists = (file) => existsSync(`${ROOT}${file}`);
 const themeJson = JSON.parse(read('theme.json'));
-const cssFiles = ['style.css', ...readdirSync(`${ROOT}assets/styles`).filter((f) => f.endsWith('.css')).map((f) => `assets/styles/${f}`)];
-const css = cssFiles.map(read).join('\n');
 const legacy = exists('assets/styles/legacy-presets.css') ? read('assets/styles/legacy-presets.css') : '';
 const kebab = (slug) => slug.replace(/([a-z])([0-9])/g, '$1-$2').replace(/([0-9])([a-z])/g, '$1-$2');
+const functions = read('functions.php').replace(/\/\*[\s\S]*?\*\/|^[ \t]*\/\/.*$/gm, '');
+const legacyFrontend = /wp_enqueue_style\(\s*'[^']+'\s*,\s*get_theme_file_uri\(\s*'assets\/styles\/legacy-presets\.css'\s*\)/.test(functions);
+const legacyEditor = /add_editor_style\(\s*array\([^)]*'assets\/styles\/legacy-presets\.css'/.test(functions);
+const legacyDelivered = legacyFrontend && legacyEditor;
+
+// Only style.css and a legacy stylesheet loaded in both contexts can style
+// arbitrary saved content. Block-specific stylesheets are not global.
+const css = [read('style.css'), ...(legacy && legacyDelivered ? [legacy] : [])]
+  .join('\n').replace(/\/\*[\s\S]*?\*\//g, '');
+const rules = [...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector, body }));
+const legacyRules = [...legacy.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+  .map(([, selector, body]) => ({ selector, body }));
+const hasDeclaration = (body, property) => body.split(';').some((entry) => {
+  const colon = entry.indexOf(':');
+  return colon !== -1 && entry.slice(0, colon).trim() === property &&
+    Boolean(entry.slice(colon + 1).trim().replace(/\s*!important\s*$/, '').trim());
+});
+const hasRule = (source, selector, property) => source.some((rule) =>
+  selector.test(rule.selector) && (property ? hasDeclaration(rule.body, property) : /[\w-]+\s*:\s*\S/.test(rule.body)));
+const fallback = (slug, kind, selector, property) => {
+  assert.ok(legacyDelivered, `${kind} ${slug} left theme.json, so legacy-presets.css must load on the front end and in the editor`);
+  assert.ok(hasRule(legacyRules, selector, property), `${kind} ${slug} left theme.json, so legacy-presets.css needs a nonempty ${property} declaration`);
+};
 
 // §3.1 Pattern slugs.
 const PATTERNS = [
@@ -50,7 +71,7 @@ const CLASSES = [
   'agile-base-type-scale',
 ];
 for (const name of CLASSES) {
-  assert.match(css, new RegExp(`\\.${name}(?![\\w-])`), `.${name} must keep a CSS rule (1.x content uses it)`);
+  assert.ok(hasRule(rules, new RegExp(`\\.${name}(?![\\w-])`)), `.${name} must keep a CSS rule (1.x content uses it)`);
 }
 
 // §3.4 Preset slugs still resolve, from theme.json or from legacy-presets.css.
@@ -67,24 +88,25 @@ const fontSizes = new Set(themeJson.settings.typography.fontSizes.map((f) => f.s
 const spacing = new Set(themeJson.settings.spacing.spacingSizes.map((s) => s.slug));
 for (const slug of COLORS) {
   if (palette.has(slug)) continue;
-  for (const needle of [`--wp--preset--color--${slug}:`, `.has-${slug}-color`, `.has-${slug}-background-color`, `.has-${slug}-border-color`]) {
-    assert.ok(legacy.includes(needle), `color ${slug} left the palette, so legacy-presets.css needs ${needle}`);
-  }
+  fallback(slug, 'color', /(?:^|,)\s*:root\s*(?:,|$)/, `--wp--preset--color--${slug}`);
+  for (const [suffix, property] of [['color', 'color'], ['background-color', 'background-color'], ['border-color', 'border-color']])
+    fallback(slug, 'color', new RegExp(`\\.has-${slug}-${suffix}(?![\\w-])`), property);
 }
 for (const slug of FONT_SIZES) {
   if (fontSizes.has(slug)) continue;
-  for (const needle of [`--wp--preset--font-size--${kebab(slug)}:`, `.has-${kebab(slug)}-font-size`]) {
-    assert.ok(legacy.includes(needle), `font size ${slug} left theme.json, so legacy-presets.css needs ${needle}`);
-  }
+  fallback(slug, 'font size', /(?:^|,)\s*:root\s*(?:,|$)/, `--wp--preset--font-size--${kebab(slug)}`);
+  fallback(slug, 'font size', new RegExp(`\\.has-${kebab(slug)}-font-size(?![\\w-])`), 'font-size');
 }
 for (const slug of SPACING) {
   if (spacing.has(slug)) continue;
-  assert.ok(legacy.includes(`--wp--preset--spacing--${kebab(slug)}:`), `spacing ${slug} left theme.json, so legacy-presets.css needs it`);
+  fallback(slug, 'spacing', /(?:^|,)\s*:root\s*(?:,|$)/, `--wp--preset--spacing--${kebab(slug)}`);
 }
 
 // §3.5 Block style names and the pattern category.
-const functions = read('functions.php');
-for (const name of ['pill', 'plain']) assert.match(functions, new RegExp(`'name'\\s*=>\\s*'${name}'`), `Tags block style "${name}" must stay`);
+const tagsStyleCalls = [...functions.matchAll(/register_block_style\(\s*'core\/post-terms'\s*,\s*array\(([\s\S]*?)\)\s*\);/g)]
+  .map(([, options]) => options);
+for (const name of ['pill', 'plain'])
+  assert.ok(tagsStyleCalls.some((options) => new RegExp(`'name'\\s*=>\\s*'${name}'`).test(options)), `Tags block style "${name}" must stay`);
 assert.match(functions, /register_block_pattern_category\(\s*'agile-base'/, 'pattern category agile-base must stay');
 
 console.log('compat checks passed');
