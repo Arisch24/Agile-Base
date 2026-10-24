@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /** Check representative frontend URLs at three widths and capture screenshots. */
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, unlinkSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 
@@ -74,6 +74,9 @@ try {
     ) )`);
   }
   mkdirSync(out, { recursive: true });
+  for (const name of readdirSync(out)) {
+    if (name.endsWith('.png')) unlinkSync(`${out}/${name}`);
+  }
   browser = await chromium.launch();
   for (const width of [375, 768, 1440]) {
     const context = await browser.newContext({ viewport: { width, height: 900 }, ignoreHTTPSErrors: true });
