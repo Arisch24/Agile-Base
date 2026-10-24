@@ -76,6 +76,15 @@ theme: there is no Gulp/SASS/webpack step. Appearance is driven almost entirely 
 - `node tests/release-check.mjs` — static checks on the source (versions, changelog,
   template and pattern structure). Add assertions when you change structure.
 - `bash tests/release-package-check.sh` — builds a release zip and checks its contents.
+- `npm test` runs the source checks: release structure, editor markup, and (after Task 4)
+  the 1.x compatibility contract. Run `npm install` once for the live checks below.
+- `npm run check:editor` opens every template, part and pattern in the ddev editors and
+  fails on invalid blocks or console errors (filter with `-- hero`). It creates and
+  removes a temporary admin and drafts.
+- `npm run check:frontend -- [--style dark|velocity] [label]` checks each page type at
+  375/768/1440 px for status, landmarks, PHP notices, overflow, image alt and console
+  errors. Screenshots go to `build/checks/<label>/`; `node bin/compare-screenshots.mjs
+  <a> <b>` byte-compares two complete runs.
 - `vendor/bin/phpcs .` against `phpcs.xml.dist` (WordPress-Extra + WordPress-Docs) after
   `composer install`. CI (`.github/workflows/ci.yml`) runs these plus `php -l` on pushes
   and PRs to `main`.
