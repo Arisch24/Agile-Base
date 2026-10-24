@@ -298,4 +298,24 @@ assert.ok(themeJson.settings.shadow.presets.some((p) => p.slug === 'card'), 'sha
 assert.equal(themeJson.styles.typography.fontFamily, 'var(--wp--custom--font--body)');
 assert.equal(themeJson.styles.elements.heading.typography.fontFamily, 'var(--wp--custom--font--display)');
 
+// 2.0 Part 1: Velocity freezes the 1.x look. It carries its own font faces, so it
+// still works after 2.0 replaces the fonts in theme.json.
+const velocity = JSON.parse(read('styles/velocity.json'));
+assert.equal(velocity.title, 'Velocity');
+assert.equal(velocity.settings.custom.color.primary, '262 100% 62%');
+assert.equal(velocity.settings.custom.color.paper, '40 30% 98%');
+assert.equal(velocity.settings.custom.font.display, 'var(--wp--preset--font-family--space-grotesk)');
+assert.equal(velocity.settings.custom.radius.card, '8px');
+assert.equal(velocity.styles.elements.heading.typography.fontFamily, 'var(--wp--custom--font--display)');
+for (const slug of ['figtree', 'space-grotesk', 'space-mono']) {
+  const family = velocity.settings.typography.fontFamilies.find((f) => f.slug === slug);
+  assert.ok(family && family.fontFace.length, `Velocity must define the ${slug} font faces`);
+  for (const face of family.fontFace) {
+    for (const src of face.src.filter((s) => s.startsWith('file:./'))) {
+      assert.equal(existsSync(new URL(`../${src.slice('file:./'.length)}`, import.meta.url)), true, `${src} must exist`);
+    }
+  }
+}
+assert.equal(velocity.settings.color.palette.length, 24);
+
 console.log('release source checks passed');
