@@ -106,6 +106,10 @@ theme: there is no Gulp/SASS/webpack step. Appearance is driven almost entirely 
 
 ## Releases
 
+- **2.0 is built on `release/2.0`.** Each part of the redesign
+  (`docs/superpowers/plans/2026-10-24-2.0-part-*.md`) is a PR into `release/2.0`; `main`
+  stays at 1.4.x for hotfixes, and any hotfix merged to `main` is merged into `release/2.0`
+  the same day. Part 5 opens the `release/2.0` → `main` PR.
 - Bump `Version:` in `style.css` and `Stable tag:` in `readme.txt`, add a changelog entry,
   and update the version assertions in `tests/release-check.mjs`.
 - If the homepage changed, regenerate `screenshot.png` (1200×900) with
