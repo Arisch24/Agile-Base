@@ -70,6 +70,12 @@ theme: there is no Gulp/SASS/webpack step. Appearance is driven almost entirely 
   (`padding-top`/`-right`/`-bottom`/`-left`), never shorthand `padding`; a button's border
   color goes inline (`style="border-color:..."`), not as a `has-*-border-color` class.
 - Use the Avatar + Post Author Name blocks for bylines; the Post Author block is deprecated.
+- **1.x compatibility contract** (`tests/compat-check.mjs`): sites updating from 1.x keep
+  their content, so the 26 1.x pattern slugs, the template/part/custom-template names, the
+  CSS rule for every class 1.x patterns put into content, every 1.x palette/font-size/
+  spacing slug (in `theme.json` or `assets/styles/legacy-presets.css`), the Tags block
+  styles `pill`/`plain`, and the `agile-base` pattern category must all stay. Restyle them;
+  never delete them.
 
 ## Verifying changes
 
