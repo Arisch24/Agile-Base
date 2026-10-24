@@ -252,7 +252,7 @@ const PILL = ':where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)
 for (const part of ['', ' .wp-block-post-terms__separator', ' a', ' a::before', ' a:hover', ' a:focus-visible']) {
   assert.ok(postTermsCss.includes(PILL + part), `pill selector missing for "${part || 'container'}"`);
 }
-assert.match(postTermsCss, /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\) \{[^}]*font-family: var\(--wp--preset--font-family--space-mono\);[^}]*font-size: var\(--wp--preset--font-size--small\);/);
+assert.match(postTermsCss, /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\) \{[^}]*font-family: var\(--wp--custom--font--mono\);[^}]*font-size: var\(--wp--preset--font-size--small\);/);
 assert.match(postTermsCss, /content: "#" \/ "";/);
 assert.doesNotMatch(postTermsCss, /agile-base-tags|taxonomy-category|\.single /);
 for (const line of postTermsCss.split('\n').filter((l) => /\{\s*$/.test(l) && !l.startsWith('@media'))) {
@@ -282,5 +282,20 @@ assert.match(readme, /^= 1\.0\.3 =$/m);
 assert.match(style, /^Version: 1\.4\.1$/m);
 assert.match(readme, /^Stable tag: 1\.4\.1$/m);
 assert.match(readme, /^= 1\.4\.1 =$/m);
+
+// 2.0 Part 1: role tokens. CSS reaches fonts, radii, shadows and motion through
+// theme.json tokens, so a style variation (Velocity) or the 2.0 design can change them.
+for (const [file, source] of [['style.css', stylesheet], ['assets/styles/core-post-terms.css', read('assets/styles/core-post-terms.css')]]) {
+  assert.doesNotMatch(source, /--wp--preset--font-family--/, `${file}: use --wp--custom--font--*`);
+  assert.doesNotMatch(source, /border-radius:[^;]*\d+px/, `${file}: use --wp--custom--radius--*`);
+  assert.doesNotMatch(source, /box-shadow:\s*\d/, `${file}: use --wp--preset--shadow--*`);
+  assert.doesNotMatch(source, /transition:[^;]*\d*\.\d+s/, `${file}: use --wp--custom--motion--*`);
+}
+assert.deepEqual(Object.keys(themeJson.settings.custom.font), ['body', 'display', 'mono']);
+assert.deepEqual(Object.keys(themeJson.settings.custom.radius), ['bar', 'card', 'icon', 'panel', 'pill', 'round']);
+assert.deepEqual(Object.keys(themeJson.settings.custom.motion), ['fast', 'base', 'slow', 'slower']);
+assert.ok(themeJson.settings.shadow.presets.some((p) => p.slug === 'card'), 'shadow preset "card"');
+assert.equal(themeJson.styles.typography.fontFamily, 'var(--wp--custom--font--body)');
+assert.equal(themeJson.styles.elements.heading.typography.fontFamily, 'var(--wp--custom--font--display)');
 
 console.log('release source checks passed');

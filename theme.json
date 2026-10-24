@@ -137,6 +137,25 @@
 			]
 		},
 		"custom": {
+			"font": {
+				"body": "var(--wp--preset--font-family--figtree)",
+				"display": "var(--wp--preset--font-family--space-grotesk)",
+				"mono": "var(--wp--preset--font-family--space-mono)"
+			},
+			"radius": {
+				"bar": "4px",
+				"card": "8px",
+				"icon": "10px",
+				"panel": "12px",
+				"pill": "999px",
+				"round": "50%"
+			},
+			"motion": {
+				"fast": "0.12s",
+				"base": "0.15s",
+				"slow": "0.2s",
+				"slower": "0.25s"
+			},
 			"fontWeight": {
 				"thin": "100",
 				"extraLight": "200",
@@ -207,6 +226,11 @@
 					"name": "Large",
 					"slug": "large",
 					"shadow": "0 4px 8px rgba(0, 0, 0, 0.1)"
+				},
+				{
+					"name": "Card",
+					"slug": "card",
+					"shadow": "0 6px 16px -10px rgba(0, 0, 0, 0.35)"
 				}
 			]
 		},
@@ -436,7 +460,7 @@
 	},
 	"styles": {
 		"typography": {
-			"fontFamily": "var(--wp--preset--font-family--figtree)",
+			"fontFamily": "var(--wp--custom--font--body)",
 			"fontWeight": "var(--wp--custom--font-weight--regular)",
 			"fontSize": "var(--wp--preset--font-size--medium)",
 			"lineHeight": "var(--wp--custom--line-height--body)"
@@ -474,7 +498,7 @@
 			},
 			"heading": {
 				"typography": {
-					"fontFamily": "var(--wp--preset--font-family--space-grotesk)",
+					"fontFamily": "var(--wp--custom--font--display)",
 					"fontWeight": "var(--wp--custom--font-weight--bold)",
 					"lineHeight": "1.04",
 					"letterSpacing": "-0.03em"
