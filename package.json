@@ -1,0 +1,12 @@
+{
+	"name": "agile-base",
+	"private": true,
+	"description": "Dev-only tooling for Agile Base (static checks, editor and front-end checks). Not part of the theme; excluded from release builds.",
+	"license": "GPL-2.0-or-later",
+	"scripts": {
+		"test": "node tests/release-check.mjs"
+	},
+	"devDependencies": {
+		"playwright": "1.62.1"
+	}
+}
