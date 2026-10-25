@@ -9,6 +9,27 @@ WordPress.org theme directory as `agile-base` (author `arisch24`). It is a **no-
 theme: there is no Gulp/SASS/webpack step. Appearance is driven almost entirely by
 `theme.json`; structure by block templates, template parts and patterns.
 
+## Audience
+
+Agile Base is a fast, neutral base for business and client sites built in the Site Editor.
+
+- **Site builders**: freelancers and agencies who set it up for clients. They need speed,
+  updates that never break a client site, a rebrand in minutes, and clean markup.
+- **Site owners**: business owners and DIYers building their own site. They need a
+  professional result out of the box, ready pages to start from, and editing without code.
+
+Every change keeps these true:
+
+- **Rebrandable.** Every visual value is a `theme.json` token, so changing colors and fonts
+  in Styles changes the whole site. No raw colors, fonts or sizes in CSS or markup.
+- **Fast.** No theme JavaScript, no external requests, small CSS and fonts.
+- **Stable.** Pattern slugs, template and part names, tokens, CSS classes and block style
+  names are public API: restyle them, never rename or remove them within a major version.
+- **Editable without code.** Core blocks only; no shortcodes, custom blocks or required plugins.
+- **Accessible.** WCAG 2.2 AA in every style variation.
+- **Business-ready copy.** Translatable placeholder copy for a generic service business that
+  says what goes there. Never marketing for Agile Base.
+
 ## Architecture
 
 - `theme.json` (v3) — the single source of truth for the design system: color palette
@@ -27,12 +48,15 @@ theme: there is no Gulp/SASS/webpack step. Appearance is driven almost entirely 
 - `parts/*.html` — template parts, referenced via `wp:template-part` with `tagName`:
   `header` (Site Logo + Site Title + Navigation), `header-centered`, `header-minimal`,
   `footer` (credit line), `footer-columns` (title, footer menu, search). Users swap the
-  variants in with "Replace" in the Site Editor.
+  variants in with "Replace" in the Site Editor. The three headers and `footer-columns`
+  are one `wp:pattern` line each; their markup lives in the matching `hidden-*` pattern,
+  so labels such as the navigation's `ariaLabel` can be translated.
 - `patterns/*.php` — four kinds:
   - **Building blocks** (`Inserter: no`), referenced from templates and parts with
     `<!-- wp:pattern {"slug":"agile-base/..."} /-->`: `posts-list` (the query-loop card
     grid shared by index/home/archive/search), `comments`, and the `hidden-*` patterns
-    (post header, blog heading, no results, 404, footer credit, footer columns).
+    (the three headers, post header, post navigation, blog heading, no results, 404,
+    footer credit, footer columns).
   - **Sections** in the inserter (category `agile-base`): `hero`, `logos`, `features`,
     `stats`, `testimonial`, `faq`, `call-to-action`, `team`, `pricing`, `style-guide`.
   - **Page layouts** (`Block Types: core/post-content`, offered in the new-page "Choose a
@@ -40,6 +64,9 @@ theme: there is no Gulp/SASS/webpack step. Appearance is driven almost entirely 
     `page-team`, `page-contact`. They nest the section patterns with `wp:pattern`.
   - **Template designs** (`Template Types:`, `Inserter: no`, listed in the Site Editor's
     template "Design" panel): `template-archive-list`, `template-404-search`.
+- `styles/velocity.json` — the 1.x look (palette, fonts with their own font faces, sizes,
+  spacing, layout widths, tokens and styles), frozen so sites can keep it after 2.0.
+  Never edit it.
 - `styles/dark.json` — the **Dark** style variation. The root `theme.json` is the default
   (light) style. Variations override `styles.color`/elements only; they are admin-selected
   global styles, not a visitor runtime toggle.
@@ -59,6 +86,10 @@ theme: there is no Gulp/SASS/webpack step. Appearance is driven almost entirely 
   **Appearance → Editor**. Use the *Create Block Theme* plugin to export Site Editor
   changes back to these files and to manage fonts.
 - Text domain is `agile-base` (must equal the folder slug). All PHP prefixed `agile_base`/`agile_base_`.
+- Every string a visitor or screen reader gets is translatable: patterns print it with
+  `esc_html_e()`/`esc_attr_x()`. Templates and parts can't run PHP, so text they need
+  (including block labels such as `ariaLabel`) goes in a hidden pattern.
+  `tests/markup-check.mjs` enforces this.
 - Self-hosted fonts live in `assets/fonts/` and are wired via `theme.json`
   `fontFace` (with `unicodeRange` per latin / latin-ext subset) — **no external font
   requests**. Don't reintroduce Google Fonts.
@@ -82,18 +113,20 @@ theme: there is no Gulp/SASS/webpack step. Appearance is driven almost entirely 
 - `node tests/release-check.mjs` — static checks on the source (versions, changelog,
   template and pattern structure). Add assertions when you change structure.
 - `bash tests/release-package-check.sh` — builds a release zip and checks its contents.
-- `npm test` runs the source checks: release structure, editor markup, and (after Task 4)
-  the 1.x compatibility contract. Run `npm install` once for the live checks below.
+- `npm test` runs the source checks: release structure, block markup and translatable
+  text, and the 1.x compatibility contract. Run `npm install` once for the live checks below.
 - `npm run check:editor` opens every template, part and pattern in the ddev editors and
   fails on invalid blocks or console errors (filter with `-- hero`). It creates and
   removes a temporary admin and drafts.
 - `npm run check:frontend -- [--style dark|velocity] [label]` checks each page type at
-  375/768/1440 px for status, landmarks, PHP notices, overflow, image alt and console
-  errors. Screenshots go to `build/checks/<label>/`; `node bin/compare-screenshots.mjs
-  <a> <b>` byte-compares two complete runs.
+  375/768/1440 px for status, landmarks (one `<main>` and `<h1>`, a non-empty header and
+  footer), PHP notices, overflow, image alt and console errors. Screenshots go to
+  `build/checks/<label>/`; `node bin/compare-screenshots.mjs <a> <b>` byte-compares two
+  complete runs. `--style` applies a variation for the run, then restores your saved
+  styles without adding to their revision history.
 - `vendor/bin/phpcs .` against `phpcs.xml.dist` (WordPress-Extra + WordPress-Docs) after
-  `composer install`. CI (`.github/workflows/ci.yml`) runs these plus `php -l` on pushes
-  and PRs to `main`.
+  `composer install`. CI (`.github/workflows/ci.yml`) runs `npm test`'s three checks,
+  `php -l` and phpcs on pushes and PRs to `main` and `release/**`.
 - The local site is a ddev WordPress install at https://theme-dev-wp.ddev.site (theme root
   is `wp-content/themes/agile-base`; run `ddev wp ...` and `ddev exec ...` from the WP root,
   where PHP is available). Keep `WP_DEBUG = true` and confirm no PHP notices.
