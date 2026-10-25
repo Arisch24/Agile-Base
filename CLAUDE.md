@@ -82,6 +82,14 @@ Every change keeps these true:
 
 ## Conventions
 
+- **All design work goes through the `impeccable` skill.** Anything that decides or changes
+  how the theme looks or reads (tokens, fonts, colors and presets, layout, components,
+  states, pattern copy) runs through `/impeccable`: load its context once per session
+  (`scripts/impeccable context` in the skill folder), then use the matching command:
+  `shape` for a new surface, `typeset`, `colorize`, `layout`, `adapt` (screen sizes and
+  right-to-left), `harden` (edge and empty states, i18n), `clarify` (copy), `critique` and
+  `audit` to review, `polish` to finish. `DESIGN.md` is written by `/impeccable document`
+  from the build, never by hand.
 - **No build step.** Edit `theme.json` / `.html` / pattern `.php` directly, then refine in
   **Appearance → Editor**. Use the *Create Block Theme* plugin to export Site Editor
   changes back to these files and to manage fonts.
