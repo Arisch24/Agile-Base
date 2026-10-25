@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-black-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Black</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Black', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -62,7 +62,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-black-light-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Black Light</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Black Light', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -73,7 +73,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-black-ultra-light-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Black Ultra Light</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Black Ultra Light', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-black-dark-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Black Dark</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Black Dark', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -95,7 +95,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-black-ultra-dark-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Black Ultra Dark</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Black Ultra Dark', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -106,7 +106,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-white-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">White</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'White', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -117,7 +117,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-paper-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Paper</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Paper', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -128,7 +128,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-ink-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Ink</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Ink', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -139,7 +139,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-surface-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Surface</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Surface', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -158,7 +158,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-primary-ultra-light-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Ultra Light</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Ultra Light', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -169,7 +169,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-primary-light-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Light</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Light', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -180,7 +180,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-primary-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Primary</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Primary', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -191,7 +191,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-primary-dark-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Dark</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Dark', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -202,7 +202,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-primary-ultra-dark-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Ultra Dark</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Ultra Dark', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -221,7 +221,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-secondary-ultra-light-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Ultra Light</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Ultra Light', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -232,7 +232,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-secondary-light-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Light</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Light', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -243,7 +243,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-secondary-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Secondary</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Secondary', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -254,7 +254,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-secondary-dark-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Dark</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Dark', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -265,7 +265,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-secondary-ultra-dark-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Ultra Dark</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Ultra Dark', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -284,7 +284,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-accent-ultra-light-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Ultra Light</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Ultra Light', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -295,7 +295,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-accent-light-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Light</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Light', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -306,7 +306,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-accent-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Accent</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Accent', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -317,7 +317,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-accent-dark-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Dark</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Dark', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -328,7 +328,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="wp-block-group agile-base-swatch has-accent-ultra-dark-background-color has-background"></div>
 			<!-- /wp:group -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">Ultra Dark</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Ultra Dark', 'color swatch name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -348,10 +348,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"className":"agile-base-type-row","layout":{"type":"flex","justifyContent":"space-between"}} -->
 		<div class="wp-block-group agile-base-type-row">
 			<!-- wp:paragraph {"fontSize":"x-small","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="has-x-small-font-size" style="margin-top:0;margin-bottom:0">Aa</p>
+			<p class="has-x-small-font-size" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'Aa', 'type specimen sample', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0">x-small · 12px</p>
+			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'x-small · 12px', 'font size preset and size', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -359,10 +359,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"className":"agile-base-type-row","layout":{"type":"flex","justifyContent":"space-between"}} -->
 		<div class="wp-block-group agile-base-type-row">
 			<!-- wp:paragraph {"fontSize":"small","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="has-small-font-size" style="margin-top:0;margin-bottom:0">Aa</p>
+			<p class="has-small-font-size" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'Aa', 'type specimen sample', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0">small · 14px</p>
+			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'small · 14px', 'font size preset and size', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -370,10 +370,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"className":"agile-base-type-row","layout":{"type":"flex","justifyContent":"space-between"}} -->
 		<div class="wp-block-group agile-base-type-row">
 			<!-- wp:paragraph {"fontSize":"medium","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="has-medium-font-size" style="margin-top:0;margin-bottom:0">Aa</p>
+			<p class="has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'Aa', 'type specimen sample', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0">medium · 16–18px</p>
+			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'medium · 16–18px', 'font size preset and size', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -381,10 +381,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"className":"agile-base-type-row","layout":{"type":"flex","justifyContent":"space-between"}} -->
 		<div class="wp-block-group agile-base-type-row">
 			<!-- wp:paragraph {"fontSize":"large","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="has-large-font-size" style="margin-top:0;margin-bottom:0">Aa</p>
+			<p class="has-large-font-size" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'Aa', 'type specimen sample', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0">large · 18–22px</p>
+			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'large · 18–22px', 'font size preset and size', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -392,10 +392,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"className":"agile-base-type-row","layout":{"type":"flex","justifyContent":"space-between"}} -->
 		<div class="wp-block-group agile-base-type-row">
 			<!-- wp:paragraph {"fontSize":"x-large","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="has-x-large-font-size" style="margin-top:0;margin-bottom:0">Aa</p>
+			<p class="has-x-large-font-size" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'Aa', 'type specimen sample', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0">x-large · 22–28px</p>
+			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'x-large · 22–28px', 'font size preset and size', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -403,10 +403,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"className":"agile-base-type-row","layout":{"type":"flex","justifyContent":"space-between"}} -->
 		<div class="wp-block-group agile-base-type-row">
 			<!-- wp:paragraph {"fontSize":"2-x-large","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="has-2-x-large-font-size" style="margin-top:0;margin-bottom:0">Aa</p>
+			<p class="has-2-x-large-font-size" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'Aa', 'type specimen sample', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0">2-x-large · 28–34px</p>
+			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( '2-x-large · 28–34px', 'font size preset and size', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -414,10 +414,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"className":"agile-base-type-row","layout":{"type":"flex","justifyContent":"space-between"}} -->
 		<div class="wp-block-group agile-base-type-row">
 			<!-- wp:paragraph {"fontSize":"3-x-large","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="has-3-x-large-font-size" style="margin-top:0;margin-bottom:0">Aa</p>
+			<p class="has-3-x-large-font-size" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'Aa', 'type specimen sample', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0">3-x-large · 34–46px</p>
+			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( '3-x-large · 34–46px', 'font size preset and size', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -425,10 +425,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"className":"agile-base-type-row","layout":{"type":"flex","justifyContent":"space-between"}} -->
 		<div class="wp-block-group agile-base-type-row">
 			<!-- wp:paragraph {"fontSize":"4-x-large","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="has-4-x-large-font-size" style="margin-top:0;margin-bottom:0">Aa</p>
+			<p class="has-4-x-large-font-size" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'Aa', 'type specimen sample', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0">4-x-large · 46–58px</p>
+			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( '4-x-large · 46–58px', 'font size preset and size', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -436,10 +436,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"className":"agile-base-type-row","layout":{"type":"flex","justifyContent":"space-between"}} -->
 		<div class="wp-block-group agile-base-type-row">
 			<!-- wp:paragraph {"fontSize":"5-x-large","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="has-5-x-large-font-size" style="margin-top:0;margin-bottom:0">Aa</p>
+			<p class="has-5-x-large-font-size" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( 'Aa', 'type specimen sample', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label","style":{"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
-			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0">5-x-large · 58–70px</p>
+			<p class="agile-base-swatch-label" style="margin-top:0;margin-bottom:0"><?php echo esc_html_x( '5-x-large · 58–70px', 'font size preset and size', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -503,7 +503,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="agile-base-scale-bar" style="width:var(--wp--preset--spacing--x-small)"></div>
 			<!-- /wp:html -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">x-small</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'x-small', 'spacing preset name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -514,7 +514,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="agile-base-scale-bar" style="width:var(--wp--preset--spacing--small)"></div>
 			<!-- /wp:html -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">small</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'small', 'spacing preset name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -525,7 +525,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="agile-base-scale-bar" style="width:var(--wp--preset--spacing--medium)"></div>
 			<!-- /wp:html -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">medium</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'medium', 'spacing preset name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -536,7 +536,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="agile-base-scale-bar" style="width:var(--wp--preset--spacing--large)"></div>
 			<!-- /wp:html -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">large</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'large', 'spacing preset name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -547,7 +547,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="agile-base-scale-bar" style="width:var(--wp--preset--spacing--x-large)"></div>
 			<!-- /wp:html -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">x-large</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'x-large', 'spacing preset name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -558,7 +558,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="agile-base-scale-bar" style="width:var(--wp--preset--spacing--2-x-large)"></div>
 			<!-- /wp:html -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">2-x-large</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( '2-x-large', 'spacing preset name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
@@ -569,7 +569,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="agile-base-scale-bar" style="width:var(--wp--preset--spacing--3-x-large)"></div>
 			<!-- /wp:html -->
 			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
-			<p class="agile-base-swatch-label">3-x-large</p>
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( '3-x-large', 'spacing preset name', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->

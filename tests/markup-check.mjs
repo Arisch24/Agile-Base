@@ -107,11 +107,23 @@ for (const file of markupFiles) {
   }
 }
 
-// 7. Visible text is translatable: patterns wrap it in esc_html_e(), and
-//    templates and parts hold no text of their own.
-const RAW_ENGLISH = />\s*[A-Z][a-z]+\s+[a-z]+/;
+// 7. Visible text is translatable: patterns print it with esc_html_e() and
+//    friends. Templates and parts can't run PHP, so text they need lives in a
+//    hidden pattern. Covers text between tags, and the block and HTML attributes
+//    that visitors or screen readers get.
+const TEXT_ATTRIBUTE = /"(?:label|buttonText|placeholder|ariaLabel|content|moreText)":"([^"]*)"|\s(?:alt|placeholder|aria-label|title)="([^"]*)"/g;
+const hasWords = (text) => /[A-Za-z]{2}/.test(text.replace(/&[a-zA-Z]+;|&#\d+;/g, ' '));
 for (const file of markupFiles) {
-  if (RAW_ENGLISH.test(read(file).replace(/<\?php[\s\S]*?\?>/g, ''))) fail(file, 'text that is not translatable');
+  const plain = read(file).replace(/<\?php[\s\S]*?\?>/g, '');
+  const texts = [
+    ...[...plain.replace(/<!--[\s\S]*?-->/g, '').matchAll(/>([^<]+)</g)].map(([, text]) => text.trim()),
+    ...[...plain.matchAll(TEXT_ATTRIBUTE)].map(([, a, b]) => a ?? b),
+  ];
+  for (const text of texts.filter(hasWords)) {
+    fail(file, file.startsWith('patterns/')
+      ? `"${text}" is not translatable (print it with esc_html_e() or esc_attr_x())`
+      : `"${text}" can't be translated in a template or part (move it into a hidden pattern)`);
+  }
 }
 
 // 8. Style variations and section styles are valid theme.json version 3.

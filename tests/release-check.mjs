@@ -86,6 +86,9 @@ assert.match(postHeader, /wp:post-author-name/);
 assert.match(postHeader, /wp:post-title \{[^\n]*"level":1/);
 assert.doesNotMatch(postHeader, /wp:post-author(?![-\w])/);
 assert.match(singleTemplate, /"slug":"agile-base\/hidden-post-header"/);
+assert.match(singleTemplate, /"slug":"agile-base\/hidden-post-navigation"/);
+assert.match(read('templates/single-wide.html'), /"slug":"agile-base\/hidden-post-navigation"/);
+assert.match(read('patterns/hidden-post-navigation.php'), /"className":"agile-base-postnav"/);
 assert.doesNotMatch(singleTemplate, /wp:post-author(?![-\w])/);
 assert.doesNotMatch(singleTemplate, /wp:post-title/);
 
@@ -139,18 +142,24 @@ assert.match(postsList, /wp:post-author-name/);
 // Phase 2: Header (Centered).
 const themeJsonParts = JSON.parse(read('theme.json')).templateParts;
 const templatePart = (name) => themeJsonParts.find((p) => p.name === name);
-const headerCentered = read('parts/header-centered.html');
+// Header markup lives in hidden patterns so the navigation label can be translated.
+const PRIMARY_NAV = String.raw`wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( 'Primary', 'navigation landmark label', 'agile-base' \); \?>"`;
+for (const part of ['header', 'header-centered', 'header-minimal']) {
+  assert.equal(read(`parts/${part}.html`).trim(), `<!-- wp:pattern {"slug":"agile-base/hidden-${part}"} /-->`);
+  assert.match(read(`patterns/hidden-${part}.php`), /^ \* Inserter: no$/m);
+}
+const headerCentered = read('patterns/hidden-header-centered.php');
 assert.match(headerCentered, /wp:site-logo/);
 assert.match(headerCentered, /wp:site-title/);
-assert.match(headerCentered, /wp:navigation \{"ariaLabel":"Primary","overlayMenu":"mobile"[^\n]*"justifyContent":"center"/);
+assert.match(headerCentered, new RegExp(`${PRIMARY_NAV},"overlayMenu":"mobile"[^\\n]*"justifyContent":"center"`));
 assert.match(headerCentered, /"orientation":"vertical","justifyContent":"center"/);
 assert.deepEqual(templatePart('header-centered'), { name: 'header-centered', title: 'Header (Centered)', area: 'header' });
 
 // Phase 2: Header (Minimal).
-const headerMinimal = read('parts/header-minimal.html');
+const headerMinimal = read('patterns/hidden-header-minimal.php');
 assert.doesNotMatch(headerMinimal, /wp:site-logo/);
 assert.match(headerMinimal, /wp:site-title/);
-assert.match(headerMinimal, /wp:navigation \{"ariaLabel":"Primary","overlayMenu":"always"/);
+assert.match(headerMinimal, new RegExp(`${PRIMARY_NAV},"overlayMenu":"always"`));
 assert.match(headerMinimal, /var:preset\|spacing\|x-small/);
 assert.deepEqual(templatePart('header-minimal'), { name: 'header-minimal', title: 'Header (Minimal)', area: 'header' });
 
@@ -160,7 +169,7 @@ const footerColumns = read('patterns/hidden-footer-columns.php');
 assert.equal(footerColumnsPart.trim(), '<!-- wp:pattern {"slug":"agile-base/hidden-footer-columns"} /-->');
 assert.match(footerColumns, /^ \* Slug: agile-base\/hidden-footer-columns$/m);
 assert.match(footerColumns, /^ \* Inserter: no$/m);
-assert.match(footerColumns, /wp:navigation \{"ariaLabel":"Footer"/);
+assert.match(footerColumns, /wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( 'Footer', 'navigation landmark label', 'agile-base' \); \?>"/);
 assert.match(footerColumns, /wp:search/);
 assert.match(footerColumns, /"slug":"agile-base\/hidden-footer-credit"/);
 assert.doesNotMatch(footerColumns, RAW_ENGLISH);
