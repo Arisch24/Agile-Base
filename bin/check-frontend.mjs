@@ -23,13 +23,18 @@ if (style && !existsSync(`${root}styles/${style}.json`)) {
 const out = `${root}build/checks/${label}`;
 const wp = (...args) => execFileSync('ddev', ['wp', ...args], { cwd: root, encoding: 'utf8' }).trim();
 const globalStylesId = 'WP_Theme_JSON_Resolver::get_user_global_styles_post_id()';
+// Swapping styles must not add entries to the owner's Styles > Revisions history.
 const setGlobalStyles = (expression) => wp('eval', `
   kses_remove_filters();
+  add_filter( 'wp_revisions_to_keep', '__return_zero' );
   $result = wp_update_post( array( 'ID' => ${globalStylesId}, 'post_content' => wp_slash( ${expression} ) ), true );
   if ( is_wp_error( $result ) ) { WP_CLI::error( $result->get_error_message() ); }`);
 
+const revisions = () => Number(wp('eval', `echo count( wp_get_post_revisions( ${globalStylesId} ) );`));
+
 let browser;
 let saved = null;
+let revisionsBefore = null;
 let restoring;
 const restore = () => {
   if (saved === null) return;
@@ -48,6 +53,9 @@ process.on('SIGINT', () => { void cleanup().then(() => process.exit(130), (error
 
 let failed = 0;
 try {
+  // WordPress caches the list of theme pattern files while the theme version stays
+  // the same. Refresh it so pattern files added or removed since are rendered.
+  wp('eval', 'wp_get_theme()->delete_pattern_cache();');
   const urls = JSON.parse(wp('eval', `
     $post = get_posts( array( 'numberposts' => 1 ) );
     $page = get_posts( array( 'post_type' => 'page', 'numberposts' => 1, 'post__not_in' => array( (int) get_option( 'page_on_front' ), (int) get_option( 'page_for_posts' ) ) ) );
@@ -67,6 +75,7 @@ try {
     if (!urls[name]) throw new Error(`no URL for ${name}`);
   }
   if (style) {
+    revisionsBefore = revisions();
     saved = wp('eval', `echo base64_encode( get_post_field( 'post_content', ${globalStylesId} ) );`);
     setGlobalStyles(`wp_json_encode( array_merge(
       array( 'version' => 3, 'isGlobalStylesUserThemeJSON' => true ),
@@ -97,6 +106,7 @@ try {
         notices: /<b>(Warning|Notice|Deprecated|Fatal error)<\/b>:/.test(document.documentElement.outerHTML),
         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         noAlt: [...document.images].filter((img) => !img.hasAttribute('alt')).length,
+        empty: ['header', 'footer'].filter((tag) => !document.querySelector(tag)?.innerText.trim()),
       }));
       const problems = [];
       if (response.status() !== (name === '404' ? 404 : 200)) problems.push(`status ${response.status()}`);
@@ -105,6 +115,7 @@ try {
       if (facts.notices) problems.push('PHP notice');
       if (facts.overflow > 0) problems.push(`scrolls sideways by ${facts.overflow}px`);
       if (facts.noAlt) problems.push(`${facts.noAlt} images without alt`);
+      if (facts.empty.length) problems.push(`empty or missing ${facts.empty.join(' and ')}`);
       if (errors.length) problems.push(`console error: ${errors[0].slice(0, 160)}`);
       await page.screenshot({ path: `${out}/${name}-${width}.png`, fullPage: true });
       if (problems.length) failed++;
@@ -117,6 +128,13 @@ try {
   console.error(error);
 } finally {
   try { await cleanup(); } catch (error) { failed++; console.error('cleanup failed:', error); }
+}
+if (revisionsBefore !== null) {
+  const revisionsAfter = revisions();
+  if (revisionsAfter !== revisionsBefore) {
+    failed++;
+    console.log(`FAIL the run changed the global styles revisions: ${revisionsBefore} before, ${revisionsAfter} after`);
+  }
 }
 console.log(failed ? `${failed} failed` : `front-end checks passed; screenshots in build/checks/${label}/`);
 process.exitCode = failed ? 1 : 0;
