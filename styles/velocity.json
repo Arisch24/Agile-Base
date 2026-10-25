@@ -3,6 +3,10 @@
 	"version": 3,
 	"title": "Velocity",
 	"settings": {
+		"layout": {
+			"contentSize": "960px",
+			"wideSize": "1280px"
+		},
 		"color": {
 			"palette": [
 				{
@@ -265,6 +269,7 @@
 			]
 		},
 		"typography": {
+			"fluid": true,
 			"fontFamilies": [
 				{
 					"name": "Figtree",
@@ -453,7 +458,8 @@
 					"slug": "5x-large"
 				}
 			]
-		}
+		},
+		"useRootPaddingAwareAlignments": true
 	},
 	"styles": {
 		"typography": {

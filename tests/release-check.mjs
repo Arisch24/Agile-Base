@@ -306,6 +306,9 @@ assert.equal(velocity.settings.custom.color.primary, '262 100% 62%');
 assert.equal(velocity.settings.custom.color.paper, '40 30% 98%');
 assert.equal(velocity.settings.custom.font.display, 'var(--wp--preset--font-family--space-grotesk)');
 assert.equal(velocity.settings.custom.radius.card, '8px');
+assert.deepEqual(velocity.settings.layout, { contentSize: '960px', wideSize: '1280px' });
+assert.equal(velocity.settings.typography.fluid, true);
+assert.equal(velocity.settings.useRootPaddingAwareAlignments, true);
 assert.equal(velocity.styles.elements.heading.typography.fontFamily, 'var(--wp--custom--font--display)');
 for (const slug of ['figtree', 'space-grotesk', 'space-mono']) {
   const family = velocity.settings.typography.fontFamilies.find((f) => f.slug === slug);
