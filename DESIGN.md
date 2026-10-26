@@ -208,10 +208,16 @@ Square. Buttons, fields, panels and post-navigation links have 0 radius (`bar`, 
 - **Shape:** square, 2px ink border (0 radius).
 - **Primary:** ink fill, paper text, bold, `0.75em 1em` padding, line height 1.
 - **Hover / Focus:** invert to paper fill, ink text, over 0.12s; focus adds the 3px `currentColor` outline at 3px offset. The outline style inverts the other way (transparent to ink fill).
+- **Boxed:** the `boxed` Button style shares the outline style’s transparent fill, current-color border and inverse hover/focus treatment. In Field, Ink and Ruled sections, both styles use that section’s semantic foreground/background pair, including nested sections. WordPress resolves `core/button` custom CSS `&` directly to the button link; state selectors attach there.
 - **On a color field:** `on-primary` fill with `primary` text, inverting to transparent with `on-primary` text; the outline style is transparent with `on-primary` text, inverting to an `on-primary` fill. Focus rings take `on-primary`. Button text is `large` on a field. Submit inputs follow the standard button.
 
 ### Color field (`agile-base-field`)
 The hero and call to action: a full-width `primary` band, `on-primary` text, large headline and a bold lead sentence, two buttons. This is the one place the accent canvas appears.
+
+### Section and block styles
+Field, Ink and Ruled apply to Group, Columns and Cover, with `small` padding on every side. Field pairs `primary` with `on-primary`; Ink pairs `ink` with `paper`; Ruled pairs `paper` with `ink` and adds hairlines above and below. Headings, links, filled buttons, boxed/outline buttons and focus rings follow the innermost section’s pair. Filled buttons invert to transparent; boxed/outline buttons invert to the section foreground fill.
+
+The Ruled Group block style is a complete hairline box with `small` padding; the Double rule Separator is a 3px double `currentColor` line. These are editable block styles, separate from full-width section composition.
 
 ### Text and Image (`agile-base/text-image`)
 A `surface` band with a heading, a few sentences and a standard button on the left (5 of 12 columns) and a photo on the right (7 of 12), vertically centered, stacking text first on phones. On the homepage it follows the logo row, so light and tinted sections keep alternating. It carries the only bundled photo: a black-and-white CC0 placeholder (a potter's hands), 4:3, 2px radius, credited in `readme.txt`. Monochrome, so it holds against any palette. Every other image slot stays empty.
@@ -238,10 +244,18 @@ Postnav: a hairline above, then two bordered (2px) square links in Archivo that 
 A 1px ruled box with 2px radius that fills with `surface` on hover.
 
 ### Inputs / Fields
-Any form plugin's inputs inherit: `0.7em 0.9em` padding, 1px ink border, 0 radius, paper background, surface on hover, 3px `currentColor` focus outline at 2px offset, accent border and 2px accent outline when invalid, 0.65 opacity when disabled.
+Plugin form fields, comment fields and core Search share the square field language. Low-specificity rules let plugin styling override it. Text fields, selects and textareas inherit: `0.7em 0.9em` padding, 1px ink border, 0 radius, paper background, surface on hover, 3px `currentColor` focus outline at 2px offset, accent border and 2px accent outline when invalid, 0.65 opacity and surface fill when disabled. Textareas have an 8em minimum height; placeholders use 72% current color. Visible labels sit above fields; choice labels remain inline. Fieldsets have a hairline box with `x-small` padding. Checkboxes and radios use ink as their accent. Submit controls use the standard boxed ink button. Search keeps a token gap between input and button, lets the input shrink and keeps the button label together.
 
 ### Navigation
-Header: logo, bold site title and navigation, `x-small` padding above and below, ruled below with a 1px line. Nav links are plain and underline on hover; the footer is ruled above with a 2px line. Header and footer variants (centered, minimal, columns) share these rules.
+Header: logo, bold site title and navigation, `x-small` padding above and below, ruled below with a 1px line. Nav links are plain and underline on hover; the footer is ruled above with a 2px line. Header and footer variants (centered, minimal, columns) share these rules. Active navigation links stay underlined; submenus have a hairline border and the ink/paper pair. The mobile overlay also uses ink on paper, `small` padding and visible focus outlines. Open and close controls have a `small` minimum target size.
+
+The Button header adds a “Book a call” button beside navigation; below 600px the actions take their own row, with menu and button at opposite ends. Long titles and button labels wrap. The Business footer uses three columns for identity/tagline, contact details and opening hours, followed by wrapping legal navigation, logos-only social links and the shared credit. Empty social lists disappear; footer headings keep the `large` scale.
+
+### Optional author bio
+An insertable About the Author pattern, absent from the default Single template: round 64px Avatar, linked Post Author Name in the mono role, and Post Author Biography. Hairlines above and below and `small` vertical padding frame the wrapping row. Text wraps beneath the avatar when space is tight; biography measure is capped at 65ch. It reads WordPress profile data rather than placeholder biography text.
+
+### Landing template
+A compact ruled identity header with logo and site title, full-width editable content, and a ruled credit footer. The page title remains an accessible, visually hidden h1; page content supplies the visible opening. This reduced chrome omits navigation and keeps the same global spacing, type and color roles.
 
 ### Motion
 Short and functional: 0.1 to 0.2s (`--wp--custom--motion--*`) color and background transitions only, ease timing, all disabled under `prefers-reduced-motion: reduce`.
