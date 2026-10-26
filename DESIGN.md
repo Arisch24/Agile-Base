@@ -84,9 +84,10 @@ components:
   field-band:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
-  hero-photo:
-    rounded: "{rounded.card}"
-    width: "21%"
+  text-image:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    padding: "{spacing.2x-large}"
   service-card:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
@@ -186,7 +187,7 @@ Headings carry `letter-spacing: -0.025em` and `word-spacing: 0.08em`. Heading si
 
 Constrained flow: content 960px, wide 1280px, with root-padding-aware full-bleed sections. Sections are full-width bands with vertical padding from the spacing scale (typically `2x-large` top and bottom; `medium` top and bottom for the hero), holding a wide inner group. Card sets use a CSS grid with three columns and a 17rem minimum, or wrapping columns with `medium` gaps.
 
-The top is compact. The page has no padding above the header or below the footer; the header pads itself `x-small`, and the homepage hero meets it with no gap. The homepage hero is three columns: the serial (12%), the headline, lead and buttons (62%), and the photo (21%). They stack on phones and tablets, the photo last, kept to half the width from 600 to 781px. At 1366×768 and 1440×900 the next section starts within 85% of the screen, and on a 375×812 phone the first button ends within 80% (`check-frontend --fold`; Velocity, the frozen 1.x look, is exempt).
+The top is compact. The page has no padding above the header or below the footer; the header pads itself `x-small`, and the homepage hero meets it with no gap. The homepage hero is two columns, the serial (12%) and the headline, lead and buttons (two thirds), stacking on phones. At 1366×768 and 1440×900 the next section starts within 85% of the screen, and on a 375×812 phone the first button ends within 80% (`check-frontend --fold`; Velocity, the frozen 1.x look, is exempt).
 
 Spacing is a fluid seven-step scale (`x-small` 16px up to `3x-large` 96 to 176px, all `clamp()`), and block gap is a separate fluid gap scale (`--wp--custom--gap--*`, default `small`). Adjacent full-width sections touch edge to edge, with no gap between color fields, and the footer meets a full-width section that ends the page (`check-frontend` checks every page). Logical properties only (`margin-block`, `padding-inline`, `border-inline-end`, `inset-inline-start`, `text-align: end`) so right-to-left needs no overrides.
 
@@ -212,8 +213,8 @@ Square. Buttons, fields, panels and post-navigation links have 0 radius (`bar`, 
 ### Color field (`agile-base-field`)
 The hero and call to action: a full-width `primary` band, `on-primary` text, large headline and a bold lead sentence, two buttons. This is the one place the accent canvas appears.
 
-### Hero photo (`agile-base-hero-photo`)
-The only bundled photo: a black-and-white CC0 placeholder (a potter's hands) in the homepage hero's right column, 4:3, 2px radius, credited in `readme.txt`. Monochrome, so it holds against any primary. It stacks under the buttons on narrow screens. Every other image slot stays empty.
+### Text and Image (`agile-base/text-image`)
+A `surface` band with a heading, a few sentences and a standard button on the left (5 of 12 columns) and a photo on the right (7 of 12), vertically centered, stacking text first on phones. On the homepage it follows the logo row, so light and tinted sections keep alternating. It carries the only bundled photo: a black-and-white CC0 placeholder (a potter's hands), 4:3, 2px radius, credited in `readme.txt`. Monochrome, so it holds against any palette. Every other image slot stays empty.
 
 ### Ruled row (`agile-base-ruled`)
 A hairline above and below, used for the logo row. The feature strip uses 2px rules above and below.

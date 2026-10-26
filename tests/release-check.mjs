@@ -566,18 +566,20 @@ const fieldPadding = (source) => source.match(/"className":"agile-base-field","s
 assert.ok(fieldPadding(homeHero), 'the homepage hero sets its padding');
 assert.equal(fieldPadding(hero), fieldPadding(homeHero), 'the inserter hero and the homepage hero share their padding');
 
-// 2.0 Part 2b: one placeholder photo in the homepage hero (spec D3): CC0 and credited, a
-// small bundled WebP (never hotlinked), translatable alt text, and a fixed aspect ratio so
-// the hero doesn't move as it loads.
-const HERO_PHOTO = 'assets/images/placeholder-hero.webp';
-assert.ok(existsSync(new URL(`../${HERO_PHOTO}`, import.meta.url)), `${HERO_PHOTO} exists (spec D3)`);
-const heroPhoto = readFileSync(new URL(`../${HERO_PHOTO}`, import.meta.url));
-assert.ok(heroPhoto.subarray(0, 4).toString() === 'RIFF' && heroPhoto.subarray(8, 12).toString() === 'WEBP', `${HERO_PHOTO} is a WebP`);
-assert.ok(heroPhoto.length <= 80 * 1024, `${HERO_PHOTO} is ${Math.round(heroPhoto.length / 1024)} KB, at most 80 KB`);
-assert.match(readme, /^placeholder-hero\.webp, .+\n\* Source: https:\/\/\S+\n\* License: CC0 1\.0 Universal\n\* License URI: https:\/\/creativecommons\.org\/publicdomain\/zero\/1\.0\/$/m, 'readme credits the photo with its source and CC0 license');
-assert.match(homeHero, /<img src="<\?php echo esc_url\( get_theme_file_uri\( 'assets\/images\/placeholder-hero\.webp' \) \); \?>" alt="<\?php echo esc_attr_x\( '[^']+', 'placeholder photo alt text', 'agile-base' \); \?>"/, 'the hero photo is bundled, with translatable alt text');
-assert.match(homeHero, /<!-- wp:image \{"aspectRatio":"4\/3","scale":"cover"/, 'the hero photo keeps a 4:3 frame');
-assert.match(css, /@media \(min-width: 600px\) and \(max-width: 781px\) \{\s*\.agile-base-hero-photo \{\s*max-inline-size: 50%;/, 'the stacked hero photo keeps to half the width on tablets');
+// 2.0 Part 2b: one placeholder photo, in the Text and Image section on the homepage (spec
+// D3): CC0 and credited, a small bundled WebP (never hotlinked), translatable alt text, and
+// a fixed aspect ratio so the page doesn't move as it loads.
+const PHOTO = 'assets/images/placeholder-photo.webp';
+assert.ok(existsSync(new URL(`../${PHOTO}`, import.meta.url)), `${PHOTO} exists (spec D3)`);
+const photo = readFileSync(new URL(`../${PHOTO}`, import.meta.url));
+assert.ok(photo.subarray(0, 4).toString() === 'RIFF' && photo.subarray(8, 12).toString() === 'WEBP', `${PHOTO} is a WebP`);
+assert.ok(photo.length <= 80 * 1024, `${PHOTO} is ${Math.round(photo.length / 1024)} KB, at most 80 KB`);
+assert.match(readme, /^placeholder-photo\.webp, .+\n\* Source: https:\/\/\S+\n\* License: CC0 1\.0 Universal\n\* License URI: https:\/\/creativecommons\.org\/publicdomain\/zero\/1\.0\/$/m, 'readme credits the photo with its source and CC0 license');
+const textImage = assertNewPattern('text-image', { title: 'Text and Image', categories: ['agile-base', 'about'] });
+assert.match(textImage, /<img src="<\?php echo esc_url\( get_theme_file_uri\( 'assets\/images\/placeholder-photo\.webp' \) \); \?>" alt="<\?php echo esc_attr_x\( '[^']+', 'placeholder photo alt text', 'agile-base' \); \?>"/, 'the photo is bundled, with translatable alt text');
+assert.match(textImage, /<!-- wp:image \{"aspectRatio":"4\/3","scale":"cover"/, 'the photo keeps a 4:3 frame');
+assert.doesNotMatch(homeHero, /<img\b/, 'the homepage hero has no photo');
+assert.ok(pageHome.indexOf('"slug":"agile-base/logos"') < pageHome.indexOf('"slug":"agile-base/text-image"') && pageHome.indexOf('"slug":"agile-base/text-image"') < pageHome.indexOf('"slug":"agile-base/services-grid"'), 'the homepage shows the Text and Image section after the logos');
 for (const file of markupFiles) assert.doesNotMatch(read(file), /<img [^>]*src="https?:/, `${file}: images are bundled, never hotlinked`);
 // Full-width sections touch, on the homepage too (check-frontend measures it on every page).
 assert.match(css, /:is\(main, \.wp-block-post-content\) > \.alignfull \+ \.alignfull,\s*\.wp-site-blocks > main:has\(> \.alignfull:last-child\) \+ \* \{\s*margin-block-start: 0;/, 'full-width sections and the footer sit edge to edge');

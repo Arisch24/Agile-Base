@@ -103,7 +103,7 @@ Logo mark and screenshot, Copyright 2026 Arischvaran Puvanesvaran
 * License: GNU General Public License v2 or later
 * License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-placeholder-hero.webp, photo by Quino Al (2016, released under CC0 on Unsplash before its license change) via Wikimedia Commons, cropped and resized
+placeholder-photo.webp, photo by Quino Al (2016, released under CC0 on Unsplash before its license change) via Wikimedia Commons, cropped and resized
 * Source: https://commons.wikimedia.org/wiki/File:Black_and_white_pottery_(Unsplash).jpg
 * License: CC0 1.0 Universal
 * License URI: https://creativecommons.org/publicdomain/zero/1.0/

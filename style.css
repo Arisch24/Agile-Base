@@ -519,14 +519,6 @@ table,
 	outline-color: var(--wp--preset--color--on-primary);
 }
 
-/* The homepage hero photo. Once the columns stack on a tablet, it keeps to half the width,
-   so the headline stays the focal point and the next section shows. */
-@media (min-width: 600px) and (max-width: 781px) {
-	.agile-base-hero-photo {
-		max-inline-size: 50%;
-	}
-}
-
 /* A ruled row (logos): hairlines above and below. */
 .agile-base-ruled {
 	border-block: 1px solid currentColor;
