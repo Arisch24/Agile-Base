@@ -31,7 +31,7 @@
 :where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a {
 	display: inline-block;
 	padding: 0.3em 0.8em;
-	border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+	border: 1px solid currentColor;
 	border-radius: var(--wp--custom--radius--pill);
 	line-height: 1.4;
 	text-decoration: none;
@@ -45,8 +45,9 @@
 
 :where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a:hover,
 :where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a:focus-visible {
-	border-color: var(--wp--preset--color--primary);
-	background-color: color-mix(in srgb, var(--wp--preset--color--primary) 14%, transparent);
+	color: var(--wp--preset--color--paper);
+	background-color: var(--wp--preset--color--ink);
+	border-color: var(--wp--preset--color--ink);
 	text-decoration: none;
 }
 

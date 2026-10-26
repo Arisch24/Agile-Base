@@ -79,7 +79,9 @@ for (const file of markupFiles) {
 
 // 5. Preset slugs used in markup exist in theme.json. Markup spells "2x-large" as "2-x-large".
 const kebab = (slug) => slug.replace(/([a-z])([0-9])/g, '$1-$2').replace(/([0-9])([a-z])/g, '$1-$2');
-const colors = new Set(themeJson.settings.color.palette.map((c) => c.slug));
+// 1.x shades that left the picker still resolve through assets/styles/legacy-presets.css.
+const legacyColors = [...read('assets/styles/legacy-presets.css').matchAll(/^\s*--wp--preset--color--([a-z0-9-]+):/gm)].map((m) => m[1]);
+const colors = new Set([...themeJson.settings.color.palette.map((c) => c.slug), ...legacyColors]);
 const fontSizes = new Set(themeJson.settings.typography.fontSizes.map((f) => kebab(f.slug)));
 const spacing = new Set(themeJson.settings.spacing.spacingSizes.map((s) => kebab(s.slug)));
 for (const file of markupFiles) {
@@ -127,7 +129,7 @@ for (const file of markupFiles) {
 }
 
 // 8. Style variations and section styles are valid theme.json version 3.
-for (const file of [...list('styles', '.json'), ...list('styles/sections', '.json')]) {
+for (const file of [...list('styles', '.json'), ...list('styles/sections', '.json'), ...list('styles/colors', '.json'), ...list('styles/typography', '.json')]) {
   try {
     if (JSON.parse(read(file)).version !== 3) fail(file, 'not theme.json version 3');
   } catch {

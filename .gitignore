@@ -57,6 +57,7 @@ assets/bower_components/*
 ##########
 /.impeccable/*
 !/.impeccable/config.json
+!/.impeccable/surfaces/
 
 # Codekit #
 ##########

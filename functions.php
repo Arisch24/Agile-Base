@@ -26,7 +26,7 @@ if ( ! function_exists( 'agile_base_setup' ) ) :
 		add_theme_support( 'editor-styles' );
 		// Block styles are loaded on demand on the front end, which skips the
 		// editor, so the per-block stylesheet is added to the editor here.
-		add_editor_style( array( 'style.css', 'assets/styles/core-post-terms.css' ) );
+		add_editor_style( array( 'style.css', 'assets/styles/core-post-terms.css', 'assets/styles/legacy-presets.css' ) );
 
 		add_theme_support(
 			'custom-logo',
@@ -132,6 +132,13 @@ if ( ! function_exists( 'agile_base_enqueue_assets' ) ) :
 			wp_get_theme()->get( 'Version' )
 		);
 
+		wp_enqueue_style(
+			'agile-base-legacy-presets',
+			get_theme_file_uri( 'assets/styles/legacy-presets.css' ),
+			array(),
+			wp_get_theme()->get( 'Version' )
+		);
+
 		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			wp_enqueue_script( 'comment-reply' );
 		}
@@ -141,22 +148,45 @@ add_action( 'wp_enqueue_scripts', 'agile_base_enqueue_assets' );
 
 if ( ! function_exists( 'agile_base_preload_resources' ) ) :
 	/**
-	 * Preload the critical (latin, normal) Figtree font to speed up text LCP.
-	 *
-	 * Only the one face needed for first paint is preloaded; italic and
-	 * latin-ext are left to download on demand via their unicode-range.
+	 * Preload the first-paint font files (latin, normal style) of the body and
+	 * display roles, but only while those roles still use the bundled families.
+	 * A font preset, the System preset or Velocity points the roles elsewhere,
+	 * and then nothing is preloaded that the page won't use.
 	 *
 	 * @param array $resources Resources to preload.
 	 * @return array
 	 */
 	function agile_base_preload_resources( $resources ): array {
-		foreach ( array( 'figtree/figtree-latin', 'space-grotesk/space-grotesk-latin' ) as $font ) {
-			$resources[] = array(
-				'href'        => get_theme_file_uri( "assets/fonts/{$font}.woff2" ),
-				'as'          => 'font',
-				'type'        => 'font/woff2',
-				'crossorigin' => 'anonymous',
-			);
+		$preloads = array(
+			'body'    => array(
+				'family' => 'Public Sans',
+				'file'   => 'public-sans/public-sans-latin-wght-normal',
+			),
+			'display' => array(
+				'family' => 'Archivo',
+				'file'   => 'archivo/archivo-latin-wght-normal',
+			),
+		);
+
+		// Later origins (the site's saved styles) override earlier ones (the theme).
+		$families = array();
+		foreach ( (array) wp_get_global_settings( array( 'typography', 'fontFamilies' ) ) as $origin_families ) {
+			foreach ( (array) $origin_families as $family ) {
+				$families[ $family['slug'] ] = $family['fontFamily'];
+			}
+		}
+		$tokens = wp_get_global_settings( array( 'custom', 'font' ) );
+
+		foreach ( $preloads as $role => $font ) {
+			$slug = isset( $tokens[ $role ] ) && preg_match( '/--font-family--([a-z0-9-]+)\)$/', $tokens[ $role ], $matches ) ? $matches[1] : '';
+			if ( isset( $families[ $slug ] ) && false !== strpos( $families[ $slug ], $font['family'] ) ) {
+				$resources[] = array(
+					'href'        => get_theme_file_uri( "assets/fonts/{$font['file']}.woff2" ),
+					'as'          => 'font',
+					'type'        => 'font/woff2',
+					'crossorigin' => 'anonymous',
+				);
+			}
 		}
 
 		return $resources;

@@ -17,6 +17,9 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 /*
  * Most styling is handled by theme.json and core block supports.
  * This file only covers the few things blocks cannot express on their own.
+ * Colors come only from palette presets and fonts from the role tokens, so
+ * color and font presets and a client's brand change everything. Logical
+ * properties keep it right-to-left ready.
  */
 
 /* Accessible visually-hidden text (used by skip link, search labels, etc.). */
@@ -34,10 +37,10 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 }
 
 .screen-reader-text:focus {
-	background-color: #fff;
+	background-color: var(--wp--preset--color--paper);
 	clip: auto;
 	clip-path: none;
-	color: #000;
+	color: var(--wp--preset--color--ink);
 	display: block;
 	height: auto;
 	left: 5px;
@@ -47,38 +50,126 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	z-index: 100000;
 }
 
-/* Post cards in the query loop. Surface + shadow adapt to the active light/dark style. */
-.post-card {
-	height: 100%;
-	padding: var(--wp--preset--spacing--small);
-	background-color: color-mix(in srgb, currentColor 6%, transparent);
-	border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
-	border-radius: var(--wp--custom--radius--card);
-	box-shadow: var(--wp--preset--shadow--card);
+/* Browser surfaces: the parts the browser draws, themed from the palette. */
+::selection {
+	background-color: var(--wp--preset--color--primary);
+	color: var(--wp--preset--color--black);
 }
 
-/* Allow height transitions to/from intrinsic sizes (used by the FAQ). */
 :root {
+	accent-color: var(--wp--preset--color--ink);
+	caret-color: var(--wp--preset--color--accent);
 	interpolate-size: allow-keywords;
 }
 
-/* FAQ — a Radix-style accordion built on the native <details> element.
-   Bordered card, hairline dividers, question + a chevron that rotates on open,
-   and a smooth height transition where the browser supports it. */
-.agile-base-faq {
-	background-color: color-mix(in srgb, currentColor 6%, transparent);
-	border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
-	border-radius: var(--wp--custom--radius--panel);
+/* Numbers in tables and meta line up in columns. */
+table,
+.agile-base-stat-number {
+	font-variant-numeric: tabular-nums;
+}
+
+/* Form fields (spec D14): any form plugin's markup inherits them. :where() keeps the
+   specificity at zero, so a plugin's own styles still win. */
+:where(input:not([type="checkbox"], [type="radio"], [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"], [type="range"], [type="color"], [type="file"]), select, textarea) {
+	box-sizing: border-box;
+	max-width: 100%;
+	padding: 0.7em 0.9em;
+	font: inherit;
+	color: var(--wp--preset--color--ink);
+	background-color: var(--wp--preset--color--paper);
+	border: 1px solid var(--wp--preset--color--ink);
+	border-radius: var(--wp--custom--radius--bar);
+}
+
+:where(textarea) {
+	min-height: 8em;
+}
+
+:where(input, select, textarea)::placeholder {
+	color: color-mix(in srgb, currentColor 72%, transparent);
+	opacity: 1;
+}
+
+:where(input, select, textarea):hover {
+	background-color: var(--wp--preset--color--surface);
+}
+
+:where(input, select, textarea):focus-visible {
+	outline: 3px solid currentColor;
+	outline-offset: 2px;
+}
+
+:where(input, select, textarea):user-invalid {
+	border-color: var(--wp--preset--color--accent);
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 0;
+}
+
+:where(input, select, textarea):disabled {
+	background-color: var(--wp--preset--color--surface);
+	cursor: not-allowed;
+	opacity: 0.65;
+}
+
+:where(input[type="checkbox"], input[type="radio"]) {
+	accent-color: var(--wp--preset--color--ink);
+}
+
+:where(input[type="submit"], input[type="button"], input[type="reset"], button[type="submit"]) {
+	padding: 0.75em 1em;
+	font: inherit;
+	font-weight: var(--wp--custom--font-weight--bold);
+	line-height: var(--wp--custom--line-height--one);
+	color: var(--wp--preset--color--paper);
+	background-color: var(--wp--preset--color--ink);
+	border: 2px solid var(--wp--preset--color--ink);
+	border-radius: var(--wp--custom--radius--bar);
+	cursor: pointer;
+}
+
+:where(input[type="submit"], input[type="button"], input[type="reset"], button[type="submit"]):hover,
+:where(input[type="submit"], input[type="button"], input[type="reset"], button[type="submit"]):focus-visible {
+	color: var(--wp--preset--color--ink);
+	background-color: var(--wp--preset--color--paper);
+}
+
+:where(input[type="submit"], input[type="button"], input[type="reset"], button[type="submit"]):focus-visible {
+	outline: 3px solid currentColor;
+	outline-offset: 3px;
+}
+
+/* Post cards in the query loop: a ruled box that fills with the surface color on hover. */
+.post-card {
+	height: 100%;
+	padding: var(--wp--preset--spacing--small);
+	border: 1px solid currentColor;
+	border-radius: var(--wp--custom--radius--card);
 	box-shadow: var(--wp--preset--shadow--card);
-	overflow: clip;
+	transition: background-color var(--wp--custom--motion--base) ease;
+}
+
+.post-card:hover {
+	background-color: var(--wp--preset--color--surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.post-card {
+		transition: none;
+	}
+}
+
+/* FAQ: a native <details> accordion, set as ruled lines with a chevron that rotates
+   on open and a smooth height transition where the browser supports it. */
+.agile-base-faq {
+	border-block: 2px solid currentColor;
 }
 
 .agile-base-faq .wp-block-details {
-	border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+	border-block-end: 1px solid currentColor;
 }
 
 .agile-base-faq .wp-block-details:last-child {
-	border-bottom: 0;
+	border-block-end: 0;
 }
 
 .agile-base-faq summary {
@@ -88,8 +179,8 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	align-items: center;
 	justify-content: space-between;
 	gap: 1em;
-	padding: 1.05em 1.25em;
-	font-weight: 600;
+	padding: 1.05em 0;
+	font-weight: var(--wp--custom--font-weight--semi-bold);
 	transition: background-color var(--wp--custom--motion--base) ease;
 }
 
@@ -98,12 +189,12 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 }
 
 .agile-base-faq summary:hover {
-	background-color: color-mix(in srgb, currentColor 5%, transparent);
+	background-color: color-mix(in srgb, currentColor 6%, transparent);
 }
 
 .agile-base-faq summary:focus-visible {
-	outline: 2px solid var(--wp--preset--color--primary);
-	outline-offset: -2px;
+	outline: 3px solid currentColor;
+	outline-offset: -3px;
 }
 
 /* Chevron, drawn with borders so it inherits the text color. */
@@ -112,11 +203,10 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	flex: none;
 	width: 0.5em;
 	height: 0.5em;
-	border-right: 2px solid currentColor;
-	border-bottom: 2px solid currentColor;
+	border-inline-end: 2px solid currentColor;
+	border-block-end: 2px solid currentColor;
 	transform: translateY(-0.15em) rotate(45deg);
 	transition: transform var(--wp--custom--motion--slow) ease;
-	opacity: 0.65;
 }
 
 .agile-base-faq .wp-block-details[open] summary::after {
@@ -124,8 +214,8 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 }
 
 .agile-base-faq .wp-block-details > :not(summary) {
-	margin: -0.25em 1.25em 1.25em;
-	color: color-mix(in srgb, currentColor 72%, transparent);
+	margin: -0.25em 0 1.25em;
+	max-width: 60ch;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -140,27 +230,8 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	}
 }
 
-/* Cards lift slightly on hover (feature cards + blog query cards). */
-.post-card {
-	transition: transform var(--wp--custom--motion--base) ease, border-color var(--wp--custom--motion--base) ease;
-}
-
-.post-card:hover {
-	border-color: color-mix(in srgb, var(--wp--preset--color--primary) 60%, currentColor);
-	transform: translateY(-3px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.post-card {
-		transition: none;
-	}
-	.post-card:hover {
-		transform: none;
-	}
-}
-
-/* Stat numbers — visually match the heading style without being headings;
-   they're decorative data points, not document-outline headings. */
+/* Stat numbers: they match the heading style without being headings; they are
+   data points, not document-outline headings. */
 .agile-base-stat-number {
 	font-family: var(--wp--custom--font--display);
 	font-weight: var(--wp--custom--font-weight--bold);
@@ -169,38 +240,50 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	margin: 0;
 }
 
-/* Testimonial — a bold pull-quote card: accent border, tinted surface,
-   and an oversized decorative quotation mark behind the quote text. */
+/* Testimonial: the carbon-copy sheet (secondary color) with a ruled top and an oversized quotation mark
+   behind the quote text. */
 .agile-base-testimonial {
-	background-color: color-mix(in srgb, currentColor 6%, transparent);
-	border-left: 6px solid var(--wp--preset--color--primary);
-	border-radius: 0 var(--wp--custom--radius--panel) var(--wp--custom--radius--panel) 0;
-	box-shadow: var(--wp--preset--shadow--card);
+	color: var(--wp--preset--color--black);
+	background-color: var(--wp--preset--color--secondary);
+	border-block-start: 2px solid currentColor;
+	border-radius: var(--wp--custom--radius--panel);
+}
+
+@media (max-width: 600px) {
+	.agile-base-testimonial {
+		padding: var(--wp--preset--spacing--small);
+	}
 }
 
 .agile-base-quote {
 	position: relative;
 	font-family: var(--wp--custom--font--display);
-	font-weight: 700;
+	font-weight: var(--wp--custom--font-weight--bold);
 	letter-spacing: -0.02em;
 	line-height: 1.15;
+	word-spacing: 0.08em;
+	padding-block-start: 1.1em;
 }
 
 .agile-base-quote::before {
 	content: "\201C";
 	position: absolute;
-	top: -0.32em;
-	left: -0.06em;
+	inset-block-start: -0.3em;
+	inset-inline-start: -0.06em;
 	font-size: 4.5em;
 	line-height: 1;
-	color: color-mix(in srgb, var(--wp--preset--color--primary) 40%, transparent);
+	color: currentColor;
 }
 
-/* Post meta row — mono, in the "builder" voice, slightly muted. */
-.agile-base-meta,
-.agile-base-meta a {
+/* Post meta row: mono, as measurement, slightly muted. */
+.agile-base-meta {
 	font-family: var(--wp--custom--font--mono);
-	color: color-mix(in srgb, currentColor 70%, transparent);
+	color: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+.agile-base-meta a {
+	font-family: inherit;
+	color: inherit;
 }
 
 /* Author archive header: avatar beside the name and bio, wrapping under the
@@ -217,55 +300,60 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 
 .agile-base-author__bio {
 	max-width: 60ch;
-	color: color-mix(in srgb, currentColor 75%, transparent);
+	color: color-mix(in srgb, currentColor 78%, transparent);
 }
 
 /* Single-post previous/next navigation. */
 .agile-base-postnav {
-	margin-top: var(--wp--preset--spacing--large);
-	padding-top: var(--wp--preset--spacing--small);
-	border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+	margin-block-start: var(--wp--preset--spacing--large);
+	padding-block-start: var(--wp--preset--spacing--small);
+	border-block-start: 1px solid currentColor;
 }
 
 .agile-base-postnav .wp-block-post-navigation-link {
 	font-family: var(--wp--custom--font--display);
-	font-weight: 600;
+	font-weight: var(--wp--custom--font-weight--semi-bold);
 	letter-spacing: -0.01em;
 }
 
-.agile-base-postnav .post-navigation-link-next {
-	text-align: right;
+.agile-base-postnav .wp-block-post-navigation-link a {
+	display: block;
+	padding: 0.75em 1em;
+	text-decoration: none;
+	border: 2px solid currentColor;
+	border-radius: var(--wp--custom--radius--bar);
+	transition: background-color var(--wp--custom--motion--base) ease, color var(--wp--custom--motion--base) ease;
 }
 
-/* ---- Velocity: signature elements -------------------------------------- */
+.agile-base-postnav .wp-block-post-navigation-link a:hover,
+.agile-base-postnav .wp-block-post-navigation-link a:focus-visible {
+	color: var(--wp--preset--color--paper);
+	background-color: var(--wp--preset--color--ink);
+}
 
-/* Subtle full-bleed section band that adapts to the active light/dark style. */
+.agile-base-postnav .post-navigation-link-next {
+	text-align: end;
+}
+
+/* Subtle full-bleed section band that adapts to the active color preset. */
 .agile-base-band {
 	background-color: color-mix(in srgb, currentColor 5%, transparent);
 }
 
-/* Mono eyebrow label — the "builder/code" voice on small caps labels.
-   The accent is mixed with the current text color so it stays legible on
-   both the light and dark backgrounds. */
+/* Small label in the mono voice (1.x content; new surfaces don't use it). */
 .agile-base-eyebrow {
 	font-family: var(--wp--custom--font--mono);
 	text-transform: uppercase;
-	letter-spacing: 0.18em;
+	letter-spacing: 0.14em;
 	font-size: var(--wp--preset--font-size--x-small);
-	color: color-mix(in srgb, var(--wp--preset--color--primary) 72%, currentColor);
+	color: color-mix(in srgb, var(--wp--preset--color--accent) 75%, currentColor);
 }
 
-/* Keep the site title (a level-0 site-title renders as a <p>) free of the
-   in-content paragraph-link underline. */
-.wp-block-site-title a {
-	text-decoration: none;
-}
-
-/* Marker highlight — a violet swipe behind a single word. */
+/* Marker highlight: a swipe of the primary color behind a single word. */
 .agile-base-mark {
 	color: inherit;
 	background-color: transparent;
-	background-image: linear-gradient(transparent 54%, hsla(var(--wp--custom--color--primary) / 0.32) 54%);
+	background-image: linear-gradient(transparent 54%, color-mix(in srgb, var(--wp--preset--color--primary) 70%, transparent) 54%);
 	padding-inline: 0.1em;
 }
 
@@ -282,27 +370,26 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	justify-content: center;
 	font-family: var(--wp--custom--font--mono);
 	text-transform: uppercase;
-	letter-spacing: 0.14em;
+	letter-spacing: 0.1em;
 	font-size: var(--wp--preset--font-size--small);
-}
-
-.agile-base-marquee__track span {
-	color: color-mix(in srgb, var(--wp--preset--color--primary) 72%, currentColor);
 }
 
 .agile-base-marquee__track span:not(:last-child)::after {
 	color: currentColor;
-	content: "—";
+	content: "\2014";
 	margin-inline-start: 0.75em;
 }
 
-/* Buttons: a small, confident lift on interaction. */
+/* Buttons: they invert on hover and focus (set in theme.json); the outline style
+   inverts too. */
 .wp-block-button__link {
-	transition: transform var(--wp--custom--motion--fast) ease, background-color var(--wp--custom--motion--base) ease, color var(--wp--custom--motion--base) ease;
+	transition: background-color var(--wp--custom--motion--base) ease, color var(--wp--custom--motion--base) ease;
 }
 
-.wp-block-button__link:not(:disabled):hover {
-	transform: translateY(-2px);
+.wp-block-button.is-style-outline > .wp-block-button__link:not(:disabled):hover,
+.wp-block-button.is-style-outline > .wp-block-button__link:not(:disabled):focus-visible {
+	color: var(--wp--preset--color--paper);
+	background-color: var(--wp--preset--color--ink);
 }
 
 .wp-block-button__link:disabled {
@@ -314,21 +401,17 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	.wp-block-button__link {
 		transition: none;
 	}
-	.wp-block-button__link:not(:disabled):hover {
-		transform: none;
-	}
 }
 
-/* Feature card icon badge — a small tinted square that carries the icon. */
+/* Feature card icon: an outlined square that carries the icon. */
 .agile-base-feature-icon {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	width: 2.75rem;
 	height: 2.75rem;
-	margin-bottom: var(--wp--preset--spacing--x-small);
-	color: var(--wp--preset--color--white);
-	background-color: var(--wp--preset--color--primary);
+	margin-block-end: var(--wp--preset--spacing--x-small);
+	border: 2px solid currentColor;
 	border-radius: var(--wp--custom--radius--icon);
 }
 
@@ -337,7 +420,7 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	height: 1.5rem;
 }
 
-/* Testimonial avatar — initials on a solid primary circle, no photo required. */
+/* Testimonial avatar: initials on a solid circle, no photo required. */
 .agile-base-avatar {
 	display: inline-flex;
 	flex: none;
@@ -347,54 +430,171 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 	height: 2.75rem;
 	font-family: var(--wp--custom--font--display);
 	font-size: var(--wp--preset--font-size--small);
-	font-weight: 700;
-	color: var(--wp--preset--color--white);
-	background-color: var(--wp--preset--color--primary);
+	font-weight: var(--wp--custom--font-weight--bold);
+	color: var(--wp--preset--color--paper);
+	background-color: var(--wp--preset--color--ink);
 	border-radius: var(--wp--custom--radius--round);
 }
 
-/* Style guide pattern — color swatches, type-scale rows and spacing bars. */
+/* Style guide pattern: color swatches, type-scale rows and spacing bars. */
 .agile-base-swatch-item {
 	width: 6.5rem;
 }
 
 .agile-base-swatch {
 	aspect-ratio: 1 / 1;
-	border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+	border: 1px solid currentColor;
 	border-radius: var(--wp--custom--radius--card);
-	margin-bottom: 0.5em;
+	margin-block-end: 0.5em;
 }
 
 .agile-base-swatch-label {
 	font-family: var(--wp--custom--font--mono);
 	font-size: var(--wp--preset--font-size--x-small);
-	color: color-mix(in srgb, currentColor 70%, transparent);
+	color: color-mix(in srgb, currentColor 72%, transparent);
 }
 
 .agile-base-type-scale {
-	border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+	border: 1px solid currentColor;
 	border-radius: var(--wp--custom--radius--panel);
 	overflow: clip;
 }
 
 .agile-base-type-row {
 	padding: 0.75em 1.25em;
-	border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+	border-block-end: 1px solid color-mix(in srgb, currentColor 30%, transparent);
 }
 
 .agile-base-type-row:last-child {
-	border-bottom: 0;
+	border-block-end: 0;
 }
 
 .agile-base-scale-bar {
 	height: 1.5rem;
 	min-width: 0.25rem;
-	background-color: var(--wp--preset--color--primary);
+	background-color: var(--wp--preset--color--ink);
 	border-radius: var(--wp--custom--radius--bar);
 }
 
-/* Archive (List) and 404 (Search First) designs: a divider between rows that
-   blends with the current text color, so it suits the light and dark styles. */
+/* Archive (List) and 404 (Search First) designs: a ruled line between rows. */
 .agile-base-list-item {
-	border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+	border-block-end: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+/* Chrome: the header and footer are ruled, like the edge of a form. */
+.site-header {
+	border-block-end: 1px solid currentColor;
+}
+
+.site-footer {
+	border-block-start: 2px solid currentColor;
+}
+
+/* Color field (hero, call to action): primary fills the band and the text stays black,
+   so the buttons are set in black and white whatever the active color preset is. */
+.agile-base-field .wp-element-button {
+	font-size: var(--wp--preset--font-size--large) !important;
+	font-weight: var(--wp--custom--font-weight--bold);
+	color: var(--wp--preset--color--white);
+	background-color: var(--wp--preset--color--black);
+	border-color: var(--wp--preset--color--black);
+}
+
+.agile-base-field .wp-element-button:hover,
+.agile-base-field .wp-element-button:focus-visible {
+	color: var(--wp--preset--color--black);
+	background-color: var(--wp--preset--color--white);
+}
+
+.agile-base-field .is-style-outline > .wp-element-button {
+	color: var(--wp--preset--color--black);
+	background-color: transparent;
+}
+
+.agile-base-field .is-style-outline > .wp-element-button:hover,
+.agile-base-field .is-style-outline > .wp-element-button:focus-visible {
+	color: var(--wp--preset--color--white);
+	background-color: var(--wp--preset--color--black);
+}
+
+/* A ruled row (logos): hairlines above and below. */
+.agile-base-ruled {
+	border-block: 1px solid currentColor;
+}
+
+/* Services Grid card: a ruled box. */
+.agile-base-service {
+	border: 1px solid currentColor;
+	border-radius: var(--wp--custom--radius--card);
+}
+
+/* Reasons (features): a heavy rule above each column. */
+.agile-base-reason {
+	border-block-start: 2px solid currentColor;
+	padding-block-start: var(--wp--preset--spacing--x-small);
+}
+
+/* How It Works step: a heavy rule above the numbered step. */
+.agile-base-step {
+	border-block-start: 2px solid currentColor;
+	padding-block-start: var(--wp--preset--spacing--x-small);
+}
+
+/* Post header meta row: ruled above and below, with a round avatar. */
+.agile-base-postmeta {
+	border-block: 1px solid currentColor;
+}
+
+.agile-base-meta .wp-block-avatar img,
+.wp-block-comment-template .wp-block-avatar img {
+	border-radius: var(--wp--custom--radius--round);
+}
+
+/* Comments: a ruled line between comments; the reply indent follows the text direction. */
+.wp-block-comment-template > li {
+	padding-block: var(--wp--preset--spacing--x-small);
+	border-block-end: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.wp-block-comment-template > li:last-child {
+	border-block-end: 0;
+}
+
+.wp-block-comment-template ol {
+	padding-inline-start: var(--wp--preset--spacing--small);
+}
+
+.wp-block-comments-title,
+.comment-reply-title {
+	font-family: var(--wp--custom--font--display);
+}
+
+/* Wide content scrolls inside its own box instead of the page, whichever style is active. */
+.wp-block-table,
+.wp-block-code,
+.wp-block-preformatted {
+	overflow-x: auto;
+}
+
+/* Captions keep the text color of their surroundings (WordPress's default grey fails on dark). */
+.wp-element-caption,
+.wp-block-table figcaption {
+	color: inherit;
+}
+
+/* A very long word breaks instead of widening the page. */
+.wp-block-post-content,
+.wp-block-post-title,
+.wp-block-post-excerpt,
+.wp-block-comment-content {
+	overflow-wrap: anywhere;
+}
+
+.wp-block-table table {
+	min-width: 32rem;
+}
+
+/* Sections inside post content sit edge to edge: no white sliver between color fields. */
+.wp-block-post-content > .alignfull + .alignfull {
+	margin-block-start: 0;
 }

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 
 const read = (file) => readFileSync(new URL(`../${file}`, import.meta.url), 'utf8');
 
@@ -33,7 +33,6 @@ assert.doesNotMatch(notFound, /href="\/"/);
 assert.doesNotMatch(hero, /<a(?![^>]*href=)/);
 assert.doesNotMatch(callToAction, /<a(?![^>]*href=)/);
 assert.doesNotMatch(styleGuide, /<a(?![^>]*href=)/);
-assert.doesNotMatch(hero, /11 block patterns/);
 assert.doesNotMatch(stylesheet, /animation:\s*agile-base-marquee/);
 assert.doesNotMatch(stylesheet, /will-change:\s*transform/);
 
@@ -214,7 +213,7 @@ const pageSlugs = (source) => [...source.matchAll(/wp:pattern \{"slug":"agile-ba
 assert.deepEqual(pageSlugs(assertPagePattern('page-about', 'about')), ['stats', 'team', 'testimonial', 'call-to-action']);
 assert.deepEqual(pageSlugs(assertPagePattern('page-team', 'team')), ['team', 'call-to-action']);
 
-assert.deepEqual(pageSlugs(assertPagePattern('page-services', 'services')), ['features', 'testimonial', 'faq', 'call-to-action']);
+assert.deepEqual(pageSlugs(assertPagePattern('page-services', 'services')), ['services-grid', 'steps', 'testimonial', 'faq', 'call-to-action']);
 assert.deepEqual(pageSlugs(assertPagePattern('page-pricing', 'call-to-action')), ['pricing', 'faq', 'call-to-action']);
 
 const pageContact = assertPagePattern('page-contact', 'contact');
@@ -269,7 +268,7 @@ for (const line of postTermsCss.split('\n').filter((l) => /\{\s*$/.test(l) && !l
 }
 assert.doesNotMatch(stylesheet, /agile-base-tags/);
 assert.match(functions, /wp_enqueue_block_style\(/);
-assert.match(functions, /add_editor_style\( array\( 'style\.css', 'assets\/styles\/core-post-terms\.css' \) \)/);
+assert.match(functions, /add_editor_style\( array\( 'style\.css', 'assets\/styles\/core-post-terms\.css', 'assets\/styles\/legacy-presets\.css' \) \)/);
 assert.match(singleTagsTemplate, /<!-- wp:post-terms \{"term":"post_tag","style":\{"spacing":\{"margin":\{"top":"var:preset\|spacing\|medium"\}\}\}\} \/-->/);
 assert.doesNotMatch(singleTagsTemplate, /agile-base-tags/);
 
@@ -329,5 +328,171 @@ for (const slug of ['figtree', 'space-grotesk', 'space-mono']) {
   }
 }
 assert.equal(velocity.settings.color.palette.length, 24);
+
+// 2.0 Part 2: fonts (spec §4). Role presets body/display/mono, which the tokens point at,
+// so font presets and a client's brand can swap them; every bundled face is a local file
+// with its OFL file and readme credit; preloads follow the role tokens.
+const fontFamilies = (json) => json.settings?.typography?.fontFamilies ?? [];
+const styleFiles = (dir) => (existsSync(new URL(`../${dir}`, import.meta.url))
+  ? readdirSync(new URL(`../${dir}`, import.meta.url)).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(read(`${dir}/${f}`)))
+  : []);
+for (const family of [themeJson, ...styleFiles('styles'), ...styleFiles('styles/typography')].flatMap(fontFamilies).filter((f) => f.fontFace?.length)) {
+  for (const src of family.fontFace.flatMap((face) => face.src)) {
+    assert.ok(src.startsWith('file:./') || src.startsWith('local('), `${family.name}: ${src} must be self-hosted`);
+    if (src.startsWith('file:./')) assert.equal(existsSync(new URL(`../${src.slice(7)}`, import.meta.url)), true, `${src} must exist`);
+  }
+  if (family.fontFace.some((face) => face.src.some((s) => s.startsWith('file:./')))) {
+    assert.equal(existsSync(new URL(`../assets/fonts/OFL-${family.name.replace(/\s+/g, '-')}.txt`, import.meta.url)), true, `OFL file for ${family.name}`);
+    assert.match(readme, new RegExp(`^${family.name} font, Copyright`, 'm'), `readme credit for ${family.name}`);
+  }
+}
+const roleFamilies = Object.fromEntries(fontFamilies(themeJson).map((f) => [f.slug, f]));
+for (const role of ['body', 'display', 'mono']) {
+  assert.ok(roleFamilies[role], `theme.json has the "${role}" role font preset (spec §4)`);
+  assert.equal(themeJson.settings.custom.font[role], `var(--wp--preset--font-family--${role})`, `custom.font.${role} points at the ${role} preset`);
+}
+assert.doesNotMatch(roleFamilies.display.fontFamily, /Space Grotesk/, '2.0 replaces the 1.x display face');
+const preloadCode = functions.slice(functions.indexOf('function agile_base_preload_resources'), functions.indexOf("add_filter( 'wp_preload_resources'"));
+const preloadFiles = [...preloadCode.matchAll(/'file'\s*=>\s*'([a-z0-9-]+\/[a-z0-9-]+)'/g)].map((m) => m[1]);
+assert.ok(preloadFiles.length >= 1, 'the preload list is found');
+for (const file of preloadFiles) {
+  assert.equal(existsSync(new URL(`../assets/fonts/${file}.woff2`, import.meta.url)), true, `preloaded assets/fonts/${file}.woff2 must exist`);
+}
+assert.match(preloadCode, /wp_get_global_settings\( array\( 'custom', 'font' \) \)/, 'preloads follow the role tokens');
+
+// 2.0 Part 2: tokens and global styles (spec §4, §7.5). Theme CSS takes colors only from
+// palette presets (which color presets can change), uses logical properties so right-to-left
+// works, and styles form fields; links in text are underlined and every control gets a
+// 2px focus outline; headings no longer force margin: 0 !important; Dark only recolors.
+const SR_FOCUS = /\.screen-reader-text:focus \{[^}]*\}/; // WordPress's standard snippet
+const themeCssFiles = ['style.css', ...readdirSync(new URL('../assets/styles/', import.meta.url)).filter((f) => f.endsWith('.css')).map((f) => `assets/styles/${f}`)];
+for (const file of themeCssFiles) {
+  const source = read(file).replace(SR_FOCUS, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.doesNotMatch(source, /#[0-9a-f]{3,8}\b|\brgba?\(|\bhsla?\(/i, `${file}: colors come from palette presets, not literals`);
+  assert.doesNotMatch(source, /--wp--custom--color--/, `${file}: read colors as --wp--preset--color--*, which color presets can change`);
+  assert.doesNotMatch(source, /\b(margin|padding|border)-(left|right)\b|(^|[\s;{])(left|right)\s*:|text-align:\s*(left|right)|float:\s*(left|right)/m, `${file}: logical properties (inline-start/end), so right-to-left works`);
+}
+const css = read('style.css').replace(/\/\*[\s\S]*?\*\//g, '');
+for (const field of ['input', 'select', 'textarea']) assert.match(css, new RegExp(`(^|[\\s,(])${field}\\b[^{]*\\{`, 'm'), `style.css styles ${field} fields (spec D14)`);
+assert.match(css, /(input|select|textarea)[^{]*:focus-visible[^{]*\{/, 'form fields have a focus style');
+assert.ok(themeJson.settings.color.palette.every((c) => !/var\(/.test(c.color)), 'palette colors are plain values (spec §4)');
+const link = themeJson.styles.elements.link;
+assert.equal(link.typography?.textDecoration, 'underline', 'links in text are underlined (accessibility-ready)');
+assert.ok(link[':hover']?.typography?.textDecoration && link[':hover'].typography.textDecoration !== 'underline', 'the underline changes on hover, not only the color');
+for (const element of ['link', 'button']) {
+  const focus = themeJson.styles.elements[element][':focus-visible'];
+  assert.ok(focus?.outline && parseFloat(focus.outline.width) >= 2, `${element}: a focus-visible outline of at least 2px`);
+}
+assert.doesNotMatch(JSON.stringify(themeJson.styles.elements.heading), /!important/, 'heading margins without !important');
+// The editor counts a style file as a color (or font) preset only if it holds nothing else.
+const onlyKeys = (object, keys) => Object.fromEntries(Object.entries(object).flatMap(([key, value]) => {
+  if (keys.includes(key)) return [[key, value]];
+  if (value && typeof value === 'object') {
+    const kept = onlyKeys(value, keys);
+    return Object.keys(kept).length ? [[key, kept]] : [];
+  }
+  return [];
+}));
+const isPreset = (json, keys) => ['settings', 'styles'].every((part) => JSON.stringify(onlyKeys(json[part] ?? {}, keys)) === JSON.stringify(json[part] ?? {}));
+const dark = JSON.parse(read('styles/dark.json'));
+assert.ok(isPreset(dark, ['color']), 'Dark only recolors (the Site Editor lists it under Colors)');
+assert.ok(themeJson.settings.custom.radius.card !== '8px' || themeJson.settings.custom.motion.base !== '0.15s' || themeJson.settings.custom.color?.primary !== '262 100% 62%', '2.0 sets its own token values');
+
+// 2.0 Part 2: brand presets (spec §4, D13). Color presets hold only colors and redefine the
+// whole palette; font presets hold only typography and redefine the three role fonts; System
+// downloads nothing; the client-brand fixture changes every brand value at once.
+const presetFiles = (dir) => (existsSync(new URL(`../${dir}`, import.meta.url))
+  ? readdirSync(new URL(`../${dir}`, import.meta.url)).filter((f) => f.endsWith('.json')).map((f) => [f, JSON.parse(read(`${dir}/${f}`))])
+  : []);
+const paletteSlugs = themeJson.settings.color.palette.map((c) => c.slug).sort();
+const colorPresets = presetFiles('styles/colors');
+assert.ok(colorPresets.length >= 3, 'at least three color presets besides Dark');
+for (const [file, preset] of [...colorPresets, ['dark.json', dark]]) {
+  assert.ok(preset.title, `${file}: title`);
+  assert.ok(isPreset(preset, ['color']), `${file}: colors only, so the Site Editor lists it under Colors`);
+  assert.deepEqual(preset.settings.color.palette.map((c) => c.slug).sort(), paletteSlugs, `${file}: redefines every palette color`);
+  assert.ok(preset.settings.color.palette.every((c) => !/var\(/.test(c.color)), `${file}: plain color values`);
+}
+const fontPresets = presetFiles('styles/typography');
+assert.ok(fontPresets.length >= 3, 'at least two font presets plus System');
+for (const [file, preset] of fontPresets) {
+  assert.ok(preset.title, `${file}: title`);
+  assert.ok(isPreset(preset, ['typography']), `${file}: typography only, so the Site Editor lists it under Typography`);
+  assert.deepEqual(fontFamilies(preset).map((f) => f.slug).sort(), ['body', 'display', 'mono'], `${file}: redefines the three role fonts`);
+}
+const systemPreset = fontPresets.find(([file]) => file === 'system.json')?.[1];
+assert.ok(systemPreset, 'styles/typography/system.json (spec D13)');
+assert.ok(fontFamilies(systemPreset).every((f) => !f.fontFace), 'System downloads no fonts');
+const clientBrand = JSON.parse(read('tests/fixtures/client-brand.json'));
+assert.deepEqual(clientBrand.settings.color.palette.map((c) => c.slug).sort(), paletteSlugs, 'client-brand covers every palette color (re-run bin/make-client-brand.mjs)');
+assert.deepEqual(fontFamilies(clientBrand).map((f) => f.slug).sort(), ['body', 'display', 'mono']);
+assert.deepEqual(Object.keys(clientBrand.settings.custom.radius).sort(), Object.keys(themeJson.settings.custom.radius).sort(), 'client-brand covers every radius token');
+assert.ok(Object.values(clientBrand.settings.custom.radius).every((r) => r === '0'), 'client-brand squares every corner');
+
+// 2.0 Part 2: homepage. One <h1> wherever the hero goes (spec D5); no small label above a
+// heading (the 1.x eyebrow); demo copy never markets the theme (D4).
+const KICKER = [
+  /<!-- wp:paragraph \{[^\n]*agile-base-eyebrow[^\n]*\} -->\s*<p[^>]*>[\s\S]*?<\/p>\s*<!-- \/wp:paragraph -->\s*<!-- wp:(?:heading|post-title|query-title)\b/,
+  /<!-- wp:(?:post-terms|post-date)[^\n]*agile-base-eyebrow[^\n]*\/-->\s*<!-- wp:(?:heading|post-title|query-title)\b/,
+];
+const hasKicker = (source) => KICKER.some((re) => re.test(source));
+const marketsTheme = (source) => /Agile Base/.test(source.replace(/<\?php[\s\S]*?\?>/g, (php) => php.replace(/'agile-base'/g, '')));
+// Every new inserter pattern meets the same bar (spec §7).
+const CORE_CATEGORIES = new Set(['banner', 'buttons', 'columns', 'text', 'query', 'featured', 'call-to-action', 'team', 'testimonials', 'services', 'contact', 'about', 'portfolio', 'gallery', 'media', 'videos', 'audio', 'posts', 'footer', 'header', 'navigation']);
+const assertNewPattern = (slug, { title, categories }) => {
+  const source = read(`patterns/${slug}.php`);
+  assert.match(source, new RegExp(`^ \\* Title: ${title.replace(/[()]/g, '\\$&')}$`, 'm'), `${slug}: title`);
+  assert.match(source, new RegExp(`^ \\* Categories: ${categories.join(', ')}$`, 'm'), `${slug}: categories`);
+  assert.ok(categories[0] === 'agile-base' && categories.slice(1).some((c) => CORE_CATEGORIES.has(c)), `${slug}: agile-base plus a core category`);
+  for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${slug}: ${header}`);
+  assert.doesNotMatch(source, /href="#"/, `${slug}: no dead links`);
+  assert.equal(marketsTheme(source), false, `${slug}: copy does not market the theme`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /<h1\b|"level":1\b/, `${slug}: sections never add an <h1>`);
+  return source;
+};
+const queriesIn = (source) => [...source.matchAll(/<!-- wp:query (\{[^\n]*\}) -->/g)].map((m) => JSON.parse(m[1]));
+
+const homeHero = read('patterns/hidden-home-hero.php');
+assert.match(homeHero, /^ \* Inserter: no$/m);
+assert.equal((homeHero.match(/<h1\b/g) || []).length, 1, 'hidden-home-hero holds the homepage <h1>');
+assert.equal((read('patterns/hero.php').match(/<h1\b/g) || []).length, 0, 'the hero section must not add a second <h1>');
+assert.match(read('patterns/hero.php'), /<h2\b/);
+const servicesGrid = assertNewPattern('services-grid', { title: 'Services Grid', categories: ['agile-base', 'services'] });
+assert.ok((servicesGrid.match(/<h3\b/g) || []).length >= 3, 'at least three services, each with a heading');
+const pageHome = read('patterns/page-home.php');
+assert.match(pageHome, /^ \* Title: Page: Home \(Agency\)$/m);
+assert.ok(pageHome.indexOf('"slug":"agile-base/hidden-home-hero"') > -1 && pageHome.indexOf('"slug":"agile-base/hidden-home-hero"') < pageHome.indexOf('"slug":"agile-base/services-grid"'), 'the homepage opens with its hero, then shows the services');
+assert.doesNotMatch(pageHome, /wp:pattern \{"slug":"agile-base\/hero"\}/);
+for (const slug of ['hidden-home-hero', 'hero', 'logos', 'features', 'stats', 'testimonial', 'faq', 'call-to-action', 'page-home', 'hidden-header', 'hidden-footer-credit']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.equal(marketsTheme(source), false, `${slug}: demo copy must not market the theme`);
+}
+assert.doesNotMatch(read('patterns/hidden-header.php'), /agile-base-eyebrow/);
+
+// 2.0 Part 2: Services page (spec §7.3). The template shows the page title (the <h1>); the
+// layout's intro adds no label and no heading, so nothing repeats the page name.
+const steps = assertNewPattern('steps', { title: 'How It Works', categories: ['agile-base', 'services'] });
+assert.equal((steps.match(/<h3\b/g) || []).length, 3, 'three steps, each with a heading');
+const pageServices = read('patterns/page-services.php');
+const servicesIntro = pageServices.slice(pageServices.indexOf('?>'), pageServices.indexOf('<!-- wp:pattern'));
+assert.doesNotMatch(servicesIntro, /agile-base-eyebrow|wp:heading|<h1/, 'page-services: the intro repeats nothing');
+assert.equal(hasKicker(pageServices), false);
+
+// 2.0 Part 2: single post. The post header has no label above the title, both single
+// templates share the header, navigation and comments, and content blocks are styled in theme.json.
+const postHeader2 = read('patterns/hidden-post-header.php');
+assert.equal(hasKicker(postHeader2), false, 'hidden-post-header: no label above the title');
+assert.match(postHeader2, /wp:post-title \{[^\n]*"level":1/);
+for (const template of ['single', 'single-wide']) {
+  const source = read(`templates/${template}.html`);
+  for (const slug of ['hidden-post-header', 'hidden-post-navigation', 'comments']) assert.match(source, new RegExp(`"slug":"agile-base/${slug}"`), `${template}: ${slug}`);
+}
+for (const block of ['core/quote', 'core/pullquote', 'core/code', 'core/preformatted', 'core/table', 'core/separator']) {
+  assert.ok(themeJson.styles.blocks[block], `theme.json styles.blocks["${block}"]`);
+}
+assert.match(read('patterns/hidden-post-navigation.php'), /"className":"agile-base-postnav"/, 'the postnav class keeps a rule (contract)');
+assert.match(read('assets/styles/core-post-terms.css'), /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\)/, 'pill selector kept (contract)');
 
 console.log('release source checks passed');

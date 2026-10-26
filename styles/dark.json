@@ -3,43 +3,55 @@
 	"version": 3,
 	"title": "Dark",
 	"settings": {
-		"custom": {
-			"color": {
-				"surface": "264 30% 7%"
-			}
+		"color": {
+			"palette": [
+				{
+					"name": "Black",
+					"slug": "black",
+					"color": "#000000"
+				},
+				{
+					"name": "White",
+					"slug": "white",
+					"color": "#ffffff"
+				},
+				{
+					"name": "Primary",
+					"slug": "primary",
+					"color": "#fbe35a"
+				},
+				{
+					"name": "Secondary",
+					"slug": "secondary",
+					"color": "#e592a8"
+				},
+				{
+					"name": "Accent",
+					"slug": "accent",
+					"color": "#ff6b57"
+				},
+				{
+					"name": "Paper",
+					"slug": "paper",
+					"color": "#0f1527"
+				},
+				{
+					"name": "Ink",
+					"slug": "ink",
+					"color": "#f4f4ef"
+				},
+				{
+					"name": "Surface",
+					"slug": "surface",
+					"color": "#1a2340"
+				}
+			]
 		}
 	},
 	"styles": {
 		"color": {
-			"background": "hsla(var(--wp--custom--color--surface))",
-			"text": "var(--wp--preset--color--paper)"
-		},
-		"elements": {
-			"button": {
-				"color": {
-					"background": "var(--wp--preset--color--primary)",
-					"text": "var(--wp--preset--color--white)"
-				},
-				":hover": {
-					"color": {
-						"background": "var(--wp--preset--color--paper)",
-						"text": "var(--wp--preset--color--ink)"
-					}
-				},
-				":focus": {
-					"color": {
-						"background": "var(--wp--preset--color--primary)",
-						"text": "var(--wp--preset--color--white)"
-					}
-				}
-			},
-			"link": {
-				":hover": {
-					"color": {
-						"text": "var(--wp--preset--color--primary-light)"
-					}
-				}
-			}
+			"background": "var(--wp--preset--color--paper)",
+			"text": "var(--wp--preset--color--ink)"
 		}
 	}
 }
