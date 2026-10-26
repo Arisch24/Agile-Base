@@ -22,23 +22,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<!-- wp:group {"style":{"spacing":{"blockGap":{"top":"var:preset|spacing|small","left":"var:preset|spacing|x-large"}},"typography":{"fontWeight":"700"}},"layout":{"type":"flex","justifyContent":"center","flexWrap":"wrap"}} -->
 	<div class="wp-block-group" style="font-weight:700">
 		<!-- wp:paragraph {"fontSize":"large"} -->
-		<p class="has-large-font-size">Northwind</p>
+		<p class="has-large-font-size"><?php echo esc_html_x( 'Northwind', 'placeholder company name', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:paragraph {"fontSize":"large"} -->
-		<p class="has-large-font-size">Acme&nbsp;Co</p>
+		<p class="has-large-font-size"><?php echo wp_kses_post( _x( 'Acme&nbsp;Co', 'placeholder company name', 'agile-base' ) ); ?></p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:paragraph {"fontSize":"large"} -->
-		<p class="has-large-font-size">Lumen</p>
+		<p class="has-large-font-size"><?php echo esc_html_x( 'Lumen', 'placeholder company name', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:paragraph {"fontSize":"large"} -->
-		<p class="has-large-font-size">Hatch</p>
+		<p class="has-large-font-size"><?php echo esc_html_x( 'Hatch', 'placeholder company name', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 
 		<!-- wp:paragraph {"fontSize":"large"} -->
-		<p class="has-large-font-size">Vertex</p>
+		<p class="has-large-font-size"><?php echo esc_html_x( 'Vertex', 'placeholder company name', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->

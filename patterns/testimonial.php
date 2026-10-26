@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}},"layout":{"type":"flex","verticalAlignment":"center"}} -->
 		<div class="wp-block-group">
 			<!-- wp:html -->
-			<div class="agile-base-avatar" aria-hidden="true">RC</div>
+			<div class="agile-base-avatar" aria-hidden="true"><?php echo esc_html_x( 'RC', 'initials of the person quoted', 'agile-base' ); ?></div>
 			<!-- /wp:html -->
 
 			<!-- wp:group {"style":{"spacing":{"blockGap":"0.15em"}},"layout":{"type":"constrained"}} -->

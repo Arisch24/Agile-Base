@@ -86,6 +86,9 @@ assert.match(postHeader, /wp:post-author-name/);
 assert.match(postHeader, /wp:post-title \{[^\n]*"level":1/);
 assert.doesNotMatch(postHeader, /wp:post-author(?![-\w])/);
 assert.match(singleTemplate, /"slug":"agile-base\/hidden-post-header"/);
+assert.match(singleTemplate, /"slug":"agile-base\/hidden-post-navigation"/);
+assert.match(read('templates/single-wide.html'), /"slug":"agile-base\/hidden-post-navigation"/);
+assert.match(read('patterns/hidden-post-navigation.php'), /"className":"agile-base-postnav"/);
 assert.doesNotMatch(singleTemplate, /wp:post-author(?![-\w])/);
 assert.doesNotMatch(singleTemplate, /wp:post-title/);
 
@@ -139,18 +142,24 @@ assert.match(postsList, /wp:post-author-name/);
 // Phase 2: Header (Centered).
 const themeJsonParts = JSON.parse(read('theme.json')).templateParts;
 const templatePart = (name) => themeJsonParts.find((p) => p.name === name);
-const headerCentered = read('parts/header-centered.html');
+// Header markup lives in hidden patterns so the navigation label can be translated.
+const PRIMARY_NAV = String.raw`wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( 'Primary', 'navigation landmark label', 'agile-base' \); \?>"`;
+for (const part of ['header', 'header-centered', 'header-minimal']) {
+  assert.equal(read(`parts/${part}.html`).trim(), `<!-- wp:pattern {"slug":"agile-base/hidden-${part}"} /-->`);
+  assert.match(read(`patterns/hidden-${part}.php`), /^ \* Inserter: no$/m);
+}
+const headerCentered = read('patterns/hidden-header-centered.php');
 assert.match(headerCentered, /wp:site-logo/);
 assert.match(headerCentered, /wp:site-title/);
-assert.match(headerCentered, /wp:navigation \{"ariaLabel":"Primary","overlayMenu":"mobile"[^\n]*"justifyContent":"center"/);
+assert.match(headerCentered, new RegExp(`${PRIMARY_NAV},"overlayMenu":"mobile"[^\\n]*"justifyContent":"center"`));
 assert.match(headerCentered, /"orientation":"vertical","justifyContent":"center"/);
 assert.deepEqual(templatePart('header-centered'), { name: 'header-centered', title: 'Header (Centered)', area: 'header' });
 
 // Phase 2: Header (Minimal).
-const headerMinimal = read('parts/header-minimal.html');
+const headerMinimal = read('patterns/hidden-header-minimal.php');
 assert.doesNotMatch(headerMinimal, /wp:site-logo/);
 assert.match(headerMinimal, /wp:site-title/);
-assert.match(headerMinimal, /wp:navigation \{"ariaLabel":"Primary","overlayMenu":"always"/);
+assert.match(headerMinimal, new RegExp(`${PRIMARY_NAV},"overlayMenu":"always"`));
 assert.match(headerMinimal, /var:preset\|spacing\|x-small/);
 assert.deepEqual(templatePart('header-minimal'), { name: 'header-minimal', title: 'Header (Minimal)', area: 'header' });
 
@@ -160,7 +169,7 @@ const footerColumns = read('patterns/hidden-footer-columns.php');
 assert.equal(footerColumnsPart.trim(), '<!-- wp:pattern {"slug":"agile-base/hidden-footer-columns"} /-->');
 assert.match(footerColumns, /^ \* Slug: agile-base\/hidden-footer-columns$/m);
 assert.match(footerColumns, /^ \* Inserter: no$/m);
-assert.match(footerColumns, /wp:navigation \{"ariaLabel":"Footer"/);
+assert.match(footerColumns, /wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( 'Footer', 'navigation landmark label', 'agile-base' \); \?>"/);
 assert.match(footerColumns, /wp:search/);
 assert.match(footerColumns, /"slug":"agile-base\/hidden-footer-credit"/);
 assert.doesNotMatch(footerColumns, RAW_ENGLISH);
@@ -252,7 +261,7 @@ const PILL = ':where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)
 for (const part of ['', ' .wp-block-post-terms__separator', ' a', ' a::before', ' a:hover', ' a:focus-visible']) {
   assert.ok(postTermsCss.includes(PILL + part), `pill selector missing for "${part || 'container'}"`);
 }
-assert.match(postTermsCss, /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\) \{[^}]*font-family: var\(--wp--preset--font-family--space-mono\);[^}]*font-size: var\(--wp--preset--font-size--small\);/);
+assert.match(postTermsCss, /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\) \{[^}]*font-family: var\(--wp--custom--font--mono\);[^}]*font-size: var\(--wp--preset--font-size--small\);/);
 assert.match(postTermsCss, /content: "#" \/ "";/);
 assert.doesNotMatch(postTermsCss, /agile-base-tags|taxonomy-category|\.single /);
 for (const line of postTermsCss.split('\n').filter((l) => /\{\s*$/.test(l) && !l.startsWith('@media'))) {
@@ -282,5 +291,43 @@ assert.match(readme, /^= 1\.0\.3 =$/m);
 assert.match(style, /^Version: 1\.4\.1$/m);
 assert.match(readme, /^Stable tag: 1\.4\.1$/m);
 assert.match(readme, /^= 1\.4\.1 =$/m);
+
+// 2.0 Part 1: role tokens. CSS reaches fonts, radii, shadows and motion through
+// theme.json tokens, so a style variation (Velocity) or the 2.0 design can change them.
+for (const [file, source] of [['style.css', stylesheet], ['assets/styles/core-post-terms.css', read('assets/styles/core-post-terms.css')]]) {
+  assert.doesNotMatch(source, /--wp--preset--font-family--/, `${file}: use --wp--custom--font--*`);
+  assert.doesNotMatch(source, /border-radius:[^;]*\d+px/, `${file}: use --wp--custom--radius--*`);
+  assert.doesNotMatch(source, /box-shadow:\s*\d/, `${file}: use --wp--preset--shadow--*`);
+  assert.doesNotMatch(source, /transition:[^;]*\d*\.\d+s/, `${file}: use --wp--custom--motion--*`);
+}
+assert.deepEqual(Object.keys(themeJson.settings.custom.font), ['body', 'display', 'mono']);
+assert.deepEqual(Object.keys(themeJson.settings.custom.radius), ['bar', 'card', 'icon', 'panel', 'pill', 'round']);
+assert.deepEqual(Object.keys(themeJson.settings.custom.motion), ['fast', 'base', 'slow', 'slower']);
+assert.ok(themeJson.settings.shadow.presets.some((p) => p.slug === 'card'), 'shadow preset "card"');
+assert.equal(themeJson.styles.typography.fontFamily, 'var(--wp--custom--font--body)');
+assert.equal(themeJson.styles.elements.heading.typography.fontFamily, 'var(--wp--custom--font--display)');
+
+// 2.0 Part 1: Velocity freezes the 1.x look. It carries its own font faces, so it
+// still works after 2.0 replaces the fonts in theme.json.
+const velocity = JSON.parse(read('styles/velocity.json'));
+assert.equal(velocity.title, 'Velocity');
+assert.equal(velocity.settings.custom.color.primary, '262 100% 62%');
+assert.equal(velocity.settings.custom.color.paper, '40 30% 98%');
+assert.equal(velocity.settings.custom.font.display, 'var(--wp--preset--font-family--space-grotesk)');
+assert.equal(velocity.settings.custom.radius.card, '8px');
+assert.deepEqual(velocity.settings.layout, { contentSize: '960px', wideSize: '1280px' });
+assert.equal(velocity.settings.typography.fluid, true);
+assert.equal(velocity.settings.useRootPaddingAwareAlignments, true);
+assert.equal(velocity.styles.elements.heading.typography.fontFamily, 'var(--wp--custom--font--display)');
+for (const slug of ['figtree', 'space-grotesk', 'space-mono']) {
+  const family = velocity.settings.typography.fontFamilies.find((f) => f.slug === slug);
+  assert.ok(family && family.fontFace.length, `Velocity must define the ${slug} font faces`);
+  for (const face of family.fontFace) {
+    for (const src of face.src.filter((s) => s.startsWith('file:./'))) {
+      assert.equal(existsSync(new URL(`../${src.slice('file:./'.length)}`, import.meta.url)), true, `${src} must exist`);
+    }
+  }
+}
+assert.equal(velocity.settings.color.palette.length, 24);
 
 console.log('release source checks passed');

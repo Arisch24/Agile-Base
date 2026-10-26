@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<p class="agile-base-eyebrow"><?php esc_html_e( 'Explore', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 
-			<!-- wp:navigation {"ariaLabel":"Footer","overlayMenu":"never","layout":{"type":"flex","orientation":"vertical"}} /-->
+			<!-- wp:navigation {"ariaLabel":"<?php echo esc_attr_x( 'Footer', 'navigation landmark label', 'agile-base' ); ?>","overlayMenu":"never","layout":{"type":"flex","orientation":"vertical"}} /-->
 		</div>
 		<!-- /wp:column -->
 

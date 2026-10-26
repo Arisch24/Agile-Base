@@ -16,4 +16,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="has-medium-font-size"><?php esc_html_e( 'No posts were found. Try a different search?', 'agile-base' ); ?></p>
 <!-- /wp:paragraph -->
 
-<!-- wp:search {"label":"Search","showLabel":false,"buttonText":"Search","buttonPosition":"button-inside","style":{"border":{"radius":"6px"}}} /-->
+<!-- wp:search {"label":"<?php echo esc_attr_x( 'Search', 'search form label', 'agile-base' ); ?>","showLabel":false,"buttonText":"<?php echo esc_attr_x( 'Search', 'search button text', 'agile-base' ); ?>","buttonPosition":"button-inside","style":{"border":{"radius":"6px"}}} /-->

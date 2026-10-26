@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<!-- wp:group {"align":"full","layout":{"type":"default"}} -->
 	<div class="wp-block-group alignfull">
 		<!-- wp:html -->
-		<div class="agile-base-marquee" aria-hidden="true"><div class="agile-base-marquee__track"><span>No build step</span><span>Self-hosted fonts</span><span>Light &amp; dark</span><span>Pattern library</span><span>Fluid type &amp; space</span></div></div>
+		<div class="agile-base-marquee" aria-hidden="true"><div class="agile-base-marquee__track"><span><?php esc_html_e( 'No build step', 'agile-base' ); ?></span><span><?php esc_html_e( 'Self-hosted fonts', 'agile-base' ); ?></span><span><?php esc_html_e( 'Light & dark', 'agile-base' ); ?></span><span><?php esc_html_e( 'Pattern library', 'agile-base' ); ?></span><span><?php esc_html_e( 'Fluid type & space', 'agile-base' ); ?></span></div></div>
 		<!-- /wp:html -->
 	</div>
 	<!-- /wp:group -->

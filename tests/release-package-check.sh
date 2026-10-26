@@ -8,6 +8,11 @@ for directory in build .superpowers .aws; do
 	rg -Fq -- "--exclude='$directory/'" "$SCRIPT"
 	rg -Fq -- "f\"{slug}/$directory/\"" "$SCRIPT"
 done
+for file in package.json package-lock.json PRODUCT.md DESIGN.md; do
+	rg -Fq -- "--exclude='$file'" "$SCRIPT"
+	rg -Fq -- "f\"{slug}/$file\"" "$SCRIPT"
+	rg -Fq -- "/$file export-ignore" "$THEME_DIR/.gitattributes"
+done
 rg -Fq -- "--exclude='*.zip'" "$SCRIPT"
 rg -Fq -- "name.lower().endswith('.zip')" "$SCRIPT"
 
@@ -21,7 +26,7 @@ MEMBERS="$(unzip -Z -1 "$OUTPUT")"
 
 rg -q '^agile-base/assets/styles/core-post-terms\.css$' <<< "$MEMBERS"
 rg -q '^agile-base/functions\.php$' <<< "$MEMBERS"
-if rg -q '^agile-base/(build|\.superpowers|\.aws)/|\.zip$' <<< "$MEMBERS"; then
+if rg -q '^agile-base/(build|\.superpowers|\.aws)/|\.zip$|^agile-base/(package(-lock)?\.json|PRODUCT\.md|DESIGN\.md)$' <<< "$MEMBERS"; then
 	printf 'error: release package contains forbidden development files\n' >&2
 	exit 1
 fi

@@ -4,9 +4,11 @@ on:
     push:
         branches:
             - main
+            - 'release/**'
     pull_request:
         branches:
             - main
+            - 'release/**'
 
 permissions:
     contents: read
@@ -30,6 +32,12 @@ jobs:
 
             - name: Check release source
               run: node tests/release-check.mjs
+
+            - name: Check block markup
+              run: node tests/markup-check.mjs
+
+            - name: Check 1.x compatibility contract
+              run: node tests/compat-check.mjs
 
             - name: Check PHP syntax
               run: find . -type f -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -print0 | xargs -0 -n1 php -l
