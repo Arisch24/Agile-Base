@@ -56,6 +56,24 @@ Agile Base is distributed under the terms of the GNU GPL version 2 or later.
 
 == Resources ==
 
+Public Sans font, Copyright 2015 The Public Sans Project Authors
+* Source: https://github.com/uswds/public-sans
+* License: SIL Open Font License, 1.1
+* License URI: https://scripts.sil.org/OFL
+* License bundled at: assets/fonts/OFL-Public-Sans.txt
+
+Archivo font, Copyright 2020 The Archivo Project Authors
+* Source: https://github.com/Omnibus-Type/Archivo
+* License: SIL Open Font License, 1.1
+* License URI: https://scripts.sil.org/OFL
+* License bundled at: assets/fonts/OFL-Archivo.txt
+
+JetBrains Mono font, Copyright 2020 The JetBrains Mono Project Authors
+* Source: https://github.com/JetBrains/JetBrainsMono
+* License: SIL Open Font License, 1.1
+* License URI: https://scripts.sil.org/OFL
+* License bundled at: assets/fonts/OFL-JetBrains-Mono.txt
+
 Figtree font, Copyright 2022 The Figtree Project Authors
 * Source: https://github.com/erikdkennedy/figtree
 * License: SIL Open Font License, 1.1

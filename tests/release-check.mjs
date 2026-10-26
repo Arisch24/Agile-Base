@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 
 const read = (file) => readFileSync(new URL(`../${file}`, import.meta.url), 'utf8');
 
@@ -329,5 +329,36 @@ for (const slug of ['figtree', 'space-grotesk', 'space-mono']) {
   }
 }
 assert.equal(velocity.settings.color.palette.length, 24);
+
+// 2.0 Part 2: fonts (spec §4). Role presets body/display/mono, which the tokens point at,
+// so font presets and a client's brand can swap them; every bundled face is a local file
+// with its OFL file and readme credit; preloads follow the role tokens.
+const fontFamilies = (json) => json.settings?.typography?.fontFamilies ?? [];
+const styleFiles = (dir) => (existsSync(new URL(`../${dir}`, import.meta.url))
+  ? readdirSync(new URL(`../${dir}`, import.meta.url)).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(read(`${dir}/${f}`)))
+  : []);
+for (const family of [themeJson, ...styleFiles('styles'), ...styleFiles('styles/typography')].flatMap(fontFamilies).filter((f) => f.fontFace?.length)) {
+  for (const src of family.fontFace.flatMap((face) => face.src)) {
+    assert.ok(src.startsWith('file:./') || src.startsWith('local('), `${family.name}: ${src} must be self-hosted`);
+    if (src.startsWith('file:./')) assert.equal(existsSync(new URL(`../${src.slice(7)}`, import.meta.url)), true, `${src} must exist`);
+  }
+  if (family.fontFace.some((face) => face.src.some((s) => s.startsWith('file:./')))) {
+    assert.equal(existsSync(new URL(`../assets/fonts/OFL-${family.name.replace(/\s+/g, '-')}.txt`, import.meta.url)), true, `OFL file for ${family.name}`);
+    assert.match(readme, new RegExp(`^${family.name} font, Copyright`, 'm'), `readme credit for ${family.name}`);
+  }
+}
+const roleFamilies = Object.fromEntries(fontFamilies(themeJson).map((f) => [f.slug, f]));
+for (const role of ['body', 'display', 'mono']) {
+  assert.ok(roleFamilies[role], `theme.json has the "${role}" role font preset (spec §4)`);
+  assert.equal(themeJson.settings.custom.font[role], `var(--wp--preset--font-family--${role})`, `custom.font.${role} points at the ${role} preset`);
+}
+assert.doesNotMatch(roleFamilies.display.fontFamily, /Space Grotesk/, '2.0 replaces the 1.x display face');
+const preloadCode = functions.slice(functions.indexOf('function agile_base_preload_resources'), functions.indexOf("add_filter( 'wp_preload_resources'"));
+const preloadFiles = [...preloadCode.matchAll(/'file'\s*=>\s*'([a-z0-9-]+\/[a-z0-9-]+)'/g)].map((m) => m[1]);
+assert.ok(preloadFiles.length >= 1, 'the preload list is found');
+for (const file of preloadFiles) {
+  assert.equal(existsSync(new URL(`../assets/fonts/${file}.woff2`, import.meta.url)), true, `preloaded assets/fonts/${file}.woff2 must exist`);
+}
+assert.match(preloadCode, /wp_get_global_settings\( array\( 'custom', 'font' \) \)/, 'preloads follow the role tokens');
 
 console.log('release source checks passed');

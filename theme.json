@@ -138,9 +138,9 @@
 		},
 		"custom": {
 			"font": {
-				"body": "var(--wp--preset--font-family--figtree)",
-				"display": "var(--wp--preset--font-family--space-grotesk)",
-				"mono": "var(--wp--preset--font-family--space-mono)"
+				"body": "var(--wp--preset--font-family--body)",
+				"display": "var(--wp--preset--font-family--display)",
+				"mono": "var(--wp--preset--font-family--mono)"
 			},
 			"radius": {
 				"bar": "4px",
@@ -285,90 +285,103 @@
 			"writingMode": true,
 			"fontFamilies": [
 				{
-					"name": "Figtree",
-					"slug": "figtree",
-					"fontFamily": "'Figtree', 'Figtree Fallback', sans-serif",
+					"name": "Public Sans",
+					"slug": "body",
+					"fontFamily": "'Public Sans', sans-serif",
 					"fontFace": [
 						{
-							"fontFamily": "Figtree Fallback",
+							"fontFamily": "Public Sans",
 							"fontStyle": "normal",
-							"fontWeight": "300 900",
-							"src": [ "local('Arial')" ],
-							"sizeAdjust": "100.45%",
-							"ascentOverride": "94.57%",
-							"descentOverride": "24.89%",
-							"lineGapOverride": "0%"
-						},
-						{
-							"fontFamily": "Figtree",
-							"fontStyle": "normal",
-							"fontWeight": "300 900",
-							"fontStretch": "normal",
+							"fontWeight": "100 900",
 							"fontDisplay": "swap",
-							"unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
-							"src": [ "file:./assets/fonts/figtree/figtree-latin.woff2" ]
+							"src": [
+								"file:./assets/fonts/public-sans/public-sans-latin-wght-normal.woff2"
+							],
+							"unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
 						},
 						{
-							"fontFamily": "Figtree",
+							"fontFamily": "Public Sans",
 							"fontStyle": "normal",
-							"fontWeight": "300 900",
-							"fontStretch": "normal",
+							"fontWeight": "100 900",
 							"fontDisplay": "swap",
-							"unicodeRange": "U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF",
-							"src": [ "file:./assets/fonts/figtree/figtree-latin-ext.woff2" ]
+							"src": [
+								"file:./assets/fonts/public-sans/public-sans-latin-ext-wght-normal.woff2"
+							],
+							"unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
 						},
 						{
-							"fontFamily": "Figtree",
+							"fontFamily": "Public Sans",
 							"fontStyle": "italic",
-							"fontWeight": "300 900",
-							"fontStretch": "normal",
+							"fontWeight": "100 900",
 							"fontDisplay": "swap",
-							"unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
-							"src": [ "file:./assets/fonts/figtree/figtree-italic-latin.woff2" ]
+							"src": [
+								"file:./assets/fonts/public-sans/public-sans-latin-wght-italic.woff2"
+							],
+							"unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
 						},
 						{
-							"fontFamily": "Figtree",
+							"fontFamily": "Public Sans",
 							"fontStyle": "italic",
-							"fontWeight": "300 900",
-							"fontStretch": "normal",
+							"fontWeight": "100 900",
 							"fontDisplay": "swap",
-							"unicodeRange": "U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF",
-							"src": [ "file:./assets/fonts/figtree/figtree-italic-latin-ext.woff2" ]
+							"src": [
+								"file:./assets/fonts/public-sans/public-sans-latin-ext-wght-italic.woff2"
+							],
+							"unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
 						}
 					]
 				},
 				{
-					"name": "Space Grotesk",
-					"slug": "space-grotesk",
-					"fontFamily": "'Space Grotesk', 'Figtree Fallback', sans-serif",
+					"name": "Archivo",
+					"slug": "display",
+					"fontFamily": "'Archivo', sans-serif",
 					"fontFace": [
 						{
-							"fontFamily": "Space Grotesk",
+							"fontFamily": "Archivo",
 							"fontStyle": "normal",
-							"fontWeight": "300 700",
+							"fontWeight": "100 900",
 							"fontDisplay": "swap",
-							"src": [ "file:./assets/fonts/space-grotesk/space-grotesk-latin.woff2" ]
+							"src": [
+								"file:./assets/fonts/archivo/archivo-latin-wght-normal.woff2"
+							],
+							"unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
+						},
+						{
+							"fontFamily": "Archivo",
+							"fontStyle": "normal",
+							"fontWeight": "100 900",
+							"fontDisplay": "swap",
+							"src": [
+								"file:./assets/fonts/archivo/archivo-latin-ext-wght-normal.woff2"
+							],
+							"unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
 						}
 					]
 				},
 				{
-					"name": "Space Mono",
-					"slug": "space-mono",
-					"fontFamily": "'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace",
+					"name": "JetBrains Mono",
+					"slug": "mono",
+					"fontFamily": "'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace",
 					"fontFace": [
 						{
-							"fontFamily": "Space Mono",
+							"fontFamily": "JetBrains Mono",
 							"fontStyle": "normal",
-							"fontWeight": "400",
+							"fontWeight": "100 800",
 							"fontDisplay": "swap",
-							"src": [ "file:./assets/fonts/space-mono/space-mono-latin.woff2" ]
+							"src": [
+								"file:./assets/fonts/jetbrains-mono/jetbrains-mono-latin-wght-normal.woff2"
+							],
+							"unicodeRange": "U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD"
 						},
 						{
-							"fontFamily": "Space Mono",
+							"fontFamily": "JetBrains Mono",
 							"fontStyle": "normal",
-							"fontWeight": "700",
+							"fontWeight": "100 800",
 							"fontDisplay": "swap",
-							"src": [ "file:./assets/fonts/space-mono/space-mono-700-latin.woff2" ]
+							"src": [
+								"file:./assets/fonts/jetbrains-mono/jetbrains-mono-latin-ext-wght-normal.woff2"
+							],
+							"unicodeRange": "U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF"
 						}
 					]
 				},
