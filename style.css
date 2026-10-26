@@ -240,8 +240,8 @@ table,
 	margin: 0;
 }
 
-/* Testimonial: a ruled quote on the surface color, with an oversized quotation mark
-   in the accent color behind the quote text. */
+/* Testimonial: the carbon-copy sheet (secondary color) with a ruled top and an oversized quotation mark
+   behind the quote text. */
 .agile-base-testimonial {
 	color: var(--wp--preset--color--black);
 	background-color: var(--wp--preset--color--secondary);
@@ -585,6 +585,7 @@ table,
 /* A very long word breaks instead of widening the page. */
 .wp-block-post-content,
 .wp-block-post-title,
+.wp-block-post-excerpt,
 .wp-block-comment-content {
 	overflow-wrap: anywhere;
 }

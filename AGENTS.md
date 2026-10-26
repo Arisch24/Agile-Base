@@ -67,6 +67,9 @@ Every change keeps these true:
 - `styles/velocity.json` — the 1.x look (palette, fonts with their own font faces, sizes,
   spacing, layout widths, tokens and styles), frozen so sites can keep it after 2.0.
   Never edit it.
+- `styles/colors/*.json` and `styles/typography/*.json` — color and font presets
+  (`typography/system.json` downloads no fonts). `tests/fixtures/client-brand.json` is the
+  stand-in client brand; regenerate it with `bin/make-client-brand.mjs` after palette changes.
 - `styles/dark.json` — the **Dark** style variation. The root `theme.json` is the default
   (light) style. Variations override `styles.color`/elements only; they are admin-selected
   global styles, not a visitor runtime toggle.
@@ -90,6 +93,11 @@ Every change keeps these true:
   right-to-left), `harden` (edge and empty states, i18n), `clarify` (copy), `critique` and
   `audit` to review, `polish` to finish. `DESIGN.md` is written by `/impeccable document`
   from the build, never by hand.
+  Visual work follows `DESIGN.md` and the direction contract in
+  `.impeccable/surfaces/templates-front-page-html.md`; keep every value in `theme.json`
+  presets or `custom` tokens (colors as palette presets, fonts through the `body`/`display`/
+  `mono` roles), check rebrands with `--style client-brand`, and never edit
+  `styles/velocity.json` (the frozen 1.x look).
 - **No build step.** Edit `theme.json` / `.html` / pattern `.php` directly, then refine in
   **Appearance → Editor**. Use the *Create Block Theme* plugin to export Site Editor
   changes back to these files and to manage fonts.
