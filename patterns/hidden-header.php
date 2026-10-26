@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="wp-block-group">
 			<!-- wp:site-logo {"width":56} /-->
 
-			<!-- wp:site-title {"level":0,"style":{"typography":{"fontWeight":"700"}},"fontSize":"medium"} /-->
+			<!-- wp:site-title {"level":0,"style":{"typography":{"fontWeight":"700"}},"fontSize":"large"} /-->
 		</div>
 		<!-- /wp:group -->
 

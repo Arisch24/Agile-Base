@@ -3,7 +3,9 @@
  * Title: FAQ
  * Slug: agile-base/faq
  * Categories: agile-base, text
- * Description: A Radix-style accordion of frequently asked questions.
+ * Keywords: faq, questions, answers, accordion
+ * Viewport Width: 1400
+ * Description: A ruled accordion of frequently asked questions.
  *
  * @package Agile_Base
  */
@@ -13,50 +15,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<!-- wp:group {"align":"full","className":"agile-base-band","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"},"blockGap":"var:preset|spacing|large"}},"layout":{"type":"constrained","contentSize":"760px"}} -->
-<div class="wp-block-group alignfull agile-base-band" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--2-x-large)">
-	<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}},"layout":{"type":"constrained"}} -->
-	<div class="wp-block-group">
-		<!-- wp:paragraph {"className":"agile-base-eyebrow"} -->
-		<p class="agile-base-eyebrow"><?php esc_html_e( 'Answers', 'agile-base' ); ?></p>
-		<!-- /wp:paragraph -->
-
-		<!-- wp:heading {"fontSize":"3-x-large"} -->
-		<h2 class="wp-block-heading has-3-x-large-font-size"><?php esc_html_e( 'Frequently asked questions', 'agile-base' ); ?></h2>
-		<!-- /wp:heading -->
-	</div>
-	<!-- /wp:group -->
+<!-- wp:group {"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"},"blockGap":"var:preset|spacing|large"}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--2-x-large)">
+	<!-- wp:heading {"fontSize":"3-x-large"} -->
+	<h2 class="wp-block-heading has-3-x-large-font-size"><?php esc_html_e( 'Frequently asked questions', 'agile-base' ); ?></h2>
+	<!-- /wp:heading -->
 
 	<!-- wp:group {"className":"agile-base-faq","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"constrained"}} -->
 	<div class="wp-block-group agile-base-faq">
 		<!-- wp:details -->
-		<details class="wp-block-details"><summary><?php esc_html_e( 'Do I need to know how to code?', 'agile-base' ); ?></summary>
+		<details class="wp-block-details"><summary><?php esc_html_e( 'What does a project cost?', 'agile-base' ); ?></summary>
 		<!-- wp:paragraph -->
-		<p><?php esc_html_e( 'No. Agile Base is built for the WordPress Site Editor. You assemble pages from patterns and edit everything visually.', 'agile-base' ); ?></p>
+		<p><?php esc_html_e( 'Say how you price your work, and what affects the final figure.', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 		</details>
 		<!-- /wp:details -->
 
 		<!-- wp:details -->
-		<details class="wp-block-details"><summary><?php esc_html_e( 'Does it work with my plugins?', 'agile-base' ); ?></summary>
+		<details class="wp-block-details"><summary><?php esc_html_e( 'How long does it take?', 'agile-base' ); ?></summary>
 		<!-- wp:paragraph -->
-		<p><?php esc_html_e( 'Agile Base sticks to core blocks and standard theme features, so it plays nicely with the plugins you already use.', 'agile-base' ); ?></p>
+		<p><?php esc_html_e( 'Say how long a typical project takes, from first call to finished work.', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 		</details>
 		<!-- /wp:details -->
 
 		<!-- wp:details -->
-		<details class="wp-block-details"><summary><?php esc_html_e( 'Can I change the colors and fonts?', 'agile-base' ); ?></summary>
+		<details class="wp-block-details"><summary><?php esc_html_e( 'Do you work in my area?', 'agile-base' ); ?></summary>
 		<!-- wp:paragraph -->
-		<p><?php esc_html_e( 'Yes. Pick a style variation or open Styles in the editor to adjust colors, typography and spacing across the whole site.', 'agile-base' ); ?></p>
+		<p><?php esc_html_e( 'Say where you work, and how customers can check.', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 		</details>
 		<!-- /wp:details -->
 
 		<!-- wp:details -->
-		<details class="wp-block-details"><summary><?php esc_html_e( 'Is it good for performance?', 'agile-base' ); ?></summary>
+		<details class="wp-block-details"><summary><?php esc_html_e( 'How do I get started?', 'agile-base' ); ?></summary>
 		<!-- wp:paragraph -->
-		<p><?php esc_html_e( 'Very. Fonts are self-hosted, there is no page builder overhead, and the critical fonts are preloaded for fast first paint.', 'agile-base' ); ?></p>
+		<p><?php esc_html_e( 'Say what happens after a customer books a call.', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 		</details>
 		<!-- /wp:details -->

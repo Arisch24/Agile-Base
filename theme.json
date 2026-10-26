@@ -463,7 +463,7 @@
 				},
 				"typography": {
 					"fontSize": "var(--wp--preset--font-size--medium)!important",
-					"fontWeight": "var(--wp--custom--font-weight--semi-bold)"
+					"fontWeight": "var(--wp--custom--font-weight--bold)"
 				}
 			}
 		},

@@ -33,7 +33,6 @@ assert.doesNotMatch(notFound, /href="\/"/);
 assert.doesNotMatch(hero, /<a(?![^>]*href=)/);
 assert.doesNotMatch(callToAction, /<a(?![^>]*href=)/);
 assert.doesNotMatch(styleGuide, /<a(?![^>]*href=)/);
-assert.doesNotMatch(hero, /11 block patterns/);
 assert.doesNotMatch(stylesheet, /animation:\s*agile-base-marquee/);
 assert.doesNotMatch(stylesheet, /will-change:\s*transform/);
 
@@ -429,5 +428,47 @@ assert.deepEqual(clientBrand.settings.color.palette.map((c) => c.slug).sort(), p
 assert.deepEqual(fontFamilies(clientBrand).map((f) => f.slug).sort(), ['body', 'display', 'mono']);
 assert.deepEqual(Object.keys(clientBrand.settings.custom.radius).sort(), Object.keys(themeJson.settings.custom.radius).sort(), 'client-brand covers every radius token');
 assert.ok(Object.values(clientBrand.settings.custom.radius).every((r) => r === '0'), 'client-brand squares every corner');
+
+// 2.0 Part 2: homepage. One <h1> wherever the hero goes (spec D5); no small label above a
+// heading (the 1.x eyebrow); demo copy never markets the theme (D4).
+const KICKER = [
+  /<!-- wp:paragraph \{[^\n]*agile-base-eyebrow[^\n]*\} -->\s*<p[^>]*>[\s\S]*?<\/p>\s*<!-- \/wp:paragraph -->\s*<!-- wp:(?:heading|post-title|query-title)\b/,
+  /<!-- wp:(?:post-terms|post-date)[^\n]*agile-base-eyebrow[^\n]*\/-->\s*<!-- wp:(?:heading|post-title|query-title)\b/,
+];
+const hasKicker = (source) => KICKER.some((re) => re.test(source));
+const marketsTheme = (source) => /Agile Base/.test(source.replace(/<\?php[\s\S]*?\?>/g, (php) => php.replace(/'agile-base'/g, '')));
+// Every new inserter pattern meets the same bar (spec §7).
+const CORE_CATEGORIES = new Set(['banner', 'buttons', 'columns', 'text', 'query', 'featured', 'call-to-action', 'team', 'testimonials', 'services', 'contact', 'about', 'portfolio', 'gallery', 'media', 'videos', 'audio', 'posts', 'footer', 'header', 'navigation']);
+const assertNewPattern = (slug, { title, categories }) => {
+  const source = read(`patterns/${slug}.php`);
+  assert.match(source, new RegExp(`^ \\* Title: ${title.replace(/[()]/g, '\\$&')}$`, 'm'), `${slug}: title`);
+  assert.match(source, new RegExp(`^ \\* Categories: ${categories.join(', ')}$`, 'm'), `${slug}: categories`);
+  assert.ok(categories[0] === 'agile-base' && categories.slice(1).some((c) => CORE_CATEGORIES.has(c)), `${slug}: agile-base plus a core category`);
+  for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${slug}: ${header}`);
+  assert.doesNotMatch(source, /href="#"/, `${slug}: no dead links`);
+  assert.equal(marketsTheme(source), false, `${slug}: copy does not market the theme`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /<h1\b|"level":1\b/, `${slug}: sections never add an <h1>`);
+  return source;
+};
+const queriesIn = (source) => [...source.matchAll(/<!-- wp:query (\{[^\n]*\}) -->/g)].map((m) => JSON.parse(m[1]));
+
+const homeHero = read('patterns/hidden-home-hero.php');
+assert.match(homeHero, /^ \* Inserter: no$/m);
+assert.equal((homeHero.match(/<h1\b/g) || []).length, 1, 'hidden-home-hero holds the homepage <h1>');
+assert.equal((read('patterns/hero.php').match(/<h1\b/g) || []).length, 0, 'the hero section must not add a second <h1>');
+assert.match(read('patterns/hero.php'), /<h2\b/);
+const servicesGrid = assertNewPattern('services-grid', { title: 'Services Grid', categories: ['agile-base', 'services'] });
+assert.ok((servicesGrid.match(/<h3\b/g) || []).length >= 3, 'at least three services, each with a heading');
+const pageHome = read('patterns/page-home.php');
+assert.match(pageHome, /^ \* Title: Page: Home \(Agency\)$/m);
+assert.ok(pageHome.indexOf('"slug":"agile-base/hidden-home-hero"') > -1 && pageHome.indexOf('"slug":"agile-base/hidden-home-hero"') < pageHome.indexOf('"slug":"agile-base/services-grid"'), 'the homepage opens with its hero, then shows the services');
+assert.doesNotMatch(pageHome, /wp:pattern \{"slug":"agile-base\/hero"\}/);
+for (const slug of ['hidden-home-hero', 'hero', 'logos', 'features', 'stats', 'testimonial', 'faq', 'call-to-action', 'page-home', 'hidden-header', 'hidden-footer-credit']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.equal(marketsTheme(source), false, `${slug}: demo copy must not market the theme`);
+}
+assert.doesNotMatch(read('patterns/hidden-header.php'), /agile-base-eyebrow/);
 
 console.log('release source checks passed');

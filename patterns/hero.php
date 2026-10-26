@@ -3,7 +3,9 @@
  * Title: Hero
  * Slug: agile-base/hero
  * Categories: agile-base, banner, featured
- * Description: A left-aligned hero with a mono eyebrow, large heading with a marked word and a feature strip.
+ * Keywords: hero, banner, headline, introduction
+ * Viewport Width: 1400
+ * Description: A color field with a large headline, one sentence and two buttons. It uses a level-two heading, so it can sit under a page title.
  *
  * @package Agile_Base
  */
@@ -13,35 +15,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|3-x-large","bottom":"0"}}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--3-x-large);padding-bottom:0">
-	<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|small","margin":{"bottom":"var:preset|spacing|x-large"}}},"layout":{"type":"constrained","contentSize":"880px"}} -->
-	<div class="wp-block-group" style="margin-bottom:var(--wp--preset--spacing--x-large)">
-		<!-- wp:paragraph {"className":"agile-base-eyebrow"} -->
-		<p class="agile-base-eyebrow"><?php esc_html_e( 'The block theme for builders', 'agile-base' ); ?></p>
-		<!-- /wp:paragraph -->
-
-		<!-- wp:heading {"level":1,"fontSize":"5-x-large"} -->
-		<h1 class="wp-block-heading has-5-x-large-font-size">
-		<?php
-		/* translators: %s: the highlighted word "proud". */
-		printf( wp_kses( __( 'Ship a site you are %s of.', 'agile-base' ), array( 'mark' => array( 'class' => true ) ) ), '<mark class="agile-base-mark">proud</mark>' );
-		?>
-		</h1>
+<!-- wp:group {"align":"full","className":"agile-base-field","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|x-large"}}},"backgroundColor":"primary","textColor":"black","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull agile-base-field has-black-color has-primary-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--x-large)">
+	<!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}},"layout":{"type":"constrained","contentSize":"860px","justifyContent":"left"}} -->
+	<div class="wp-block-group alignwide">
+		<!-- wp:heading {"fontSize":"4-x-large"} -->
+		<h2 class="wp-block-heading has-4-x-large-font-size"><?php esc_html_e( 'Say what you do, and who it is for.', 'agile-base' ); ?></h2>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"fontSize":"large","style":{"spacing":{"margin":{"top":"var:preset|spacing|x-small"}}}} -->
-		<p class="has-large-font-size" style="margin-top:var(--wp--preset--spacing--x-small)"><?php esc_html_e( 'Agile Base is a fast, no-build block theme. Assemble pages from patterns, flip between light and dark in a click, and launch something that looks nothing like a template.', 'agile-base' ); ?></p>
+		<!-- wp:paragraph {"fontSize":"large","style":{"typography":{"fontWeight":"700"}}} -->
+		<p class="has-large-font-size" style="font-weight:700"><?php esc_html_e( 'One short sentence about the problem you solve for your customers.', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 
-	</div>
-	<!-- /wp:group -->
+		<!-- wp:buttons {"style":{"spacing":{"margin":{"top":"var:preset|spacing|small"}}}} -->
+		<div class="wp-block-buttons" style="margin-top:var(--wp--preset--spacing--small)">
+			<!-- wp:button -->
+			<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Book a call', 'agile-base' ); ?></a></div>
+			<!-- /wp:button -->
 
-	<!-- wp:group {"align":"full","layout":{"type":"default"}} -->
-	<div class="wp-block-group alignfull">
-		<!-- wp:html -->
-		<div class="agile-base-marquee" aria-hidden="true"><div class="agile-base-marquee__track"><span><?php esc_html_e( 'No build step', 'agile-base' ); ?></span><span><?php esc_html_e( 'Self-hosted fonts', 'agile-base' ); ?></span><span><?php esc_html_e( 'Light & dark', 'agile-base' ); ?></span><span><?php esc_html_e( 'Pattern library', 'agile-base' ); ?></span><span><?php esc_html_e( 'Fluid type & space', 'agile-base' ); ?></span></div></div>
-		<!-- /wp:html -->
+			<!-- wp:button {"className":"is-style-outline"} -->
+			<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="<?php echo esc_url( home_url( '/services/' ) ); ?>"><?php esc_html_e( 'See services', 'agile-base' ); ?></a></div>
+			<!-- /wp:button -->
+		</div>
+		<!-- /wp:buttons -->
 	</div>
 	<!-- /wp:group -->
 </div>

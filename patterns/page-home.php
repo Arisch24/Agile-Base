@@ -1,10 +1,10 @@
 <?php
 /**
- * Title: Page: Home
+ * Title: Page: Home (Agency)
  * Slug: agile-base/page-home
  * Categories: agile-base, featured
  * Block Types: core/post-content
- * Description: A complete landing page: hero, logos, features, stats, testimonial, FAQ and a call to action.
+ * Description: An agency homepage: headline, logos, services, reasons to choose you, figures, a testimonial, FAQ and a call to action.
  *
  * @package Agile_Base
  */
@@ -14,9 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<!-- wp:pattern {"slug":"agile-base/hero"} /-->
+<!-- wp:pattern {"slug":"agile-base/hidden-home-hero"} /-->
 
 <!-- wp:pattern {"slug":"agile-base/logos"} /-->
+
+<!-- wp:pattern {"slug":"agile-base/services-grid"} /-->
 
 <!-- wp:pattern {"slug":"agile-base/features"} /-->
 
