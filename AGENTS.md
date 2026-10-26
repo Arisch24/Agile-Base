@@ -80,11 +80,12 @@ Every change keeps these true:
   `vendor/bin/phpcs .` on pushes and PRs to `main` and `release/**`.
 - `npm run check:editor [-- <filter>]`: every template, part and pattern in the ddev
   editor; fails on invalid blocks or console errors.
-- `npm run check:frontend -- [--style <name>] [--axe] [--rtl] [--only home,single]
+- `npm run check:frontend -- [--style <name>] [--axe] [--rtl] [--fold] [--only home,single]
   [--expect-font "<family>"] [--no-webfonts] [label]`: each page type at 375/768/1440 px;
   screenshots in `build/checks/<label>/`. `--style` takes `dark`, `velocity`, `colors/<x>`,
   `typography/<x>` or `client-brand` (`tests/fixtures/client-brand.json`; rerun
   `bin/make-client-brand.mjs` after palette changes) and restores saved styles after.
+  `--fold` checks the homepage top against spec D17 at 375×812, 1366×768 and 1440×900.
   `node bin/compare-screenshots.mjs <a> <b>` byte-compares two runs.
 - `bash tests/release-package-check.sh` builds the zip and checks its contents. Theme Check:
   no REQUIRED items on the zip (dev-folder hits on `bin/`, `build/`, `phpcs.xml.dist` are fine).

@@ -2,12 +2,13 @@
 /**
  * Check representative frontend URLs at three widths and capture screenshots.
  *
- * Usage: node bin/check-frontend.mjs [--style <name>] [--axe] [--only <pages>]
+ * Usage: node bin/check-frontend.mjs [--style <name>] [--axe] [--fold] [--only <pages>]
  *          [--expect-font <family>] [--no-webfonts] [--rtl] [label]
  *   --style        apply a style for this run, then restore the saved global styles:
  *                  styles/<name>.json (dark, velocity, colors/<x>, typography/<x>) or
  *                  tests/fixtures/<name>.json (client-brand).
  *   --axe          also run axe (WCAG 2.2 A/AA) at 1440px; fail on serious or critical issues.
+ *   --fold         check homepage header and hero fit at phone and laptop sizes (spec D17).
  *   --only         comma-separated page names (home, single, page, author, category,
  *                  search, 404, blog); default all.
  *   --expect-font  fail unless the <h1> is set in this family and its font file loaded.
@@ -34,6 +35,7 @@ const option = (name) => {
   return value ?? '';
 };
 const axe = flag('--axe');
+const fold = flag('--fold');
 const noWebfonts = flag('--no-webfonts');
 const rtl = flag('--rtl');
 const style = option('--style');
@@ -43,7 +45,7 @@ const label = args.shift() || (style ? style.replace('/', '-') : 'default');
 const wanted = only === null ? null : only.split(',').filter(Boolean);
 if (args.length || style === '' || expectFont === '' || !/^[a-zA-Z0-9_-]+$/.test(label) ||
     (style && !/^[a-z0-9-]+(\/[a-z0-9-]+)?$/.test(style)) || (wanted && !wanted.length)) {
-  console.error('usage: node bin/check-frontend.mjs [--style <name>] [--axe] [--only <pages>] [--expect-font <family>] [--no-webfonts] [--rtl] [label]');
+  console.error('usage: node bin/check-frontend.mjs [--style <name>] [--axe] [--fold] [--only <pages>] [--expect-font <family>] [--no-webfonts] [--rtl] [label]');
   process.exit(2);
 }
 const styleFile = style && [`styles/${style}.json`, `tests/fixtures/${style}.json`].find((file) => existsSync(`${root}${file}`));
@@ -55,6 +57,7 @@ const out = `${root}build/checks/${label}`;
 const siteHost = new URL(base).host;
 // WordPress core loads avatars from Gravatar; every other asset must come from the site.
 const ALLOWED_HOSTS = [/(^|\.)gravatar\.com$/];
+const FOLD = { header: 124, next: 0.85, button: 0.8 };
 const wp = (...args) => execFileSync('ddev', ['wp', ...args], { cwd: root, encoding: 'utf8' }).trim();
 const globalStylesId = 'WP_Theme_JSON_Resolver::get_user_global_styles_post_id()';
 // Swapping styles must not add entries to the owner's Styles > Revisions history.
@@ -138,8 +141,8 @@ try {
     if (name.endsWith('.png')) unlinkSync(`${out}/${name}`);
   }
   browser = await chromium.launch();
-  for (const width of [375, 768, 1440]) {
-    const context = await browser.newContext({ viewport: { width, height: 900 }, ignoreHTTPSErrors: true });
+  for (const [width, height] of fold ? [[375, 812], [1366, 768], [1440, 900]] : [[375, 900], [768, 900], [1440, 900]]) {
+    const context = await browser.newContext({ viewport: { width, height }, ignoreHTTPSErrors: true });
     const page = await context.newPage();
     const errors = [];
     const external = new Set();
@@ -170,6 +173,15 @@ try {
         dir: document.documentElement.dir,
         h1Font: getComputedStyle(document.querySelector('h1') || document.body).fontFamily,
         loadedFonts: [...document.fonts].filter((font) => font.status === 'loaded').map((font) => font.family.replace(/["']/g, '')),
+        top: (() => {
+          const box = (el) => (el ? el.getBoundingClientRect() : null);
+          const hero = document.querySelector('main')?.firstElementChild;
+          return {
+            header: Math.round(box(document.querySelector('header'))?.height ?? 0),
+            next: Math.round(box(hero?.nextElementSibling)?.top ?? 1e6),
+            button: Math.round(box(hero?.querySelector('.wp-block-button__link'))?.bottom ?? 1e6),
+          };
+        })(),
       }));
       const problems = [];
       if (response.status() !== (name === '404' ? 404 : 200)) problems.push(`status ${response.status()}`);
@@ -186,6 +198,12 @@ try {
       if (expectFont && !(facts.h1Font.includes(expectFont) && facts.loadedFonts.includes(expectFont))) {
         problems.push(`<h1> font is ${facts.h1Font} (loaded: ${facts.loadedFonts.join(', ') || 'none'}), expected ${expectFont}`);
       }
+      if (fold && name === 'home') {
+        const { header, next, button } = facts.top;
+        if (width >= 1366 && header > FOLD.header) problems.push(`header is ${header}px tall (at most ${FOLD.header})`);
+        if (width >= 1366 && next > FOLD.next * height) problems.push(`the section after the hero starts at ${next}px of ${height} (by ${Math.round(FOLD.next * height)})`);
+        if (width < 768 && button > FOLD.button * height) problems.push(`the hero's first button ends at ${button}px of ${height} (by ${Math.round(FOLD.button * height)})`);
+      }
       if (axe && width === 1440) {
         const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa']).analyze();
         // WordPress core nests the Page List block's <ul> straight inside the navigation's
@@ -199,7 +217,8 @@ try {
       }
       await page.screenshot({ path: `${out}/${name}-${width}.png`, fullPage: true });
       if (problems.length) failed++;
-      console.log(`${problems.length ? 'FAIL' : 'ok  '} ${name} @${width} ${problems.join(' | ')}`);
+      const measured = fold && name === 'home' ? ` [header ${facts.top.header}, next ${facts.top.next}, button ${facts.top.button}]` : '';
+      console.log(`${problems.length ? 'FAIL' : 'ok  '} ${name} @${width}${measured} ${problems.join(' | ')}`);
     }
     await context.close();
   }

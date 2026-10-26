@@ -555,4 +555,15 @@ for (const [, selector, body] of fieldRules) {
 assert.ok(fieldRules.some(([, selector, body]) => /:focus-visible/.test(selector) && /outline-color:\s*var\(--wp--preset--color--on-primary\)/.test(body)), 'focus rings in a field use on-primary');
 assert.match(css, /::selection\s*\{[^}]*background-color:\s*var\(--wp--preset--color--primary\);[^}]*color:\s*var\(--wp--preset--color--on-primary\)/, 'selected text: on-primary on primary');
 
+// 2.0 Part 2b: a compact top (spec D17). The header and footer pad themselves, so the page
+// has no padding above the header; the homepage hero meets the header; the inserter hero
+// shares the homepage hero's padding. Sizes are checked live by check-frontend --fold.
+assert.equal(themeJson.styles.spacing.padding.top, '0', 'no page padding above the header');
+assert.equal(themeJson.styles.spacing.padding.bottom, '0', 'no page padding below the footer');
+assert.match(frontPage, /<!-- wp:group \{"tagName":"main","style":\{"spacing":\{"margin":\{"top":"0"\}\}\}/, 'the homepage hero meets the header');
+assert.match(frontPage, /<main class="wp-block-group" style="margin-top:0">/, 'front-page main markup matches its attributes');
+const fieldPadding = (source) => source.match(/"className":"agile-base-field","style":\{"spacing":\{"padding":(\{[^}]*\})/)?.[1];
+assert.ok(fieldPadding(homeHero), 'the homepage hero sets its padding');
+assert.equal(fieldPadding(hero), fieldPadding(homeHero), 'the inserter hero and the homepage hero share their padding');
+
 console.log('release source checks passed');

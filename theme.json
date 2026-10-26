@@ -476,9 +476,9 @@
 		"spacing": {
 			"blockGap": "var(--wp--custom--gap--small)",
 			"padding": {
-				"top": "var(--wp--preset--spacing--small)",
+				"top": "0",
 				"right": "var(--wp--preset--spacing--small)",
-				"bottom": "var(--wp--preset--spacing--small)",
+				"bottom": "0",
 				"left": "var(--wp--preset--spacing--small)"
 			},
 			"margin": {
