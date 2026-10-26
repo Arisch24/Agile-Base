@@ -566,4 +566,17 @@ const fieldPadding = (source) => source.match(/"className":"agile-base-field","s
 assert.ok(fieldPadding(homeHero), 'the homepage hero sets its padding');
 assert.equal(fieldPadding(hero), fieldPadding(homeHero), 'the inserter hero and the homepage hero share their padding');
 
+// 2.0 Part 2b: one placeholder photo in the homepage hero (spec D3): CC0 and credited, a
+// small bundled WebP (never hotlinked), translatable alt text, and a fixed aspect ratio so
+// the hero doesn't move as it loads.
+const HERO_PHOTO = 'assets/images/placeholder-hero.webp';
+assert.ok(existsSync(new URL(`../${HERO_PHOTO}`, import.meta.url)), `${HERO_PHOTO} exists (spec D3)`);
+const heroPhoto = readFileSync(new URL(`../${HERO_PHOTO}`, import.meta.url));
+assert.ok(heroPhoto.subarray(0, 4).toString() === 'RIFF' && heroPhoto.subarray(8, 12).toString() === 'WEBP', `${HERO_PHOTO} is a WebP`);
+assert.ok(heroPhoto.length <= 80 * 1024, `${HERO_PHOTO} is ${Math.round(heroPhoto.length / 1024)} KB, at most 80 KB`);
+assert.match(readme, /^placeholder-hero\.webp, .+\n\* Source: https:\/\/\S+\n\* License: CC0 1\.0 Universal\n\* License URI: https:\/\/creativecommons\.org\/publicdomain\/zero\/1\.0\/$/m, 'readme credits the photo with its source and CC0 license');
+assert.match(homeHero, /<img src="<\?php echo esc_url\( get_theme_file_uri\( 'assets\/images\/placeholder-hero\.webp' \) \); \?>" alt="<\?php echo esc_attr_x\( '[^']+', 'placeholder photo alt text', 'agile-base' \); \?>"/, 'the hero photo is bundled, with translatable alt text');
+assert.match(homeHero, /<!-- wp:image \{"aspectRatio":"4\/3","scale":"cover"/, 'the hero photo keeps a 4:3 frame');
+for (const file of markupFiles) assert.doesNotMatch(read(file), /<img [^>]*src="https?:/, `${file}: images are bundled, never hotlinked`);
+
 console.log('release source checks passed');

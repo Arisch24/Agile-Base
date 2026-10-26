@@ -32,7 +32,7 @@ A no-build WordPress block theme: `theme.json`, block templates, template parts 
 The name "Agile Base". An unused logo mark exists in `assets/images/`. The 1.x "Velocity" look is the anti-reference. Copy policy (spec D4): placeholder copy for a generic service business that names its slot; never marketing for the theme.
 
 ## Evidence on Hand
-No real testimonials, customers, benchmarks or photography; none may be fabricated. Image slots stay empty. 1.x screenshots in `build/checks/v1-*` show the current look.
+No real testimonials, customers, benchmarks or photography; none may be fabricated. Image slots stay empty, except one credited CC0 placeholder photo in the homepage hero (spec D3). 1.x screenshots in `build/checks/v1-*` show the current look.
 
 ## Product Principles
 1. Rebrandable first: every visual value is a token a builder can change in Styles.
