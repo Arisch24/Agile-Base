@@ -53,7 +53,7 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 /* Browser surfaces: the parts the browser draws, themed from the palette. */
 ::selection {
 	background-color: var(--wp--preset--color--primary);
-	color: var(--wp--preset--color--black);
+	color: var(--wp--preset--color--on-primary);
 }
 
 :root {
@@ -490,31 +490,33 @@ table,
 	border-block-start: 2px solid currentColor;
 }
 
-/* Color field (hero, call to action): primary fills the band and the text stays black,
-   so the buttons are set in black and white whatever the active color preset is. */
-.agile-base-field .wp-element-button {
+/* Color field (hero, call to action): primary fills the band and everything on it takes
+   Text on Primary (spec D16), so any brand color reads. Buttons are drawn in on-primary and
+   invert on hover and focus, like every other button. The selectors match the theme's
+   outline-button rule in weight, so they win inside a field. */
+.agile-base-field .wp-block-button__link {
 	font-size: var(--wp--preset--font-size--large) !important;
 	font-weight: var(--wp--custom--font-weight--bold);
-	color: var(--wp--preset--color--white);
-	background-color: var(--wp--preset--color--black);
-	border-color: var(--wp--preset--color--black);
+	color: var(--wp--preset--color--primary);
+	background-color: var(--wp--preset--color--on-primary);
+	border-color: var(--wp--preset--color--on-primary);
 }
 
-.agile-base-field .wp-element-button:hover,
-.agile-base-field .wp-element-button:focus-visible {
-	color: var(--wp--preset--color--black);
-	background-color: var(--wp--preset--color--white);
-}
-
-.agile-base-field .is-style-outline > .wp-element-button {
-	color: var(--wp--preset--color--black);
+.agile-base-field .wp-block-button__link:not(:disabled):hover,
+.agile-base-field .wp-block-button__link:not(:disabled):focus-visible,
+.agile-base-field .wp-block-button.is-style-outline > .wp-block-button__link {
+	color: var(--wp--preset--color--on-primary);
 	background-color: transparent;
 }
 
-.agile-base-field .is-style-outline > .wp-element-button:hover,
-.agile-base-field .is-style-outline > .wp-element-button:focus-visible {
-	color: var(--wp--preset--color--white);
-	background-color: var(--wp--preset--color--black);
+.agile-base-field .wp-block-button.is-style-outline > .wp-block-button__link:not(:disabled):hover,
+.agile-base-field .wp-block-button.is-style-outline > .wp-block-button__link:not(:disabled):focus-visible {
+	color: var(--wp--preset--color--primary);
+	background-color: var(--wp--preset--color--on-primary);
+}
+
+.agile-base-field :focus-visible {
+	outline-color: var(--wp--preset--color--on-primary);
 }
 
 /* A ruled row (logos): hairlines above and below. */

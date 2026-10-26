@@ -32,7 +32,8 @@ Every change keeps these true:
 - `styles/`: `dark.json` (the Dark variation); `colors/*.json` and `typography/*.json`
   presets, which must hold only `color` or only `typography` keys or the Site Editor stops
   listing them as presets (`typography/system.json` downloads no fonts); `velocity.json`,
-  the frozen 1.x look: never edit it.
+  the frozen 1.x look: never change it, except to add a palette color 2.0 patterns need
+  (such as `on-primary`).
 - `templates/` compose header part → `core/group` `tagName="main"` → footer part. Part text
   lives in `hidden-*` patterns (most parts are a single `wp:pattern` line) so it can be
   translated.
@@ -61,6 +62,9 @@ Every change keeps these true:
   or invalid content". Traps: inline padding is longhand (`padding-top` etc.), never
   `padding`; a button's border color goes inline, not as a `has-*-border-color` class.
 - Bylines use Avatar + Post Author Name (the Post Author block is deprecated).
+- Text, buttons and focus rings on a `primary` background use `on-primary` (Text on Primary),
+  never black or ink, so a dark brand color still reads. `tests/release-check.mjs` checks the
+  markup, the CSS and 4.5:1 contrast in every palette.
 - New fonts: `node bin/add-font.mjs @fontsource-variable/<id>` (woff2 + OFL file; prints the
   `theme.json` entry and readme credit). Credit every bundled asset in `readme.txt`.
 - Site Editor changes go back to files with the Create Block Theme plugin.
