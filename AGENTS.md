@@ -126,12 +126,20 @@ Every change keeps these true:
 - `npm run check:editor` opens every template, part and pattern in the ddev editors and
   fails on invalid blocks or console errors (filter with `-- hero`). It creates and
   removes a temporary admin and drafts.
-- `npm run check:frontend -- [--style dark|velocity] [label]` checks each page type at
-  375/768/1440 px for status, landmarks (one `<main>` and `<h1>`, a non-empty header and
-  footer), PHP notices, overflow, image alt and console errors. Screenshots go to
-  `build/checks/<label>/`; `node bin/compare-screenshots.mjs <a> <b>` byte-compares two
-  complete runs. `--style` applies a variation for the run, then restores your saved
-  styles without adding to their revision history.
+- `npm run check:frontend -- [--style <name>] [--axe] [--only home,single] [--expect-font "<family>"] [--no-webfonts] [--rtl] [label]`
+  checks each page type at 375/768/1440 px (status, one `<main>` and `<h1>`, a non-empty
+  header and footer, no PHP notices, no sideways scroll, alt on images, no console errors,
+  no requests to other hosts except Gravatar) and writes screenshots to
+  `build/checks/<label>/`. `--style` applies `styles/<name>.json` (`dark`, `velocity`,
+  `colors/<x>`, `typography/<x>`) or `tests/fixtures/<name>.json` (`client-brand`) for the
+  run and restores your saved styles without adding revisions. `--axe` adds WCAG 2.2 AA
+  checks; `--no-webfonts` fails if any font file downloads; `--rtl` renders right to left.
+  `node bin/compare-screenshots.mjs <a> <b>` byte-compares two runs.
+- `node bin/add-font.mjs @fontsource-variable/<id>` bundles a font (woff2 + OFL file) and
+  prints the `theme.json` entry and readme credit to paste in.
+- `node bin/make-client-brand.mjs` rewrites `tests/fixtures/client-brand.json` (a stand-in
+  client brand: every palette hue turned, system fonts, square corners) from the live
+  palette. Re-run it after changing the palette.
 - `vendor/bin/phpcs .` against `phpcs.xml.dist` (WordPress-Extra + WordPress-Docs) after
   `composer install`. CI (`.github/workflows/ci.yml`) runs `npm test`'s three checks,
   `php -l` and phpcs on pushes and PRs to `main` and `release/**`.
