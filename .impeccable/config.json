@@ -1,0 +1,18 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "style.css"
+        ],
+        "createdAt": "2026-10-04T12:48:34.278Z",
+        "reason": "assistant triage, not user-confirmed: FAQ accordion ::details-content height transition is domain-appropriate disclosure motion, gated by prefers-reduced-motion: no-preference, 0.25s, overflow hidden; pre-existing since 1f1f4ca"
+      }
+    ]
+  },
+  "buildPath": "code"
+}
