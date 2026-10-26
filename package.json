@@ -6,7 +6,9 @@
 	"scripts": {
 		"test": "node tests/release-check.mjs && node tests/markup-check.mjs && node tests/compat-check.mjs",
 		"check:editor": "node bin/check-editor.mjs",
-		"check:frontend": "node bin/check-frontend.mjs"
+		"check:frontend": "node bin/check-frontend.mjs",
+		"check:menu": "node bin/check-menu.mjs",
+		"check:legacy": "node bin/check-legacy-content.mjs --axe"
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "4.13.0",
