@@ -399,4 +399,35 @@ const dark = JSON.parse(read('styles/dark.json'));
 assert.ok(isPreset(dark, ['color']), 'Dark only recolors (the Site Editor lists it under Colors)');
 assert.ok(themeJson.settings.custom.radius.card !== '8px' || themeJson.settings.custom.motion.base !== '0.15s' || themeJson.settings.custom.color?.primary !== '262 100% 62%', '2.0 sets its own token values');
 
+// 2.0 Part 2: brand presets (spec §4, D13). Color presets hold only colors and redefine the
+// whole palette; font presets hold only typography and redefine the three role fonts; System
+// downloads nothing; the client-brand fixture changes every brand value at once.
+const presetFiles = (dir) => (existsSync(new URL(`../${dir}`, import.meta.url))
+  ? readdirSync(new URL(`../${dir}`, import.meta.url)).filter((f) => f.endsWith('.json')).map((f) => [f, JSON.parse(read(`${dir}/${f}`))])
+  : []);
+const paletteSlugs = themeJson.settings.color.palette.map((c) => c.slug).sort();
+const colorPresets = presetFiles('styles/colors');
+assert.ok(colorPresets.length >= 3, 'at least three color presets besides Dark');
+for (const [file, preset] of [...colorPresets, ['dark.json', dark]]) {
+  assert.ok(preset.title, `${file}: title`);
+  assert.ok(isPreset(preset, ['color']), `${file}: colors only, so the Site Editor lists it under Colors`);
+  assert.deepEqual(preset.settings.color.palette.map((c) => c.slug).sort(), paletteSlugs, `${file}: redefines every palette color`);
+  assert.ok(preset.settings.color.palette.every((c) => !/var\(/.test(c.color)), `${file}: plain color values`);
+}
+const fontPresets = presetFiles('styles/typography');
+assert.ok(fontPresets.length >= 3, 'at least two font presets plus System');
+for (const [file, preset] of fontPresets) {
+  assert.ok(preset.title, `${file}: title`);
+  assert.ok(isPreset(preset, ['typography']), `${file}: typography only, so the Site Editor lists it under Typography`);
+  assert.deepEqual(fontFamilies(preset).map((f) => f.slug).sort(), ['body', 'display', 'mono'], `${file}: redefines the three role fonts`);
+}
+const systemPreset = fontPresets.find(([file]) => file === 'system.json')?.[1];
+assert.ok(systemPreset, 'styles/typography/system.json (spec D13)');
+assert.ok(fontFamilies(systemPreset).every((f) => !f.fontFace), 'System downloads no fonts');
+const clientBrand = JSON.parse(read('tests/fixtures/client-brand.json'));
+assert.deepEqual(clientBrand.settings.color.palette.map((c) => c.slug).sort(), paletteSlugs, 'client-brand covers every palette color (re-run bin/make-client-brand.mjs)');
+assert.deepEqual(fontFamilies(clientBrand).map((f) => f.slug).sort(), ['body', 'display', 'mono']);
+assert.deepEqual(Object.keys(clientBrand.settings.custom.radius).sort(), Object.keys(themeJson.settings.custom.radius).sort(), 'client-brand covers every radius token');
+assert.ok(Object.values(clientBrand.settings.custom.radius).every((r) => r === '0'), 'client-brand squares every corner');
+
 console.log('release source checks passed');

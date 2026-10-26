@@ -56,6 +56,12 @@ Agile Base is distributed under the terms of the GNU GPL version 2 or later.
 
 == Resources ==
 
+Source Serif 4 font, Copyright 2014 - 2023 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'
+* Source: https://github.com/adobe-fonts/source-serif
+* License: SIL Open Font License, 1.1
+* License URI: https://scripts.sil.org/OFL
+* License bundled at: assets/fonts/OFL-Source-Serif-4.txt
+
 Public Sans font, Copyright 2015 The Public Sans Project Authors
 * Source: https://github.com/uswds/public-sans
 * License: SIL Open Font License, 1.1

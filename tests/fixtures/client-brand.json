@@ -1,0 +1,80 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Client brand (test fixture)",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"name": "Black",
+					"slug": "black",
+					"color": "#000000"
+				},
+				{
+					"name": "White",
+					"slug": "white",
+					"color": "#feffff"
+				},
+				{
+					"name": "Primary",
+					"slug": "primary",
+					"color": "#cce5fe"
+				},
+				{
+					"name": "Secondary",
+					"slug": "secondary",
+					"color": "#a9d8b5"
+				},
+				{
+					"name": "Accent",
+					"slug": "accent",
+					"color": "#098475"
+				},
+				{
+					"name": "Paper",
+					"slug": "paper",
+					"color": "#feffff"
+				},
+				{
+					"name": "Ink",
+					"slug": "ink",
+					"color": "#371a03"
+				},
+				{
+					"name": "Surface",
+					"slug": "surface",
+					"color": "#e7f5f6"
+				}
+			]
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"name": "Client Sans",
+					"slug": "body",
+					"fontFamily": "'Trebuchet MS', Verdana, sans-serif"
+				},
+				{
+					"name": "Client Serif",
+					"slug": "display",
+					"fontFamily": "Georgia, 'Times New Roman', serif"
+				},
+				{
+					"name": "Client Mono",
+					"slug": "mono",
+					"fontFamily": "'Courier New', monospace"
+				}
+			]
+		},
+		"custom": {
+			"radius": {
+				"bar": "0",
+				"card": "0",
+				"icon": "0",
+				"panel": "0",
+				"pill": "0",
+				"round": "0"
+			}
+		}
+	}
+}
