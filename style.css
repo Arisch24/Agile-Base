@@ -604,7 +604,10 @@ table,
 	min-width: 32rem;
 }
 
-/* Sections inside post content sit edge to edge: no white sliver between color fields. */
-.wp-block-post-content > .alignfull + .alignfull {
+/* Full-width sections sit edge to edge, in post content and in a template's main (the
+   homepage), and the footer meets a full-width section that ends the page: no white
+   sliver beside a color field. */
+:is(main, .wp-block-post-content) > .alignfull + .alignfull,
+.wp-site-blocks > main:has(> .alignfull:last-child) + * {
 	margin-block-start: 0;
 }

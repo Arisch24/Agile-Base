@@ -188,7 +188,7 @@ Constrained flow: content 960px, wide 1280px, with root-padding-aware full-bleed
 
 The top is compact. The page has no padding above the header or below the footer; the header pads itself `x-small`, and the homepage hero meets it with no gap. The homepage hero is three columns: the serial (12%), the headline, lead and buttons (62%), and the photo (21%). They stack on phones and tablets, the photo last, kept to half the width from 600 to 781px. At 1366×768 and 1440×900 the next section starts within 85% of the screen, and on a 375×812 phone the first button ends within 80% (`check-frontend --fold`; Velocity, the frozen 1.x look, is exempt).
 
-Spacing is a fluid seven-step scale (`x-small` 16px up to `3x-large` 96 to 176px, all `clamp()`), and block gap is a separate fluid gap scale (`--wp--custom--gap--*`, default `small`). Adjacent full-width sections touch edge to edge, with no gap between color fields. Logical properties only (`margin-block`, `padding-inline`, `border-inline-end`, `inset-inline-start`, `text-align: end`) so right-to-left needs no overrides.
+Spacing is a fluid seven-step scale (`x-small` 16px up to `3x-large` 96 to 176px, all `clamp()`), and block gap is a separate fluid gap scale (`--wp--custom--gap--*`, default `small`). Adjacent full-width sections touch edge to edge, with no gap between color fields, and the footer meets a full-width section that ends the page (`check-frontend` checks every page). Logical properties only (`margin-block`, `padding-inline`, `border-inline-end`, `inset-inline-start`, `text-align: end`) so right-to-left needs no overrides.
 
 ## Elevation & Depth
 

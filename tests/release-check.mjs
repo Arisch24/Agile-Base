@@ -579,5 +579,7 @@ assert.match(homeHero, /<img src="<\?php echo esc_url\( get_theme_file_uri\( 'as
 assert.match(homeHero, /<!-- wp:image \{"aspectRatio":"4\/3","scale":"cover"/, 'the hero photo keeps a 4:3 frame');
 assert.match(css, /@media \(min-width: 600px\) and \(max-width: 781px\) \{\s*\.agile-base-hero-photo \{\s*max-inline-size: 50%;/, 'the stacked hero photo keeps to half the width on tablets');
 for (const file of markupFiles) assert.doesNotMatch(read(file), /<img [^>]*src="https?:/, `${file}: images are bundled, never hotlinked`);
+// Full-width sections touch, on the homepage too (check-frontend measures it on every page).
+assert.match(css, /:is\(main, \.wp-block-post-content\) > \.alignfull \+ \.alignfull,\s*\.wp-site-blocks > main:has\(> \.alignfull:last-child\) \+ \* \{\s*margin-block-start: 0;/, 'full-width sections and the footer sit edge to edge');
 
 console.log('release source checks passed');

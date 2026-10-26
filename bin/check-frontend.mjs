@@ -173,6 +173,14 @@ try {
         dir: document.documentElement.dir,
         h1Font: getComputedStyle(document.querySelector('h1') || document.body).fontFamily,
         loadedFonts: [...document.fonts].filter((font) => font.status === 'loaded').map((font) => font.family.replace(/["']/g, '')),
+        // Full-width sections touch each other, and the footer meets one that ends the page:
+        // no block gap above either (a white sliver beside a color field).
+        sectionGaps: [...document.querySelectorAll('.alignfull')]
+          .filter((el) => el.previousElementSibling?.classList.contains('alignfull'))
+          .concat([...document.querySelectorAll('.wp-site-blocks > main')]
+            .filter((main) => main.lastElementChild?.classList.contains('alignfull') && main.nextElementSibling)
+            .map((main) => main.nextElementSibling))
+          .filter((el) => parseFloat(getComputedStyle(el).marginBlockStart) !== 0).length,
         top: (() => {
           const box = (el) => (el ? el.getBoundingClientRect() : null);
           const hero = document.querySelector('main')?.firstElementChild;
@@ -198,6 +206,7 @@ try {
       if (expectFont && !(facts.h1Font.includes(expectFont) && facts.loadedFonts.includes(expectFont))) {
         problems.push(`<h1> font is ${facts.h1Font} (loaded: ${facts.loadedFonts.join(', ') || 'none'}), expected ${expectFont}`);
       }
+      if (facts.sectionGaps) problems.push(`${facts.sectionGaps} full-width sections leave a gap before the next`);
       if (fold && name === 'home') {
         const { header, next, button } = facts.top;
         if (width >= 1366 && header > FOLD.header) problems.push(`header is ${header}px tall (at most ${FOLD.header})`);
