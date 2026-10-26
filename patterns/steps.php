@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<!-- wp:column {"className":"agile-base-step","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}}} -->
 			<div class="wp-block-column agile-base-step">
 				<!-- wp:paragraph {"textColor":"accent","fontFamily":"mono","fontSize":"3-x-large","style":{"typography":{"fontWeight":"700"}}} -->
-				<p class="has-accent-color has-text-color has-mono-font-family has-3-x-large-font-size" style="font-weight:700"><?php echo esc_html_x( '1', 'step number', 'agile-base' ); ?></p>
+				<p class="has-accent-color has-text-color has-mono-font-family has-3-x-large-font-size" style="font-weight:700"><?php echo esc_html_x( '01', 'step number', 'agile-base' ); ?></p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:heading {"level":3,"fontSize":"x-large"} -->
@@ -42,7 +42,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<!-- wp:column {"className":"agile-base-step","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}}} -->
 			<div class="wp-block-column agile-base-step">
 				<!-- wp:paragraph {"textColor":"accent","fontFamily":"mono","fontSize":"3-x-large","style":{"typography":{"fontWeight":"700"}}} -->
-				<p class="has-accent-color has-text-color has-mono-font-family has-3-x-large-font-size" style="font-weight:700"><?php echo esc_html_x( '2', 'step number', 'agile-base' ); ?></p>
+				<p class="has-accent-color has-text-color has-mono-font-family has-3-x-large-font-size" style="font-weight:700"><?php echo esc_html_x( '02', 'step number', 'agile-base' ); ?></p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:heading {"level":3,"fontSize":"x-large"} -->
@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<!-- wp:column {"className":"agile-base-step","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}}} -->
 			<div class="wp-block-column agile-base-step">
 				<!-- wp:paragraph {"textColor":"accent","fontFamily":"mono","fontSize":"3-x-large","style":{"typography":{"fontWeight":"700"}}} -->
-				<p class="has-accent-color has-text-color has-mono-font-family has-3-x-large-font-size" style="font-weight:700"><?php echo esc_html_x( '3', 'step number', 'agile-base' ); ?></p>
+				<p class="has-accent-color has-text-color has-mono-font-family has-3-x-large-font-size" style="font-weight:700"><?php echo esc_html_x( '03', 'step number', 'agile-base' ); ?></p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:heading {"level":3,"fontSize":"x-large"} -->

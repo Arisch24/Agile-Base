@@ -408,7 +408,8 @@
 					"fontWeight": "var(--wp--custom--font-weight--bold)",
 					"lineHeight": "1.05",
 					"letterSpacing": "-0.025em"
-				}
+				},
+				"css": "& { word-spacing: 0.08em; }"
 			},
 			"link": {
 				"color": {

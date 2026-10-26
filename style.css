@@ -37,10 +37,10 @@ Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, cu
 }
 
 .screen-reader-text:focus {
-	background-color: #fff;
+	background-color: var(--wp--preset--color--paper);
 	clip: auto;
 	clip-path: none;
-	color: #000;
+	color: var(--wp--preset--color--ink);
 	display: block;
 	height: auto;
 	left: 5px;
@@ -101,7 +101,8 @@ table,
 
 :where(input, select, textarea):user-invalid {
 	border-color: var(--wp--preset--color--accent);
-	box-shadow: inset 0 -3px 0 var(--wp--preset--color--accent);
+	outline: 2px solid var(--wp--preset--color--accent);
+	outline-offset: 0;
 }
 
 :where(input, select, textarea):disabled {
@@ -242,10 +243,16 @@ table,
 /* Testimonial: a ruled quote on the surface color, with an oversized quotation mark
    in the accent color behind the quote text. */
 .agile-base-testimonial {
-	background-color: var(--wp--preset--color--surface);
+	color: var(--wp--preset--color--black);
+	background-color: var(--wp--preset--color--secondary);
 	border-block-start: 2px solid currentColor;
 	border-radius: var(--wp--custom--radius--panel);
-	box-shadow: var(--wp--preset--shadow--card);
+}
+
+@media (max-width: 600px) {
+	.agile-base-testimonial {
+		padding: var(--wp--preset--spacing--small);
+	}
 }
 
 .agile-base-quote {
@@ -254,6 +261,7 @@ table,
 	font-weight: var(--wp--custom--font-weight--bold);
 	letter-spacing: -0.02em;
 	line-height: 1.15;
+	word-spacing: 0.08em;
 	padding-block-start: 1.1em;
 }
 
@@ -264,7 +272,7 @@ table,
 	inset-inline-start: -0.06em;
 	font-size: 4.5em;
 	line-height: 1;
-	color: color-mix(in srgb, var(--wp--preset--color--accent) 45%, transparent);
+	color: currentColor;
 }
 
 /* Post meta row: mono, as measurement, slightly muted. */
@@ -583,4 +591,9 @@ table,
 
 .wp-block-table table {
 	min-width: 32rem;
+}
+
+/* Sections inside post content sit edge to edge: no white sliver between color fields. */
+.wp-block-post-content > .alignfull + .alignfull {
+	margin-block-start: 0;
 }

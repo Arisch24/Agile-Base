@@ -21,13 +21,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h2 class="wp-block-heading alignwide has-3-x-large-font-size"><?php esc_html_e( 'What we do', 'agile-base' ); ?></h2>
 	<!-- /wp:heading -->
 
-	<!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"var:preset|spacing|small"}},"layout":{"type":"grid","minimumColumnWidth":"17rem"}} -->
+	<!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"var:preset|spacing|small"}},"layout":{"type":"grid","columnCount":3,"minimumColumnWidth":"17rem"}} -->
 	<div class="wp-block-group alignwide">
 		<!-- wp:group {"className":"agile-base-service","style":{"spacing":{"blockGap":"var:preset|spacing|x-small","padding":{"top":"var:preset|spacing|small","right":"var:preset|spacing|small","bottom":"var:preset|spacing|small","left":"var:preset|spacing|small"}}},"layout":{"type":"default"}} -->
 		<div class="wp-block-group agile-base-service" style="padding-top:var(--wp--preset--spacing--small);padding-right:var(--wp--preset--spacing--small);padding-bottom:var(--wp--preset--spacing--small);padding-left:var(--wp--preset--spacing--small)">
-			<!-- wp:html -->
-			<div class="agile-base-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"></path></svg></div>
-			<!-- /wp:html -->
+			<!-- wp:paragraph {"textColor":"accent","fontFamily":"mono","fontSize":"large","style":{"typography":{"fontWeight":"700"}}} -->
+			<p class="has-accent-color has-text-color has-mono-font-family has-large-font-size" style="font-weight:700"><?php echo esc_html_x( 'No. 001', 'serial number of a quote line', 'agile-base' ); ?></p>
+			<!-- /wp:paragraph -->
 
 			<!-- wp:heading {"level":3,"fontSize":"x-large"} -->
 			<h3 class="wp-block-heading has-x-large-font-size"><?php esc_html_e( 'Your main service', 'agile-base' ); ?></h3>
@@ -45,9 +45,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<!-- wp:group {"className":"agile-base-service","style":{"spacing":{"blockGap":"var:preset|spacing|x-small","padding":{"top":"var:preset|spacing|small","right":"var:preset|spacing|small","bottom":"var:preset|spacing|small","left":"var:preset|spacing|small"}}},"layout":{"type":"default"}} -->
 		<div class="wp-block-group agile-base-service" style="padding-top:var(--wp--preset--spacing--small);padding-right:var(--wp--preset--spacing--small);padding-bottom:var(--wp--preset--spacing--small);padding-left:var(--wp--preset--spacing--small)">
-			<!-- wp:html -->
-			<div class="agile-base-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17"></rect><path d="M9 4V2h6v2M9 10h6M9 14h6M9 18h3"></path></svg></div>
-			<!-- /wp:html -->
+			<!-- wp:paragraph {"textColor":"accent","fontFamily":"mono","fontSize":"large","style":{"typography":{"fontWeight":"700"}}} -->
+			<p class="has-accent-color has-text-color has-mono-font-family has-large-font-size" style="font-weight:700"><?php echo esc_html_x( 'No. 002', 'serial number of a quote line', 'agile-base' ); ?></p>
+			<!-- /wp:paragraph -->
 
 			<!-- wp:heading {"level":3,"fontSize":"x-large"} -->
 			<h3 class="wp-block-heading has-x-large-font-size"><?php esc_html_e( 'A second service', 'agile-base' ); ?></h3>
@@ -65,9 +65,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<!-- wp:group {"className":"agile-base-service","style":{"spacing":{"blockGap":"var:preset|spacing|x-small","padding":{"top":"var:preset|spacing|small","right":"var:preset|spacing|small","bottom":"var:preset|spacing|small","left":"var:preset|spacing|small"}}},"layout":{"type":"default"}} -->
 		<div class="wp-block-group agile-base-service" style="padding-top:var(--wp--preset--spacing--small);padding-right:var(--wp--preset--spacing--small);padding-bottom:var(--wp--preset--spacing--small);padding-left:var(--wp--preset--spacing--small)">
-			<!-- wp:html -->
-			<div class="agile-base-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"></path><path d="M8.5 12l2.5 2.5 4.5-4.5"></path></svg></div>
-			<!-- /wp:html -->
+			<!-- wp:paragraph {"textColor":"accent","fontFamily":"mono","fontSize":"large","style":{"typography":{"fontWeight":"700"}}} -->
+			<p class="has-accent-color has-text-color has-mono-font-family has-large-font-size" style="font-weight:700"><?php echo esc_html_x( 'No. 003', 'serial number of a quote line', 'agile-base' ); ?></p>
+			<!-- /wp:paragraph -->
 
 			<!-- wp:heading {"level":3,"fontSize":"x-large"} -->
 			<h3 class="wp-block-heading has-x-large-font-size"><?php esc_html_e( 'A third service', 'agile-base' ); ?></h3>

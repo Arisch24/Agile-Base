@@ -5,7 +5,7 @@
  * Categories: agile-base, featured
  * Keywords: stats, numbers, figures, proof
  * Viewport Width: 1400
- * Description: A dark field of three headline figures. Replace the placeholder numbers with your own.
+ * Description: A dark field of three headline figures. Replace the placeholder figures with your own.
  *
  * @package Agile_Base
  */
@@ -19,10 +19,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wp-block-group alignfull has-paper-color has-ink-background-color has-text-color has-background" style="padding-top:var(--wp--preset--spacing--x-large);padding-bottom:var(--wp--preset--spacing--x-large)">
 	<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|medium","left":"var:preset|spacing|large"}}}} -->
 	<div class="wp-block-columns alignwide">
-			<!-- wp:column -->
-			<div class="wp-block-column">
+			<!-- wp:column {"className":"agile-base-reason"} -->
+			<div class="wp-block-column agile-base-reason">
 				<!-- wp:paragraph {"className":"agile-base-stat-number","fontSize":"5-x-large"} -->
-				<p class="agile-base-stat-number has-5-x-large-font-size">12</p>
+				<p class="agile-base-stat-number has-5-x-large-font-size">00</p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:paragraph {"fontSize":"medium"} -->
@@ -31,10 +31,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<!-- /wp:column -->
 
-			<!-- wp:column -->
-			<div class="wp-block-column">
+			<!-- wp:column {"className":"agile-base-reason"} -->
+			<div class="wp-block-column agile-base-reason">
 				<!-- wp:paragraph {"className":"agile-base-stat-number","fontSize":"5-x-large"} -->
-				<p class="agile-base-stat-number has-5-x-large-font-size">350</p>
+				<p class="agile-base-stat-number has-5-x-large-font-size">000</p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:paragraph {"fontSize":"medium"} -->
@@ -43,10 +43,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<!-- /wp:column -->
 
-			<!-- wp:column -->
-			<div class="wp-block-column">
+			<!-- wp:column {"className":"agile-base-reason"} -->
+			<div class="wp-block-column agile-base-reason">
 				<!-- wp:paragraph {"className":"agile-base-stat-number","fontSize":"5-x-large"} -->
-				<p class="agile-base-stat-number has-5-x-large-font-size">48h</p>
+				<p class="agile-base-stat-number has-5-x-large-font-size">00h</p>
 				<!-- /wp:paragraph -->
 
 				<!-- wp:paragraph {"fontSize":"medium"} -->

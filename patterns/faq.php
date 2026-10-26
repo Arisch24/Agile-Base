@@ -15,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<!-- wp:group {"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"},"blockGap":"var:preset|spacing|large"}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<!-- wp:group {"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"},"blockGap":"var:preset|spacing|large"}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--2-x-large)">
-	<!-- wp:heading {"fontSize":"3-x-large"} -->
-	<h2 class="wp-block-heading has-3-x-large-font-size"><?php esc_html_e( 'Frequently asked questions', 'agile-base' ); ?></h2>
+	<!-- wp:heading {"align":"wide","fontSize":"3-x-large"} -->
+	<h2 class="wp-block-heading alignwide has-3-x-large-font-size"><?php esc_html_e( 'Frequently asked questions', 'agile-base' ); ?></h2>
 	<!-- /wp:heading -->
 
-	<!-- wp:group {"className":"agile-base-faq","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"constrained"}} -->
-	<div class="wp-block-group agile-base-faq">
+	<!-- wp:group {"align":"wide","className":"agile-base-faq","style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
+	<div class="wp-block-group alignwide agile-base-faq">
 		<!-- wp:details -->
 		<details class="wp-block-details"><summary><?php esc_html_e( 'What does a project cost?', 'agile-base' ); ?></summary>
 		<!-- wp:paragraph -->
