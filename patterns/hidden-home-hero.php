@@ -50,8 +50,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<!-- wp:column {"width":"21%"} -->
 		<div class="wp-block-column" style="flex-basis:21%">
-			<!-- wp:image {"aspectRatio":"4/3","scale":"cover","sizeSlug":"full","linkDestination":"none"} -->
-			<figure class="wp-block-image size-full"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/placeholder-hero.webp' ) ); ?>" alt="<?php echo esc_attr_x( 'A potter shaping clay on a spinning wheel', 'placeholder photo alt text', 'agile-base' ); ?>" style="aspect-ratio:4/3;object-fit:cover"/></figure>
+			<!-- wp:image {"aspectRatio":"4/3","scale":"cover","sizeSlug":"full","linkDestination":"none","className":"agile-base-hero-photo"} -->
+			<figure class="wp-block-image size-full agile-base-hero-photo"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/placeholder-hero.webp' ) ); ?>" alt="<?php echo esc_attr_x( 'A potter shaping clay on a spinning wheel', 'placeholder photo alt text', 'agile-base' ); ?>" style="aspect-ratio:4/3;object-fit:cover"/></figure>
 			<!-- /wp:image -->
 		</div>
 		<!-- /wp:column -->

@@ -577,6 +577,7 @@ assert.ok(heroPhoto.length <= 80 * 1024, `${HERO_PHOTO} is ${Math.round(heroPhot
 assert.match(readme, /^placeholder-hero\.webp, .+\n\* Source: https:\/\/\S+\n\* License: CC0 1\.0 Universal\n\* License URI: https:\/\/creativecommons\.org\/publicdomain\/zero\/1\.0\/$/m, 'readme credits the photo with its source and CC0 license');
 assert.match(homeHero, /<img src="<\?php echo esc_url\( get_theme_file_uri\( 'assets\/images\/placeholder-hero\.webp' \) \); \?>" alt="<\?php echo esc_attr_x\( '[^']+', 'placeholder photo alt text', 'agile-base' \); \?>"/, 'the hero photo is bundled, with translatable alt text');
 assert.match(homeHero, /<!-- wp:image \{"aspectRatio":"4\/3","scale":"cover"/, 'the hero photo keeps a 4:3 frame');
+assert.match(css, /@media \(min-width: 600px\) and \(max-width: 781px\) \{\s*\.agile-base-hero-photo \{\s*max-inline-size: 50%;/, 'the stacked hero photo keeps to half the width on tablets');
 for (const file of markupFiles) assert.doesNotMatch(read(file), /<img [^>]*src="https?:/, `${file}: images are bundled, never hotlinked`);
 
 console.log('release source checks passed');
