@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="wp-block-group alignwide">
 		<!-- wp:site-logo {"width":56} /-->
 
-		<!-- wp:site-title {"level":0,"textAlign":"center","style":{"typography":{"fontWeight":"700"}},"fontSize":"large"} /-->
+		<!-- wp:site-title {"level":0,"textAlign":"center","style":{"typography":{"fontWeight":"var(--wp--custom--font-weight--bold)"}},"fontSize":"large"} /-->
 
 		<!-- wp:navigation {"ariaLabel":"<?php echo esc_attr_x( 'Primary', 'navigation landmark label', 'agile-base' ); ?>","overlayMenu":"mobile","layout":{"type":"flex","justifyContent":"center","flexWrap":"wrap"}} /-->
 	</div>

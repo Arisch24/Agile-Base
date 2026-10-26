@@ -584,4 +584,112 @@ for (const file of markupFiles) assert.doesNotMatch(read(file), /<img [^>]*src="
 // Full-width sections touch, on the homepage too (check-frontend measures it on every page).
 assert.match(css, /:is\(main, \.wp-block-post-content\) > \.alignfull \+ \.alignfull,\s*\.wp-site-blocks > main:has\(> \.alignfull:last-child\) \+ \* \{\s*margin-block-start: 0;/, 'full-width sections and the footer sit edge to edge');
 
+// 2.0 Part 3: headers. Every header is one pattern line whose pattern keeps the site title
+// and an accessible, mobile-ready menu, with no label above anything; Header (Button)
+// adds one translatable call to action (spec §7.1).
+for (const part of ['header', 'header-centered', 'header-minimal', 'header-cta']) {
+  assert.equal(read(`parts/${part}.html`).trim(), `<!-- wp:pattern {"slug":"agile-base/hidden-${part}"} /-->`, `${part}: markup lives in its hidden pattern`);
+  const source = read(`patterns/hidden-${part}.php`);
+  assert.match(source, /^ \* Inserter: no$/m, `${part}: hidden pattern`);
+  assert.match(source, /wp:site-title /, `${part}: site title`);
+  assert.match(source, /wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( '[^']+', 'navigation landmark label', 'agile-base' \); \?>"[^\n]*"overlayMenu":"(mobile|always)"/, `${part}: labelled menu with a mobile overlay`);
+  assert.doesNotMatch(source, /agile-base-eyebrow/, `${part}: no eyebrow label`);
+}
+const headerCta = read('patterns/hidden-header-cta.php');
+assert.equal((headerCta.match(/<!-- wp:button\b/g) || []).length, 1, 'Header (Button): one call to action');
+assert.match(headerCta, /wp-block-button__link[^>]*href="<\?php echo esc_url\(/, 'Header (Button): the button links somewhere real');
+assert.match(headerCta, /esc_html_e\(|esc_html__\(/, 'Header (Button): translatable button text');
+assert.deepEqual(templatePart('header-cta'), { name: 'header-cta', title: 'Header (Button)', area: 'header' });
+assert.ok(themeJson.styles.blocks['core/navigation'], 'theme.json styles the navigation block');
+
+// 2.0 Part 3: footers. No eyebrow labels (1.x had four in Footer (Columns)); the columns
+// footer keeps its menu and search; Footer (Business) gives a business's contact details,
+// hours, legal links and social icons, all editable and translatable (spec §7.1).
+const footerColumns2 = read('patterns/hidden-footer-columns.php');
+assert.doesNotMatch(footerColumns2, /agile-base-eyebrow/, 'Footer (Columns): no eyebrow labels');
+assert.match(footerColumns2, /wp:navigation /);
+assert.match(footerColumns2, /wp:search /);
+assert.doesNotMatch(read('parts/footer.html'), /agile-base-eyebrow/);
+assert.equal(read('parts/footer-business.html').trim(), '<!-- wp:pattern {"slug":"agile-base/hidden-footer-business"} /-->');
+const footerBusiness = read('patterns/hidden-footer-business.php');
+assert.match(footerBusiness, /^ \* Inserter: no$/m);
+assert.match(footerBusiness, /href="mailto:/, 'Footer (Business): email link');
+assert.match(footerBusiness, /href="tel:/, 'Footer (Business): phone link');
+assert.match(footerBusiness, /wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( '[^']+', 'navigation landmark label', 'agile-base' \); \?>"/, 'Footer (Business): a labelled legal-links menu');
+assert.match(footerBusiness, /wp:social-links /);
+assert.match(footerBusiness, /"slug":"agile-base\/hidden-footer-credit"/);
+assert.equal(hasKicker(footerBusiness), false);
+assert.doesNotMatch(footerBusiness, /agile-base-eyebrow/);
+assert.deepEqual(templatePart('footer-business'), { name: 'footer-business', title: 'Footer (Business)', area: 'footer' });
+assert.match(stylesheet, /\.wp-block-social-links:empty\s*\{\s*display:\s*none;?\s*\}/, 'no gap when no social link is filled in');
+
+// 2.0 Part 3: section styles and block style variations (theme.json partials, WP 6.6+).
+// Each is a style-only partial for a fixed set of blocks, with colors from palette presets
+// so color presets and a client's brand recolor them.
+const partials = (dir) => presetFiles(dir);
+const sections = partials('styles/sections');
+assert.ok(sections.length >= 3, 'at least three section styles (spec §7.4)');
+const SECTION_BLOCKS = new Set(['core/group', 'core/columns', 'core/column', 'core/cover']);
+for (const [file, partial] of sections) {
+  assert.equal(partial.version, 3, file);
+  assert.match(partial.slug, /^section-[a-z0-9-]+$/, `${file}: slug section-*`);
+  assert.ok(partial.title, `${file}: title`);
+  assert.ok(partial.blockTypes?.length && partial.blockTypes.every((b) => SECTION_BLOCKS.has(b)), `${file}: blockTypes`);
+  assert.ok(partial.styles?.color?.background && partial.styles?.color?.text, `${file}: sets background and text`);
+  assert.ok(partial.styles?.elements?.link && partial.styles?.elements?.button, `${file}: restyles links and buttons for its background`);
+  assert.equal(partial.settings, undefined, `${file}: styles only`);
+  assert.doesNotMatch(JSON.stringify(partial.styles), /#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(|--wp--custom--color--/i, `${file}: colors from palette presets`);
+}
+for (const [file, partial] of partials('styles/blocks')) {
+  assert.equal(partial.version, 3, file);
+  assert.ok(partial.slug && partial.title && partial.blockTypes?.length && partial.styles, `${file}: slug, title, blockTypes, styles`);
+}
+for (const block of ['core/search', 'core/query-pagination', 'core/avatar', 'core/social-links']) {
+  assert.ok(themeJson.styles.blocks[block], `theme.json styles.blocks["${block}"]`);
+}
+
+// 2.0 Part 3: blog listings. No label above any heading; the card keeps its contract class
+// and its byline blocks; the 1.4.0 author header keeps wrapping on phones.
+for (const slug of ['posts-list', 'hidden-blog-heading', 'hidden-no-results']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /agile-base-eyebrow/, `${slug}: no eyebrow label`);
+}
+for (const template of ['index', 'home', 'archive', 'search', 'author']) {
+  assert.equal(hasKicker(read(`templates/${template}.html`)), false, `${template}: no label above a heading`);
+}
+assert.match(read('patterns/posts-list.php'), /className":"post-card"/);
+assert.match(read('templates/author.html'), /"className":"agile-base-author"[^\n]*"flexWrap":"wrap"/);
+
+// 2.0 Part 3: About the Author (spec §7.2, D6): insertable, not in the templates.
+const authorBio = assertNewPattern('author-bio', { title: 'About the Author', categories: ['agile-base', 'text'] });
+assert.match(authorBio, /wp:avatar /);
+assert.match(authorBio, /wp:post-author-name \{[^\n]*"isLink":true/);
+assert.match(authorBio, /wp:post-author-biography /);
+for (const template of ['single', 'single-wide']) {
+  assert.doesNotMatch(read(`templates/${template}.html`), /agile-base\/author-bio/, `${template}: no author bio by default (D6)`);
+}
+
+// 2.0 Part 3: pages, 404 and template designs. No label above a heading anywhere; the
+// 1.x structural guarantees (search on 404, rows in Archive (List)) stay; the Landing Page
+// template has no menu and one hidden <h1> (spec §7.1).
+for (const slug of ['hidden-404', 'template-archive-list', 'template-404-search']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /agile-base-eyebrow/, `${slug}: no eyebrow label`);
+}
+for (const template of ['page', 'page-no-title', 'page-full-width', 'page-blank', '404', 'page-landing']) {
+  assert.equal(hasKicker(read(`templates/${template}.html`)), false, `${template}: no label above a heading`);
+}
+assert.match(read('patterns/hidden-404.php'), /wp:search /);
+assert.match(read('patterns/template-404-search.php'), /wp:search /);
+const landing = read('templates/page-landing.html');
+assert.deepEqual(customTemplate('page-landing'), { name: 'page-landing', title: 'Landing Page', postTypes: ['page'] });
+assert.doesNotMatch(landing, /wp:navigation|wp:template-part \{"slug":"header/, 'Landing Page: no menu');
+assert.match(landing, /wp:site-title /);
+assert.match(landing, /wp:post-title \{"level":1,"className":"screen-reader-text"\}/, 'Landing Page: the title is the hidden <h1>');
+assert.match(landing, /wp:post-content \{[^\n]*"align":"full"/, 'Landing Page: content full width');
+assert.match(landing, /"slug":"agile-base\/hidden-footer-credit"/);
+assert.equal((landing.match(/"tagName":"main"/g) || []).length, 1);
+
 console.log('release source checks passed');

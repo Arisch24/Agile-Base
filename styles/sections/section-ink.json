@@ -1,0 +1,64 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Ink",
+	"slug": "section-ink",
+	"blockTypes": [
+		"core/group",
+		"core/columns",
+		"core/cover"
+	],
+	"styles": {
+		"color": {
+			"background": "var(--wp--preset--color--ink)",
+			"text": "var(--wp--preset--color--paper)"
+		},
+		"spacing": {
+			"padding": {
+				"top": "var:preset|spacing|small",
+				"right": "var:preset|spacing|small",
+				"bottom": "var:preset|spacing|small",
+				"left": "var:preset|spacing|small"
+			}
+		},
+		"elements": {
+			"link": {
+				"color": {
+					"text": "var(--wp--preset--color--paper)"
+				},
+				":hover": {
+					"color": {
+						"text": "var(--wp--preset--color--paper)"
+					}
+				}
+			},
+			"heading": {
+				"color": {
+					"text": "var(--wp--preset--color--paper)"
+				}
+			},
+			"button": {
+				"color": {
+					"background": "var(--wp--preset--color--paper)",
+					"text": "var(--wp--preset--color--ink)"
+				},
+				"border": {
+					"color": "var(--wp--preset--color--paper)"
+				},
+				":hover": {
+					"color": {
+						"background": "var(--wp--preset--color--ink)",
+						"text": "var(--wp--preset--color--paper)"
+					}
+				},
+				":focus": {
+					"color": {
+						"background": "var(--wp--preset--color--ink)",
+						"text": "var(--wp--preset--color--paper)"
+					}
+				}
+			}
+		},
+		"css": "& .wp-block-button__link { color: var(--wp--preset--color--ink) !important; background-color: var(--wp--preset--color--paper) !important; border-color: var(--wp--preset--color--paper) !important; } & .wp-block-button__link:not(:disabled):is(:hover, :focus-visible), & .wp-block-button:is(.is-style-outline, .is-style-boxed) > .wp-block-button__link { color: var(--wp--preset--color--paper) !important; background-color: transparent !important; } & .wp-block-button:is(.is-style-outline, .is-style-boxed) > .wp-block-button__link:not(:disabled):is(:hover, :focus-visible) { color: var(--wp--preset--color--ink) !important; background-color: var(--wp--preset--color--paper) !important; } & :focus-visible { outline-color: var(--wp--preset--color--paper); }"
+	}
+}

@@ -73,6 +73,7 @@ table,
 :where(input:not([type="checkbox"], [type="radio"], [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"], [type="range"], [type="color"], [type="file"]), select, textarea) {
 	box-sizing: border-box;
 	max-width: 100%;
+	inline-size: 100%;
 	padding: 0.7em 0.9em;
 	font: inherit;
 	color: var(--wp--preset--color--ink);
@@ -337,16 +338,16 @@ table,
 
 /* Subtle full-bleed section band that adapts to the active color preset. */
 .agile-base-band {
-	background-color: color-mix(in srgb, currentColor 5%, transparent);
+	background-color: var(--wp--preset--color--surface);
 }
 
-/* Small label in the mono voice (1.x content; new surfaces don't use it). */
+/* Existing 1.x labels stay legible; new surfaces open with the heading. */
 .agile-base-eyebrow {
-	font-family: var(--wp--custom--font--mono);
-	text-transform: uppercase;
-	letter-spacing: 0.14em;
-	font-size: var(--wp--preset--font-size--x-small);
-	color: color-mix(in srgb, var(--wp--preset--color--accent) 75%, currentColor);
+	font-family: var(--wp--custom--font--body);
+	text-transform: none;
+	letter-spacing: 0.02em;
+	font-size: var(--wp--preset--font-size--small);
+	color: inherit;
 }
 
 /* Marker highlight: a swipe of the primary color behind a single word. */
@@ -602,4 +603,114 @@ table,
 :is(main, .wp-block-post-content) > .alignfull + .alignfull,
 .wp-site-blocks > main:has(> .alignfull:last-child) + * {
 	margin-block-start: 0;
+}
+
+/* Chrome variants preserve the compact ruled header and footer. */
+.site-header .wp-block-site-title {
+	min-inline-size: 0;
+	overflow-wrap: anywhere;
+}
+
+.site-header .wp-block-navigation__responsive-container-open,
+.wp-block-navigation__responsive-container-close {
+	min-inline-size: var(--wp--preset--spacing--small);
+	min-block-size: var(--wp--preset--spacing--small);
+	align-items: center;
+	justify-content: center;
+}
+
+.wp-block-navigation__responsive-container.is-menu-open {
+	color: var(--wp--preset--color--ink);
+	background-color: var(--wp--preset--color--paper);
+	padding-block: var(--wp--preset--spacing--small);
+	padding-inline: var(--wp--preset--spacing--small);
+}
+
+.wp-block-navigation .wp-block-navigation__submenu-container {
+	color: var(--wp--preset--color--ink);
+	background-color: var(--wp--preset--color--paper);
+	border: 1px solid currentColor;
+}
+
+.wp-block-navigation .current-menu-item > .wp-block-navigation-item__content {
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+}
+
+.wp-block-navigation :is(a, button):focus-visible {
+	outline: 3px solid currentColor;
+	outline-offset: 3px;
+}
+
+.agile-base-header-cta > .wp-block-group > .wp-block-group {
+	min-inline-size: 0;
+	max-inline-size: 100%;
+}
+
+.agile-base-header-actions .wp-block-navigation {
+	flex-shrink: 0;
+}
+
+.agile-base-header-actions .wp-block-button__link {
+	overflow-wrap: anywhere;
+}
+
+.site-footer .agile-base-footer-heading {
+	font-size: var(--wp--preset--font-size--large) !important;
+}
+
+.wp-block-social-links:empty {
+	display: none;
+}
+
+@media (max-width: 599px) {
+	.agile-base-header-actions {
+		flex-basis: 100%;
+		justify-content: space-between;
+	}
+}
+
+/* The optional author bio uses the archive's wrapping composition. */
+.agile-base-author-bio {
+	padding-block: var(--wp--preset--spacing--small);
+	border-block: 1px solid currentColor;
+}
+
+.agile-base-author-bio > .wp-block-avatar {
+	flex: none;
+}
+
+.agile-base-author-bio > .wp-block-group {
+	flex: 1 1 20rem;
+	min-inline-size: 0;
+	overflow-wrap: anywhere;
+}
+
+.agile-base-author-bio .wp-block-post-author-name {
+	font-family: var(--wp--custom--font--mono);
+}
+
+.agile-base-author-bio .wp-block-post-author-biography {
+	max-inline-size: 65ch;
+}
+
+/* Saved 1.x color fields paired white with primary. The semantic foreground keeps
+   that published content readable when a client swaps the primary palette color. */
+:where(.wp-block-group, .wp-block-cover, .wp-block-columns).has-primary-background-color.has-white-color {
+	color: var(--wp--preset--color--on-primary) !important;
+}
+
+/* Visible plugin-form labels sit with their fields; wrapped choice labels stay inline. */
+:where(form label[for]) {
+	display: block;
+	margin-block-end: 0.35em;
+}
+
+:where(fieldset) {
+	padding: var(--wp--preset--spacing--x-small);
+	border: 1px solid currentColor;
+}
+
+:where(legend) {
+	padding-inline: 0.35em;
 }
