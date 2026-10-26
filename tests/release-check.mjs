@@ -213,7 +213,7 @@ const pageSlugs = (source) => [...source.matchAll(/wp:pattern \{"slug":"agile-ba
 assert.deepEqual(pageSlugs(assertPagePattern('page-about', 'about')), ['stats', 'team', 'testimonial', 'call-to-action']);
 assert.deepEqual(pageSlugs(assertPagePattern('page-team', 'team')), ['team', 'call-to-action']);
 
-assert.deepEqual(pageSlugs(assertPagePattern('page-services', 'services')), ['features', 'testimonial', 'faq', 'call-to-action']);
+assert.deepEqual(pageSlugs(assertPagePattern('page-services', 'services')), ['services-grid', 'steps', 'testimonial', 'faq', 'call-to-action']);
 assert.deepEqual(pageSlugs(assertPagePattern('page-pricing', 'call-to-action')), ['pricing', 'faq', 'call-to-action']);
 
 const pageContact = assertPagePattern('page-contact', 'contact');
@@ -470,5 +470,14 @@ for (const slug of ['hidden-home-hero', 'hero', 'logos', 'features', 'stats', 't
   assert.equal(marketsTheme(source), false, `${slug}: demo copy must not market the theme`);
 }
 assert.doesNotMatch(read('patterns/hidden-header.php'), /agile-base-eyebrow/);
+
+// 2.0 Part 2: Services page (spec §7.3). The template shows the page title (the <h1>); the
+// layout's intro adds no label and no heading, so nothing repeats the page name.
+const steps = assertNewPattern('steps', { title: 'How It Works', categories: ['agile-base', 'services'] });
+assert.equal((steps.match(/<h3\b/g) || []).length, 3, 'three steps, each with a heading');
+const pageServices = read('patterns/page-services.php');
+const servicesIntro = pageServices.slice(pageServices.indexOf('?>'), pageServices.indexOf('<!-- wp:pattern'));
+assert.doesNotMatch(servicesIntro, /agile-base-eyebrow|wp:heading|<h1/, 'page-services: the intro repeats nothing');
+assert.equal(hasKicker(pageServices), false);
 
 console.log('release source checks passed');

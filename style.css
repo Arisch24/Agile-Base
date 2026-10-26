@@ -506,3 +506,9 @@ table,
 	border-block-start: 2px solid currentColor;
 	padding-block-start: var(--wp--preset--spacing--x-small);
 }
+
+/* How It Works step: a heavy rule above the numbered step. */
+.agile-base-step {
+	border-block-start: 2px solid currentColor;
+	padding-block-start: var(--wp--preset--spacing--x-small);
+}
