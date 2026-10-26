@@ -268,10 +268,14 @@ table,
 }
 
 /* Post meta row: mono, as measurement, slightly muted. */
-.agile-base-meta,
-.agile-base-meta a {
+.agile-base-meta {
 	font-family: var(--wp--custom--font--mono);
 	color: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+.agile-base-meta a {
+	font-family: inherit;
+	color: inherit;
 }
 
 /* Author archive header: avatar beside the name and bio, wrapping under the
@@ -302,6 +306,21 @@ table,
 	font-family: var(--wp--custom--font--display);
 	font-weight: var(--wp--custom--font-weight--semi-bold);
 	letter-spacing: -0.01em;
+}
+
+.agile-base-postnav .wp-block-post-navigation-link a {
+	display: block;
+	padding: 0.75em 1em;
+	text-decoration: none;
+	border: 2px solid currentColor;
+	border-radius: var(--wp--custom--radius--bar);
+	transition: background-color var(--wp--custom--motion--base) ease, color var(--wp--custom--motion--base) ease;
+}
+
+.agile-base-postnav .wp-block-post-navigation-link a:hover,
+.agile-base-postnav .wp-block-post-navigation-link a:focus-visible {
+	color: var(--wp--preset--color--paper);
+	background-color: var(--wp--preset--color--ink);
 }
 
 .agile-base-postnav .post-navigation-link-next {
@@ -511,4 +530,57 @@ table,
 .agile-base-step {
 	border-block-start: 2px solid currentColor;
 	padding-block-start: var(--wp--preset--spacing--x-small);
+}
+
+/* Post header meta row: ruled above and below, with a round avatar. */
+.agile-base-postmeta {
+	border-block: 1px solid currentColor;
+}
+
+.agile-base-meta .wp-block-avatar img,
+.wp-block-comment-template .wp-block-avatar img {
+	border-radius: var(--wp--custom--radius--round);
+}
+
+/* Comments: a ruled line between comments; the reply indent follows the text direction. */
+.wp-block-comment-template > li {
+	padding-block: var(--wp--preset--spacing--x-small);
+	border-block-end: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.wp-block-comment-template > li:last-child {
+	border-block-end: 0;
+}
+
+.wp-block-comment-template ol {
+	padding-inline-start: var(--wp--preset--spacing--small);
+}
+
+.wp-block-comments-title,
+.comment-reply-title {
+	font-family: var(--wp--custom--font--display);
+}
+
+/* Wide content scrolls inside its own box instead of the page, whichever style is active. */
+.wp-block-table,
+.wp-block-code,
+.wp-block-preformatted {
+	overflow-x: auto;
+}
+
+/* Captions keep the text color of their surroundings (WordPress's default grey fails on dark). */
+.wp-element-caption,
+.wp-block-table figcaption {
+	color: inherit;
+}
+
+/* A very long word breaks instead of widening the page. */
+.wp-block-post-content,
+.wp-block-post-title,
+.wp-block-comment-content {
+	overflow-wrap: anywhere;
+}
+
+.wp-block-table table {
+	min-width: 32rem;
 }

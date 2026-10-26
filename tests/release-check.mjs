@@ -480,4 +480,19 @@ const servicesIntro = pageServices.slice(pageServices.indexOf('?>'), pageService
 assert.doesNotMatch(servicesIntro, /agile-base-eyebrow|wp:heading|<h1/, 'page-services: the intro repeats nothing');
 assert.equal(hasKicker(pageServices), false);
 
+// 2.0 Part 2: single post. The post header has no label above the title, both single
+// templates share the header, navigation and comments, and content blocks are styled in theme.json.
+const postHeader2 = read('patterns/hidden-post-header.php');
+assert.equal(hasKicker(postHeader2), false, 'hidden-post-header: no label above the title');
+assert.match(postHeader2, /wp:post-title \{[^\n]*"level":1/);
+for (const template of ['single', 'single-wide']) {
+  const source = read(`templates/${template}.html`);
+  for (const slug of ['hidden-post-header', 'hidden-post-navigation', 'comments']) assert.match(source, new RegExp(`"slug":"agile-base/${slug}"`), `${template}: ${slug}`);
+}
+for (const block of ['core/quote', 'core/pullquote', 'core/code', 'core/preformatted', 'core/table', 'core/separator']) {
+  assert.ok(themeJson.styles.blocks[block], `theme.json styles.blocks["${block}"]`);
+}
+assert.match(read('patterns/hidden-post-navigation.php'), /"className":"agile-base-postnav"/, 'the postnav class keeps a rule (contract)');
+assert.match(read('assets/styles/core-post-terms.css'), /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\)/, 'pill selector kept (contract)');
+
 console.log('release source checks passed');
