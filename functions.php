@@ -26,7 +26,7 @@ if ( ! function_exists( 'agile_base_setup' ) ) :
 		add_theme_support( 'editor-styles' );
 		// Block styles are loaded on demand on the front end, which skips the
 		// editor, so the per-block stylesheet is added to the editor here.
-		add_editor_style( array( 'style.css', 'assets/styles/core-post-terms.css' ) );
+		add_editor_style( array( 'style.css', 'assets/styles/core-post-terms.css', 'assets/styles/legacy-presets.css' ) );
 
 		add_theme_support(
 			'custom-logo',
@@ -128,6 +128,13 @@ if ( ! function_exists( 'agile_base_enqueue_assets' ) ) :
 		wp_enqueue_style(
 			'agile-base-style',
 			get_stylesheet_uri(),
+			array(),
+			wp_get_theme()->get( 'Version' )
+		);
+
+		wp_enqueue_style(
+			'agile-base-legacy-presets',
+			get_theme_file_uri( 'assets/styles/legacy-presets.css' ),
 			array(),
 			wp_get_theme()->get( 'Version' )
 		);

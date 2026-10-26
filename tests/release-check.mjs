@@ -269,7 +269,7 @@ for (const line of postTermsCss.split('\n').filter((l) => /\{\s*$/.test(l) && !l
 }
 assert.doesNotMatch(stylesheet, /agile-base-tags/);
 assert.match(functions, /wp_enqueue_block_style\(/);
-assert.match(functions, /add_editor_style\( array\( 'style\.css', 'assets\/styles\/core-post-terms\.css' \) \)/);
+assert.match(functions, /add_editor_style\( array\( 'style\.css', 'assets\/styles\/core-post-terms\.css', 'assets\/styles\/legacy-presets\.css' \) \)/);
 assert.match(singleTagsTemplate, /<!-- wp:post-terms \{"term":"post_tag","style":\{"spacing":\{"margin":\{"top":"var:preset\|spacing\|medium"\}\}\}\} \/-->/);
 assert.doesNotMatch(singleTagsTemplate, /agile-base-tags/);
 
@@ -360,5 +360,43 @@ for (const file of preloadFiles) {
   assert.equal(existsSync(new URL(`../assets/fonts/${file}.woff2`, import.meta.url)), true, `preloaded assets/fonts/${file}.woff2 must exist`);
 }
 assert.match(preloadCode, /wp_get_global_settings\( array\( 'custom', 'font' \) \)/, 'preloads follow the role tokens');
+
+// 2.0 Part 2: tokens and global styles (spec §4, §7.5). Theme CSS takes colors only from
+// palette presets (which color presets can change), uses logical properties so right-to-left
+// works, and styles form fields; links in text are underlined and every control gets a
+// 2px focus outline; headings no longer force margin: 0 !important; Dark only recolors.
+const SR_FOCUS = /\.screen-reader-text:focus \{[^}]*\}/; // WordPress's standard snippet
+const themeCssFiles = ['style.css', ...readdirSync(new URL('../assets/styles/', import.meta.url)).filter((f) => f.endsWith('.css')).map((f) => `assets/styles/${f}`)];
+for (const file of themeCssFiles) {
+  const source = read(file).replace(SR_FOCUS, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.doesNotMatch(source, /#[0-9a-f]{3,8}\b|\brgba?\(|\bhsla?\(/i, `${file}: colors come from palette presets, not literals`);
+  assert.doesNotMatch(source, /--wp--custom--color--/, `${file}: read colors as --wp--preset--color--*, which color presets can change`);
+  assert.doesNotMatch(source, /\b(margin|padding|border)-(left|right)\b|(^|[\s;{])(left|right)\s*:|text-align:\s*(left|right)|float:\s*(left|right)/m, `${file}: logical properties (inline-start/end), so right-to-left works`);
+}
+const css = read('style.css').replace(/\/\*[\s\S]*?\*\//g, '');
+for (const field of ['input', 'select', 'textarea']) assert.match(css, new RegExp(`(^|[\\s,(])${field}\\b[^{]*\\{`, 'm'), `style.css styles ${field} fields (spec D14)`);
+assert.match(css, /(input|select|textarea)[^{]*:focus-visible[^{]*\{/, 'form fields have a focus style');
+assert.ok(themeJson.settings.color.palette.every((c) => !/var\(/.test(c.color)), 'palette colors are plain values (spec §4)');
+const link = themeJson.styles.elements.link;
+assert.equal(link.typography?.textDecoration, 'underline', 'links in text are underlined (accessibility-ready)');
+assert.ok(link[':hover']?.typography?.textDecoration && link[':hover'].typography.textDecoration !== 'underline', 'the underline changes on hover, not only the color');
+for (const element of ['link', 'button']) {
+  const focus = themeJson.styles.elements[element][':focus-visible'];
+  assert.ok(focus?.outline && parseFloat(focus.outline.width) >= 2, `${element}: a focus-visible outline of at least 2px`);
+}
+assert.doesNotMatch(JSON.stringify(themeJson.styles.elements.heading), /!important/, 'heading margins without !important');
+// The editor counts a style file as a color (or font) preset only if it holds nothing else.
+const onlyKeys = (object, keys) => Object.fromEntries(Object.entries(object).flatMap(([key, value]) => {
+  if (keys.includes(key)) return [[key, value]];
+  if (value && typeof value === 'object') {
+    const kept = onlyKeys(value, keys);
+    return Object.keys(kept).length ? [[key, kept]] : [];
+  }
+  return [];
+}));
+const isPreset = (json, keys) => ['settings', 'styles'].every((part) => JSON.stringify(onlyKeys(json[part] ?? {}, keys)) === JSON.stringify(json[part] ?? {}));
+const dark = JSON.parse(read('styles/dark.json'));
+assert.ok(isPreset(dark, ['color']), 'Dark only recolors (the Site Editor lists it under Colors)');
+assert.ok(themeJson.settings.custom.radius.card !== '8px' || themeJson.settings.custom.motion.base !== '0.15s' || themeJson.settings.custom.color?.primary !== '262 100% 62%', '2.0 sets its own token values');
 
 console.log('release source checks passed');
