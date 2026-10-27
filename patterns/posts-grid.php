@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- wp:heading -->
 <h2 class="wp-block-heading"><?php esc_html_e( 'Latest news', 'agile-base' ); ?></h2>
 <!-- /wp:heading -->
-<!-- wp:query {"queryId":13,"className":"agile-base-posts-grid","query":{"perPage":6,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","inherit":false}} -->
+<!-- wp:query {"queryId":13,"className":"agile-base-posts-grid","query":{"perPage":6,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","sticky":"ignore","inherit":false}} -->
 <div class="wp-block-query agile-base-posts-grid">
 <!-- wp:post-template {"layout":{"type":"grid","minimumColumnWidth":"18rem"}} -->
 <!-- wp:group {"className":"post-card","layout":{"type":"constrained"}} -->

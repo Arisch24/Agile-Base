@@ -799,4 +799,9 @@ for (const [slug, source] of [['posts-grid', latestGrid], ['posts-compact', late
 assert.match(latestGrid, /"className":"agile-base-posts-grid"/);
 assert.match(stylesheet, /\.agile-base-posts-grid[^}]*:only-child\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/);
 
+// Sticky posts remain in date order and never inflate the advertised limits.
+for (const source of [latestGrid, latestList]) {
+  assert.equal(queriesIn(source)[0].query.sticky, 'ignore', 'latest posts ignore sticky promotion');
+}
+
 console.log('release source checks passed');

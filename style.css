@@ -721,7 +721,7 @@ table,
 }
 
 /* Optional media: keep the copy complete before an owner chooses an image. */
-.agile-base-media:not(:has(> .wp-block-media-text__media > :is(img, video))) {
+.agile-base-media:not(:has(> .wp-block-media-text__media :is(img, video))) {
 	display: block;
 }
 
@@ -729,7 +729,12 @@ table,
 	padding-inline: var(--wp--preset--spacing--small);
 }
 
-.agile-base-media:not(:has(> .wp-block-media-text__media > :is(img, video))) > .wp-block-media-text__content {
+/* Core fixes the grid direction; text follows the document independently. */
+.agile-base-media:dir(rtl) > .wp-block-media-text__content {
+	direction: rtl;
+}
+
+.agile-base-media:not(:has(> .wp-block-media-text__media :is(img, video))) > .wp-block-media-text__content {
 	padding-inline: 0;
 }
 
