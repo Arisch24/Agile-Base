@@ -732,3 +732,8 @@ table,
 .agile-base-media:not(:has(> .wp-block-media-text__media > :is(img, video))) > .wp-block-media-text__content {
 	padding-inline: 0;
 }
+
+/* A single news item uses the row rather than sitting beside empty grid tracks. */
+.agile-base-posts-grid > .wp-block-post-template > :only-child {
+	grid-column: 1 / -1;
+}

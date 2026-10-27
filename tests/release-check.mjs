@@ -780,4 +780,23 @@ assert.match(subscribe, /wp:social-links /);
 assert.doesNotMatch(subscribe, /<form\b/, 'no forms: plugin territory');
 assert.equal(existsSync(new URL('../patterns/media-text.php', import.meta.url)), false, 'Image and Text is agile-base/text-image (Part 2b): no second one');
 
+// 2.0 Part 4a: latest posts (spec §7.2). Own queries (never the page's), distinct ids, and
+// an empty state for a site with no posts.
+const latestGrid = assertNewPattern('posts-grid', { title: 'Latest Posts (Grid)', categories: ['agile-base', 'posts'] });
+assert.equal(queriesIn(latestGrid)[0].query.perPage, 6);
+assert.match(latestGrid, /wp:post-template \{[^\n]*"type":"grid"[^\n]*"minimumColumnWidth"/, 'a responsive grid, not a fixed column count');
+const latestList = assertNewPattern('posts-compact', { title: 'Latest Posts (List)', categories: ['agile-base', 'posts'] });
+assert.equal(queriesIn(latestList)[0].query.perPage, 5);
+assert.doesNotMatch(latestList, /wp:post-featured-image/, 'the list has no images');
+for (const [slug, source] of [['posts-grid', latestGrid], ['posts-compact', latestList]]) {
+  const queries = queriesIn(source);
+  assert.ok(queries.length >= 1 && queries.every((q) => q.query.inherit === false && q.query.postType === 'post'), `${slug}: own post queries`);
+  assert.equal(new Set(queries.map((q) => q.queryId)).size, queries.length, `${slug}: distinct queryIds`);
+  assert.equal((source.match(/wp:query-no-results/g) || []).length / 2, queries.length, `${slug}: an empty state per query`);
+}
+
+// One post fills the responsive grid instead of leaving unused tracks.
+assert.match(latestGrid, /"className":"agile-base-posts-grid"/);
+assert.match(stylesheet, /\.agile-base-posts-grid[^}]*:only-child\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/);
+
 console.log('release source checks passed');
