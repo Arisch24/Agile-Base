@@ -747,4 +747,15 @@ assert.ok(serviceRows.every((row) => row.isStackedOnMobile !== false), 'rows sta
 assert.doesNotMatch(servicesList, /"mediaUrl"|"mediaId"|<img\b/, 'image slots are empty');
 assert.equal((servicesList.match(/<h3\b/g) || []).length, serviceRows.length, 'a heading per service');
 
+// 2.0 Part 4a: proof sections (spec §7.2).
+const caseStudies = assertNewPattern('case-studies', { title: 'Case Studies', categories: ['agile-base', 'portfolio'] });
+assert.equal((caseStudies.match(/<h3\b/g) || []).length, 3, 'three case studies, each with a heading');
+assert.ok((caseStudies.match(/<!-- wp:image\b/g) || []).length >= 3, 'an image slot per case study');
+assert.doesNotMatch(caseStudies, /"url":|"id":\d|src=/, 'image slots are empty');
+const testimonialsGrid = assertNewPattern('testimonials-grid', { title: 'Testimonials Grid', categories: ['agile-base', 'testimonials'] });
+assert.equal((testimonialsGrid.match(/<!-- wp:quote\b/g) || []).length, 3, 'three quotes, as quote blocks');
+assert.equal((testimonialsGrid.match(/<cite\b/g) || []).length, 3, 'each quote names its person');
+const guarantees = assertNewPattern('guarantees', { title: 'Guarantees', categories: ['agile-base', 'about'] });
+assert.equal((guarantees.match(/<h3\b/g) || []).length, 3, 'three guarantees, each with a heading');
+
 console.log('release source checks passed');
