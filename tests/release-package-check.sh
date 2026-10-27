@@ -26,6 +26,7 @@ MEMBERS="$(unzip -Z -1 "$OUTPUT")"
 
 rg -q '^agile-base/assets/styles/core-post-terms\.css$' <<< "$MEMBERS"
 rg -q '^agile-base/functions\.php$' <<< "$MEMBERS"
+rg -q '^agile-base/assets/images/placeholder-photo\.webp$' <<< "$MEMBERS"
 if rg -q '^agile-base/(build|\.superpowers|\.aws)/|\.zip$|^agile-base/(package(-lock)?\.json|PRODUCT\.md|DESIGN\.md)$' <<< "$MEMBERS"; then
 	printf 'error: release package contains forbidden development files\n' >&2
 	exit 1

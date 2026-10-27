@@ -5,7 +5,8 @@
  * Every palette color keeps its perceived lightness (OKLCH L) but turns 150 degrees
  * round the color wheel, so contrast pairs hold while every hue changes; greys get a
  * faint tint. The three role fonts become system fonts (nothing to download), and
- * every radius token becomes 0.
+ * every radius token becomes 0. Text on Primary becomes black or white, whichever
+ * reads better on the new primary.
  *
  * Reads the palette as the live site resolves it, so run it after changing theme.json.
  * Usage: node bin/make-client-brand.mjs
@@ -71,12 +72,21 @@ const rebrand = ([r, g, b, alpha]) => {
   return alpha < 255 ? `${hex(rgb)}${Math.round(alpha).toString(16).padStart(2, '0')}` : hex(rgb);
 };
 
+// Text on Primary follows the rebranded primary (spec D16): black or white, whichever has
+// more contrast. 0.179 is the luminance where the two are equal.
+const luminanceOf = (color) => [1, 3, 5].map((i) => toLinear(parseInt(color.slice(i, i + 2), 16) / 255))
+  .reduce((sum, c, k) => sum + c * [0.2126, 0.7152, 0.0722][k], 0);
+const rebranded = palette.map(({ name, slug }, i) => ({ name, slug, color: rebrand(rgba[i]) }));
+const rebrandedPrimary = rebranded.find((c) => c.slug === 'primary');
+const onPrimary = rebranded.find((c) => c.slug === 'on-primary');
+if (rebrandedPrimary && onPrimary) onPrimary.color = luminanceOf(rebrandedPrimary.color) > 0.179 ? '#000000' : '#ffffff';
+
 const fixture = {
   $schema: 'https://schemas.wp.org/trunk/theme.json',
   version: 3,
   title: 'Client brand (test fixture)',
   settings: {
-    color: { palette: palette.map(({ name, slug }, i) => ({ name, slug, color: rebrand(rgba[i]) })) },
+    color: { palette: rebranded },
     typography: {
       fontFamilies: [
         { name: 'Client Sans', slug: 'body', fontFamily: "'Trebuchet MS', Verdana, sans-serif" },

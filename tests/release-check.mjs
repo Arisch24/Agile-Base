@@ -327,7 +327,7 @@ for (const slug of ['figtree', 'space-grotesk', 'space-mono']) {
     }
   }
 }
-assert.equal(velocity.settings.color.palette.length, 24);
+assert.equal(velocity.settings.color.palette.length, 25);
 
 // 2.0 Part 2: fonts (spec §4). Role presets body/display/mono, which the tokens point at,
 // so font presets and a client's brand can swap them; every bundled face is a local file
@@ -494,5 +494,94 @@ for (const block of ['core/quote', 'core/pullquote', 'core/code', 'core/preforma
 }
 assert.match(read('patterns/hidden-post-navigation.php'), /"className":"agile-base-postnav"/, 'the postnav class keeps a rule (contract)');
 assert.match(read('assets/styles/core-post-terms.css'), /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\)/, 'pill selector kept (contract)');
+
+// 2.0 Part 2b: Text on Primary (spec §4, D16). Whatever sits on a primary background takes
+// on-primary, so a dark brand primary gets light text. Every style file with a palette sets
+// it at 4.5:1 or more against its own primary, right after primary in the palette.
+const luminance = (rgb) => rgb.map((c) => { c /= 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; })
+  .reduce((sum, c, k) => sum + c * [0.2126, 0.7152, 0.0722][k], 0);
+const contrastOf = (a, b) => { const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
+const hslToRgb = ([h, s, l]) => {
+  const a = (s / 100) * Math.min(l / 100, 1 - l / 100);
+  return [0, 8, 4].map((n) => { const k = (n + h / 30) % 12; return Math.round(255 * (l / 100 - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))); });
+};
+// Palette values are hex, or (Velocity) hsla(var(--wp--custom--color--<name>)) over "H S% L%" tokens.
+const rgbOf = (json, value) => {
+  const hex = value.match(/^#([0-9a-f]{6})$/i);
+  if (hex) return [0, 2, 4].map((i) => parseInt(hex[1].slice(i, i + 2), 16));
+  const token = value.match(/^hsla?\(var\(--wp--custom--color--([a-z-]+)\)\)$/);
+  assert.ok(token, `unreadable palette value ${value}`);
+  return hslToRgb(json.settings.custom.color[token[1].replace(/-([a-z])/g, (_, c) => c.toUpperCase())].split(/\s+/).map(parseFloat));
+};
+const palettes = [['theme.json', themeJson], ['styles/dark.json', dark], ['styles/velocity.json', velocity],
+  ['tests/fixtures/client-brand.json', clientBrand], ...colorPresets.map(([file, json]) => [`styles/colors/${file}`, json])];
+for (const [file, json] of palettes) {
+  const slugs = json.settings.color.palette.map((c) => c.slug);
+  assert.equal(slugs.indexOf('on-primary'), slugs.indexOf('primary') + 1, `${file}: Text on Primary sits right after Primary (spec D16)`);
+  const color = Object.fromEntries(json.settings.color.palette.map((c) => [c.slug, c.color]));
+  const ratio = contrastOf(rgbOf(json, color.primary), rgbOf(json, color['on-primary']));
+  assert.ok(ratio >= 4.5, `${file}: on-primary on primary is ${ratio.toFixed(2)}:1, needs 4.5:1`);
+}
+// Markup: a block with a primary background sets on-primary text (the style guide's empty
+// swatches excepted), and nothing inside a field sets its own black, ink, white or paper text.
+const markupFiles = ['patterns', 'templates', 'parts'].flatMap((dir) => readdirSync(new URL(`../${dir}/`, import.meta.url)).map((f) => `${dir}/${f}`));
+for (const file of markupFiles) {
+  const source = read(file);
+  for (const [comment] of source.matchAll(/<!-- wp:[a-z/-]+ \{.*?\} \/?-->/g)) {
+    if (/"backgroundColor":"primary"/.test(comment) && !/agile-base-swatch/.test(comment)) {
+      assert.match(comment, /"textColor":"on-primary"/, `${file}: text on a primary background uses on-primary (spec D16): ${comment.slice(0, 90)}`);
+    }
+  }
+  if (source.includes('agile-base-field')) assert.doesNotMatch(source, /"textColor":"(black|ink|white|paper)"/, `${file}: text inside a field inherits on-primary`);
+}
+// Style JSON (theme.json and every style file but frozen Velocity, including section styles
+// to come): a node that paints a primary background also sets on-primary text.
+const PRIMARY_BACKGROUND = /^(var\(--wp--preset--color--primary\)|var:preset\|color\|primary)$/;
+const checkPrimaryText = (node, where, file) => {
+  if (!node || typeof node !== 'object') return;
+  if (PRIMARY_BACKGROUND.test(node.color?.background ?? '')) assert.match(node.color.text ?? '', /on-primary/, `${file} ${where}: text on a primary background uses on-primary (spec D16)`);
+  for (const [key, value] of Object.entries(node)) checkPrimaryText(value, `${where}.${key}`, file);
+};
+const jsonFiles = (dir) => readdirSync(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true })
+  .flatMap((entry) => (entry.isDirectory() ? jsonFiles(`${dir}/${entry.name}`) : entry.name.endsWith('.json') ? [`${dir}/${entry.name}`] : []));
+for (const file of ['theme.json', ...jsonFiles('styles').filter((f) => f !== 'styles/velocity.json')]) checkPrimaryText(JSON.parse(read(file)).styles, 'styles', file);
+// CSS: field rules take colors from primary and on-primary only; focus rings in a field and
+// selected text use on-primary.
+const fieldRules = [...css.matchAll(/([^{}]*\.agile-base-field[^{}]*)\{([^}]*)\}/g)];
+assert.ok(fieldRules.length >= 3, 'style.css styles the color field');
+for (const [, selector, body] of fieldRules) {
+  assert.doesNotMatch(body, /--color--(?!primary\)|on-primary\))/, `style.css ${selector.trim()}: field colors come from primary and on-primary only`);
+}
+assert.ok(fieldRules.some(([, selector, body]) => /:focus-visible/.test(selector) && /outline-color:\s*var\(--wp--preset--color--on-primary\)/.test(body)), 'focus rings in a field use on-primary');
+assert.match(css, /::selection\s*\{[^}]*background-color:\s*var\(--wp--preset--color--primary\);[^}]*color:\s*var\(--wp--preset--color--on-primary\)/, 'selected text: on-primary on primary');
+
+// 2.0 Part 2b: a compact top (spec D17). The header and footer pad themselves, so the page
+// has no padding above the header; the homepage hero meets the header; the inserter hero
+// shares the homepage hero's padding. Sizes are checked live by check-frontend --fold.
+assert.equal(themeJson.styles.spacing.padding.top, '0', 'no page padding above the header');
+assert.equal(themeJson.styles.spacing.padding.bottom, '0', 'no page padding below the footer');
+assert.match(frontPage, /<!-- wp:group \{"tagName":"main","style":\{"spacing":\{"margin":\{"top":"0"\}\}\}/, 'the homepage hero meets the header');
+assert.match(frontPage, /<main class="wp-block-group" style="margin-top:0">/, 'front-page main markup matches its attributes');
+const fieldPadding = (source) => source.match(/"className":"agile-base-field","style":\{"spacing":\{"padding":(\{[^}]*\})/)?.[1];
+assert.ok(fieldPadding(homeHero), 'the homepage hero sets its padding');
+assert.equal(fieldPadding(hero), fieldPadding(homeHero), 'the inserter hero and the homepage hero share their padding');
+
+// 2.0 Part 2b: one placeholder photo, in the Text and Image section on the homepage (spec
+// D3): CC0 and credited, a small bundled WebP (never hotlinked), translatable alt text, and
+// a fixed aspect ratio so the page doesn't move as it loads.
+const PHOTO = 'assets/images/placeholder-photo.webp';
+assert.ok(existsSync(new URL(`../${PHOTO}`, import.meta.url)), `${PHOTO} exists (spec D3)`);
+const photo = readFileSync(new URL(`../${PHOTO}`, import.meta.url));
+assert.ok(photo.subarray(0, 4).toString() === 'RIFF' && photo.subarray(8, 12).toString() === 'WEBP', `${PHOTO} is a WebP`);
+assert.ok(photo.length <= 80 * 1024, `${PHOTO} is ${Math.round(photo.length / 1024)} KB, at most 80 KB`);
+assert.match(readme, /^placeholder-photo\.webp, .+\n\* Source: https:\/\/\S+\n\* License: CC0 1\.0 Universal\n\* License URI: https:\/\/creativecommons\.org\/publicdomain\/zero\/1\.0\/$/m, 'readme credits the photo with its source and CC0 license');
+const textImage = assertNewPattern('text-image', { title: 'Text and Image', categories: ['agile-base', 'about'] });
+assert.match(textImage, /<img src="<\?php echo esc_url\( get_theme_file_uri\( 'assets\/images\/placeholder-photo\.webp' \) \); \?>" alt="<\?php echo esc_attr_x\( '[^']+', 'placeholder photo alt text', 'agile-base' \); \?>"/, 'the photo is bundled, with translatable alt text');
+assert.match(textImage, /<!-- wp:image \{"aspectRatio":"4\/3","scale":"cover"/, 'the photo keeps a 4:3 frame');
+assert.doesNotMatch(homeHero, /<img\b/, 'the homepage hero has no photo');
+assert.ok(pageHome.indexOf('"slug":"agile-base/logos"') < pageHome.indexOf('"slug":"agile-base/text-image"') && pageHome.indexOf('"slug":"agile-base/text-image"') < pageHome.indexOf('"slug":"agile-base/services-grid"'), 'the homepage shows the Text and Image section after the logos');
+for (const file of markupFiles) assert.doesNotMatch(read(file), /<img [^>]*src="https?:/, `${file}: images are bundled, never hotlinked`);
+// Full-width sections touch, on the homepage too (check-frontend measures it on every page).
+assert.match(css, /:is\(main, \.wp-block-post-content\) > \.alignfull \+ \.alignfull,\s*\.wp-site-blocks > main:has\(> \.alignfull:last-child\) \+ \* \{\s*margin-block-start: 0;/, 'full-width sections and the footer sit edge to edge');
 
 console.log('release source checks passed');

@@ -21,6 +21,11 @@
 					"color": "#fbe35a"
 				},
 				{
+					"name": "Text on Primary",
+					"slug": "on-primary",
+					"color": "#000000"
+				},
+				{
 					"name": "Secondary",
 					"slug": "secondary",
 					"color": "#e592a8"

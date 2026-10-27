@@ -45,6 +45,11 @@
 					"color": "hsla(var(--wp--custom--color--primary))"
 				},
 				{
+					"name": "Text on Primary",
+					"slug": "on-primary",
+					"color": "hsla(var(--wp--custom--color--white))"
+				},
+				{
 					"name": "PrimaryLight",
 					"slug": "primary-light",
 					"color": "hsla(var(--wp--custom--color--primary-light))"

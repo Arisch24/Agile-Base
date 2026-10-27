@@ -3,6 +3,7 @@ name: Agile Base
 description: A rebrandable block theme set as a printed quote book, with a canary field, ink, serial numerals and hairline rules.
 colors:
   primary: "#fbe35a"
+  on-primary: "#000000"
   secondary: "#f2b8c6"
   accent: "#c8321e"
   ink: "#16213e"
@@ -74,15 +75,19 @@ components:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
   button-on-field:
-    backgroundColor: "{colors.black}"
-    textColor: "{colors.white}"
+    backgroundColor: "{colors.on-primary}"
+    textColor: "{colors.primary}"
     rounded: "{rounded.bar}"
   button-on-field-hover:
-    backgroundColor: "{colors.white}"
-    textColor: "{colors.black}"
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.on-primary}"
   field-band:
     backgroundColor: "{colors.primary}"
-    textColor: "{colors.black}"
+    textColor: "{colors.on-primary}"
+  text-image:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink}"
+    padding: "{spacing.2x-large}"
   service-card:
     backgroundColor: "{colors.paper}"
     textColor: "{colors.ink}"
@@ -113,7 +118,7 @@ Agile Base looks like the printed quote book of a trade business: a canary-yello
 It is a base theme, so the system is built to be rebranded. Every visual value reads from a `theme.json` token (plain palette presets read as `--wp--preset--color--*`, three role fonts, shape and motion tokens), and a color preset, a font preset or a client's brand replaces the values without touching the structure. The look has to survive any palette: ruled boxes use `currentColor`, bands use `color-mix` on the current text color, and only the named palette slugs carry color.
 
 **Key Characteristics:**
-- Canary field (primary) with black text for the hero and call to action; ink on paper everywhere else.
+- Canary field (primary) with Text on Primary (black by default) for the hero and call to action; ink on paper everywhere else.
 - Serial numerals in the mono voice and accent color mark ordered things (services, steps).
 - Hairline (1px) and heavy (2px) rules in `currentColor` carry all structure.
 - Flat and square: zero or 2px corners, no shadows.
@@ -122,10 +127,11 @@ It is a base theme, so the system is built to be rebranded. Every visual value r
 
 ## Colors
 
-One loud field color, one cool ink, and two supporting hues, all as plain presets (slugs `black`, `white`, `primary`, `secondary`, `accent`, `paper`, `ink`, `surface`). Components use the slugs, never raw values.
+One loud field color, one cool ink, and two supporting hues, all as plain presets (slugs `black`, `white`, `primary`, `on-primary`, `secondary`, `accent`, `paper`, `ink`, `surface`). Components use the slugs, never raw values.
 
 ### Primary
-- **Canary** (`primary`): the color field of the hero and call to action (`.agile-base-field`), text selection, and the marker swipe behind a single word. Text on it is always black.
+- **Canary** (`primary`): the color field of the hero and call to action (`.agile-base-field`), text selection, and the marker swipe behind a single word. Text on it is always `on-primary`.
+- **Text on Primary** (`on-primary`): everything on a `primary` background: field text, the filled field button, its outline style, focus rings and selected text. Black by default and in every preset; white in Velocity, whose primary is a mid purple. It sits right after Primary in the palette.
 
 ### Secondary
 - **Quote Pink** (`secondary`): the testimonial panel, with black text.
@@ -135,10 +141,10 @@ One loud field color, one cool ink, and two supporting hues, all as plain preset
 - **Ink** (`ink`): body text, button fill, form borders, rules. A cool dark navy.
 - **Paper** (`paper`): page background and button inverse.
 - **Surface** (`surface`): hover fill for cards and fields, code and preformatted backgrounds.
-- **Black / White** (`black`, `white`): fixed pair used only inside a color field and for text on `primary` and `secondary`; they do not change with the style.
+- **Black / White** (`black`, `white`): fixed pair for text on `secondary`; they do not change with the style.
 
 ### Presets (style variations)
-Each preset swaps only the palette values behind the same eight slugs.
+Each preset swaps only the palette values behind the same nine slugs.
 - **Dark**: paper deep navy, ink warm off-white, same canary, lighter pink and coral accent.
 - **Harbour**: aqua primary, pale blue secondary, teal accent, navy ink.
 - **Terracotta**: peach primary, sand secondary, brick accent, brown ink.
@@ -146,8 +152,8 @@ Each preset swaps only the palette values behind the same eight slugs.
 
 ### Rebrand model
 - A color preset or a client's brand can change: every palette value, including `primary`, which fills the field.
-- It cannot change: the slug names, which slug plays which role, the structure of rules and boxes, or the black/white text pairing inside color fields.
-- **The Black-On-Primary Rule.** Text on a `primary` field is black, and buttons inside `.agile-base-field` are black with white text, inverting to white with black text. Any primary color a client picks must therefore be light enough to carry black text at AA contrast; the pairing does not adapt, the primary value does.
+- It cannot change: the slug names, which slug plays which role, the structure of rules and boxes, or that everything on a color field takes `on-primary`.
+- **The Text-On-Primary Rule.** Everything on a `primary` field takes `on-primary`: the text, the filled button (on-primary fill, primary text), the outline button, focus rings and selected text. A client can pick any primary, dark or light, as long as its palette sets `on-primary` to whichever of black or white reads at 4.5:1 or more; `bin/make-client-brand.mjs` picks it, and `tests/release-check.mjs` checks every palette.
 
 ## Typography
 
@@ -179,9 +185,11 @@ Headings carry `letter-spacing: -0.025em` and `word-spacing: 0.08em`. Heading si
 
 ## Layout
 
-Constrained flow: content 960px, wide 1280px, with root-padding-aware full-bleed sections. Sections are full-width bands with vertical padding from the spacing scale (typically `2x-large` top and bottom, or `2x-large` over `x-large` for the hero), holding a wide inner group. Card sets use a CSS grid with three columns and a 17rem minimum, or wrapping columns with `medium` gaps.
+Constrained flow: content 960px, wide 1280px, with root-padding-aware full-bleed sections. Sections are full-width bands with vertical padding from the spacing scale (typically `2x-large` top and bottom; `medium` top and bottom for the hero), holding a wide inner group. Card sets use a CSS grid with three columns and a 17rem minimum, or wrapping columns with `medium` gaps.
 
-Spacing is a fluid seven-step scale (`x-small` 16px up to `3x-large` 96 to 176px, all `clamp()`), and block gap is a separate fluid gap scale (`--wp--custom--gap--*`, default `small`). Adjacent full-width sections touch edge to edge, with no gap between color fields. Logical properties only (`margin-block`, `padding-inline`, `border-inline-end`, `inset-inline-start`, `text-align: end`) so right-to-left needs no overrides.
+The top is compact. The page has no padding above the header or below the footer; the header pads itself `x-small`, and the homepage hero meets it with no gap. The homepage hero is two columns, the serial (12%) and the headline, lead and buttons (two thirds), stacking on phones. At 1366×768 and 1440×900 the next section starts within 85% of the screen, and on a 375×812 phone the first button ends within 80% (`check-frontend --fold`; Velocity, the frozen 1.x look, is exempt).
+
+Spacing is a fluid seven-step scale (`x-small` 16px up to `3x-large` 96 to 176px, all `clamp()`), and block gap is a separate fluid gap scale (`--wp--custom--gap--*`, default `small`). Adjacent full-width sections touch edge to edge, with no gap between color fields, and the footer meets a full-width section that ends the page (`check-frontend` checks every page). Logical properties only (`margin-block`, `padding-inline`, `border-inline-end`, `inset-inline-start`, `text-align: end`) so right-to-left needs no overrides.
 
 ## Elevation & Depth
 
@@ -200,10 +208,13 @@ Square. Buttons, fields, panels and post-navigation links have 0 radius (`bar`, 
 - **Shape:** square, 2px ink border (0 radius).
 - **Primary:** ink fill, paper text, bold, `0.75em 1em` padding, line height 1.
 - **Hover / Focus:** invert to paper fill, ink text, over 0.12s; focus adds the 3px `currentColor` outline at 3px offset. The outline style inverts the other way (transparent to ink fill).
-- **On a color field:** black fill, white text, inverting to white fill, black text; the outline style is transparent with black text, inverting to black. Button text is `large` on a field. Submit inputs follow the standard button.
+- **On a color field:** `on-primary` fill with `primary` text, inverting to transparent with `on-primary` text; the outline style is transparent with `on-primary` text, inverting to an `on-primary` fill. Focus rings take `on-primary`. Button text is `large` on a field. Submit inputs follow the standard button.
 
 ### Color field (`agile-base-field`)
-The hero and call to action: a full-width `primary` band, black text, large headline and a bold lead sentence, two buttons. This is the one place the accent canvas appears.
+The hero and call to action: a full-width `primary` band, `on-primary` text, large headline and a bold lead sentence, two buttons. This is the one place the accent canvas appears.
+
+### Text and Image (`agile-base/text-image`)
+A `surface` band with a heading, a few sentences and a standard button on the left (5 of 12 columns) and a photo on the right (7 of 12), vertically centered, stacking text first on phones. On the homepage it follows the logo row, so light and tinted sections keep alternating. It carries the only bundled photo: a black-and-white CC0 placeholder (a potter's hands), 4:3, 2px radius, credited in `readme.txt`. Monochrome, so it holds against any palette. Every other image slot stays empty.
 
 ### Ruled row (`agile-base-ruled`)
 A hairline above and below, used for the logo row. The feature strip uses 2px rules above and below.
@@ -230,7 +241,7 @@ A 1px ruled box with 2px radius that fills with `surface` on hover.
 Any form plugin's inputs inherit: `0.7em 0.9em` padding, 1px ink border, 0 radius, paper background, surface on hover, 3px `currentColor` focus outline at 2px offset, accent border and 2px accent outline when invalid, 0.65 opacity when disabled.
 
 ### Navigation
-Header: logo, bold site title and navigation, ruled below with a 1px line. Nav links are plain and underline on hover; the footer is ruled above with a 2px line. Header and footer variants (centered, minimal, columns) share these rules.
+Header: logo, bold site title and navigation, `x-small` padding above and below, ruled below with a 1px line. Nav links are plain and underline on hover; the footer is ruled above with a 2px line. Header and footer variants (centered, minimal, columns) share these rules.
 
 ### Motion
 Short and functional: 0.1 to 0.2s (`--wp--custom--motion--*`) color and background transitions only, ease timing, all disabled under `prefers-reduced-motion: reduce`.
@@ -241,7 +252,7 @@ Short and functional: 0.1 to 0.2s (`--wp--custom--motion--*`) color and backgrou
 - **Do** read every color from a palette slug and every font from a role token, so presets and client brands change everything.
 - **Do** underline text links (thickness 0.08em, offset 0.2em), removing the underline on hover and adding a 12% tint.
 - **Do** show focus as a 3px `currentColor` outline.
-- **Do** put black text and black/white buttons on `primary` fields.
+- **Do** put `on-primary` text, buttons and focus rings on `primary` fields.
 - **Do** mark ordered items with a mono serial numeral in the accent color.
 - **Do** divide content with `currentColor` rules (1px hairline, 2px heavy) and square corners.
 - **Do** write spacing and borders in logical properties.
@@ -252,6 +263,6 @@ Short and functional: 0.1 to 0.2s (`--wp--custom--motion--*`) color and backgrou
 - **Don't** place a label, kicker or small caps line above a heading; the heading opens the section.
 - **Don't** hardcode colors, font families or sizes in CSS or markup.
 - **Don't** use physical properties (`margin-left`, `padding-right`, `text-align: left`) in new CSS.
-- **Don't** set colored text on `primary` or swap the field's button pairing per preset.
+- **Don't** set black, ink, white, paper or any other color's text on `primary`; it takes `on-primary`.
 - **Don't** rename or remove slugs, tokens or classes; restyle them.
 - **Don't** use the 1.x "Velocity" look (soft shadows, rounded pills) as a reference.

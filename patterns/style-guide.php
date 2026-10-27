@@ -206,6 +206,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:group -->
+
+		<!-- wp:group {"className":"agile-base-swatch-item","layout":{"type":"constrained"}} -->
+		<div class="wp-block-group agile-base-swatch-item">
+			<!-- wp:group {"className":"agile-base-swatch","backgroundColor":"on-primary","layout":{"type":"default"}} -->
+			<div class="wp-block-group agile-base-swatch has-on-primary-background-color has-background"></div>
+			<!-- /wp:group -->
+			<!-- wp:paragraph {"className":"agile-base-swatch-label"} -->
+			<p class="agile-base-swatch-label"><?php echo esc_html_x( 'Text on Primary', 'color swatch name', 'agile-base' ); ?></p>
+			<!-- /wp:paragraph -->
+		</div>
+		<!-- /wp:group -->
 	</div>
 	<!-- /wp:group -->
 
