@@ -188,9 +188,9 @@ assert.doesNotMatch(teamSection, RAW_ENGLISH);
 const pricingSection = read('patterns/pricing.php');
 assert.match(pricingSection, /^ \* Slug: agile-base\/pricing$/m);
 assert.match(pricingSection, /^ \* Categories: agile-base, call-to-action$/m);
-assert.equal((pricingSection.match(/<!-- wp:column \{/g) || []).length, 3);
+assert.equal((pricingSection.match(/<!-- wp:column(?: \{| -->)/g) || []).length, 3);
 assert.equal((pricingSection.match(/<!-- wp:list -->/g) || []).length, 3);
-assert.doesNotMatch(pricingSection, /<a\b/);
+// 2.0 plans link to contact; destination assertions below replace the 1.x no-links check.
 assert.doesNotMatch(pricingSection, /<h1|"level":1/);
 assert.doesNotMatch(pricingSection, RAW_ENGLISH);
 
@@ -708,5 +708,20 @@ assert.match(landing, /wp:post-content \{[^\n]*"align":"full"/, 'Landing Page: c
 assert.match(landing, /"slug":"agile-base\/hidden-footer-credit"/);
 assert.match(landing, /"tagName":"footer"[^\n]*"padding":\{"top":"var:preset\|spacing\|[a-z-]+","bottom":"var:preset\|spacing\|[a-z-]+"\}/, 'Landing Page: the credit footer has room above and below');
 assert.equal((landing.match(/"tagName":"main"/g) || []).length, 1);
+
+// 2.0 Part 4a: Team, Pricing, Style Guide. No labels above headings; pricing buttons go
+// somewhere real; the Style Guide shows the whole 2.0 system, so it stays complete.
+for (const slug of ['team', 'pricing', 'style-guide']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /agile-base-eyebrow/, `${slug}: no eyebrow label`);
+}
+const guide = read('patterns/style-guide.php');
+const kebabSlug = (slug) => slug.replace(/([a-z])([0-9])/g, '$1-$2').replace(/([0-9])([a-z])/g, '$1-$2');
+for (const { slug } of themeJson.settings.color.palette) assert.match(guide, new RegExp(`has-${slug}-background-color`), `style guide shows color ${slug}`);
+for (const { slug } of themeJson.settings.typography.fontSizes) assert.match(guide, new RegExp(`"fontSize":"${kebabSlug(slug)}"`), `style guide shows font size ${slug}`);
+for (const { slug } of themeJson.settings.spacing.spacingSizes) assert.match(guide, new RegExp(`--wp--preset--spacing--${kebabSlug(slug)}\\b`), `style guide shows spacing ${slug}`);
+for (const [, partial] of [...partials('styles/sections'), ...partials('styles/blocks')]) assert.match(guide, new RegExp(`is-style-${partial.slug}\\b`), `style guide shows ${partial.slug}`);
+assert.doesNotMatch(read('patterns/pricing.php'), /<a(?![^>]*href=)|href="#"/, 'every pricing button goes somewhere real');
 
 console.log('release source checks passed');
