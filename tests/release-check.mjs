@@ -737,4 +737,14 @@ assert.doesNotMatch(heroCover, /"url":|"customOverlayColor"|<img\b/, 'no bundled
 assert.match(heroCover, /<h2\b/);
 assert.ok((heroCover.match(/<!-- wp:button\b/g) || []).length >= 1, 'an action');
 
+// 2.0 Part 4a: Services List (spec §7.2). Alternating Media & Text rows, each a service
+// with a heading and a real link, image slots empty.
+const servicesList = assertNewPattern('services-list', { title: 'Services List', categories: ['agile-base', 'services'] });
+const serviceRows = [...servicesList.matchAll(/<!-- wp:media-text (\{[^\n]*\}) -->/g)].map((m) => JSON.parse(m[1]));
+assert.ok(serviceRows.length >= 3, 'at least three services');
+assert.ok(new Set(serviceRows.map((row) => row.mediaPosition ?? 'left')).size === 2, 'the rows alternate sides');
+assert.ok(serviceRows.every((row) => row.isStackedOnMobile !== false), 'rows stack on phones');
+assert.doesNotMatch(servicesList, /"mediaUrl"|"mediaId"|<img\b/, 'image slots are empty');
+assert.equal((servicesList.match(/<h3\b/g) || []).length, serviceRows.length, 'a heading per service');
+
 console.log('release source checks passed');
