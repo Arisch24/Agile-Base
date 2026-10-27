@@ -773,4 +773,11 @@ assert.match(aboutFounder, /<!-- wp:image\b|wp:media-text \{/, 'a portrait slot'
 assert.doesNotMatch(aboutFounder, /"url":|"mediaUrl"|src=/, 'the portrait slot is empty');
 assert.ok((aboutFounder.match(/<!-- wp:button\b/g) || []).length >= 1, 'a button');
 
+// 2.0 Part 4a: Subscribe (spec §7.2).
+const subscribe = assertNewPattern('subscribe', { title: 'Subscribe', categories: ['agile-base', 'call-to-action'] });
+assert.match(subscribe, /esc_url\( get_feed_link\(\) \)/, 'the RSS button links to the real feed');
+assert.match(subscribe, /wp:social-links /);
+assert.doesNotMatch(subscribe, /<form\b/, 'no forms: plugin territory');
+assert.equal(existsSync(new URL('../patterns/media-text.php', import.meta.url)), false, 'Image and Text is agile-base/text-image (Part 2b): no second one');
+
 console.log('release source checks passed');
