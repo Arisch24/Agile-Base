@@ -758,4 +758,19 @@ assert.equal((testimonialsGrid.match(/<cite\b/g) || []).length, 3, 'each quote n
 const guarantees = assertNewPattern('guarantees', { title: 'Guarantees', categories: ['agile-base', 'about'] });
 assert.equal((guarantees.match(/<h3\b/g) || []).length, 3, 'three guarantees, each with a heading');
 
+// 2.0 Part 4a: contact and conversion sections (spec §7.2).
+const contactDetails = assertNewPattern('contact-details', { title: 'Contact Details', categories: ['agile-base', 'contact'] });
+assert.match(contactDetails, /href="mailto:/);
+assert.match(contactDetails, /href="tel:/);
+assert.equal((contactDetails.match(/<h3\b/g) || []).length, 4, 'email, phone, address and hours, each a small heading');
+assert.doesNotMatch(contactDetails, /<form|wp:jetpack|contact-form/, 'no forms: plugin territory');
+const ctaBanner = assertNewPattern('cta-banner', { title: 'CTA Banner', categories: ['agile-base', 'call-to-action'] });
+assert.match(ctaBanner, /href="tel:/, 'a phone link');
+assert.ok((ctaBanner.match(/<!-- wp:button\b/g) || []).length >= 1, 'a button');
+assert.match(ctaBanner, /"align":"full"/);
+const aboutFounder = assertNewPattern('about-founder', { title: 'About the Founder', categories: ['agile-base', 'about'] });
+assert.match(aboutFounder, /<!-- wp:image\b|wp:media-text \{/, 'a portrait slot');
+assert.doesNotMatch(aboutFounder, /"url":|"mediaUrl"|src=/, 'the portrait slot is empty');
+assert.ok((aboutFounder.match(/<!-- wp:button\b/g) || []).length >= 1, 'a button');
+
 console.log('release source checks passed');
