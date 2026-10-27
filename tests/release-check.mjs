@@ -724,4 +724,17 @@ for (const { slug } of themeJson.settings.spacing.spacingSizes) assert.match(gui
 for (const [, partial] of [...partials('styles/sections'), ...partials('styles/blocks')]) assert.match(guide, new RegExp(`is-style-${partial.slug}\\b`), `style guide shows ${partial.slug}`);
 assert.doesNotMatch(read('patterns/pricing.php'), /<a(?![^>]*href=)|href="#"/, 'every pricing button goes somewhere real');
 
+// 2.0 Part 4a: heroes (spec §7.2). An <h2> (pages supply the <h1>), real actions, and an
+// empty image slot or an overlay color from the palette (no bundled images).
+const heroSplit = assertNewPattern('hero-split', { title: 'Hero (Split)', categories: ['agile-base', 'banner'] });
+assert.match(heroSplit, /<h2\b/);
+assert.match(heroSplit, /wp:media-text \{/, 'a Media & Text block holds the image slot');
+assert.doesNotMatch(heroSplit, /"mediaUrl"|"mediaId"|<img\b/, 'the image slot is empty');
+assert.equal((heroSplit.match(/<!-- wp:button\b/g) || []).length, 2, 'two actions');
+const heroCover = assertNewPattern('hero-cover', { title: 'Hero (Cover)', categories: ['agile-base', 'banner'] });
+assert.match(heroCover, /wp:cover \{[^\n]*"overlayColor":"[a-z0-9-]+"/, 'overlay color from the palette');
+assert.doesNotMatch(heroCover, /"url":|"customOverlayColor"|<img\b/, 'no bundled image or literal color');
+assert.match(heroCover, /<h2\b/);
+assert.ok((heroCover.match(/<!-- wp:button\b/g) || []).length >= 1, 'an action');
+
 console.log('release source checks passed');

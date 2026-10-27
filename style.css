@@ -719,3 +719,16 @@ table,
 :where(legend) {
 	padding-inline: 0.35em;
 }
+
+/* Optional media: keep the copy complete before an owner chooses an image. */
+.agile-base-media:not(:has(> .wp-block-media-text__media > :is(img, video))) {
+	display: block;
+}
+
+.agile-base-media > .wp-block-media-text__content {
+	padding-inline: var(--wp--preset--spacing--small);
+}
+
+.agile-base-media:not(:has(> .wp-block-media-text__media > :is(img, video))) > .wp-block-media-text__content {
+	padding-inline: 0;
+}
