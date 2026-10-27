@@ -598,10 +598,13 @@ table,
 }
 
 /* Full-width sections sit edge to edge, in post content and in a template's main (the
-   homepage), and the footer meets a full-width section that ends the page: no white
-   sliver beside a color field. */
+   homepage). Content that opens with one meets the header, and one that ends the page
+   meets the footer (the Landing Page template): no white sliver beside a color field.
+   A template that sets margins on its main keeps them. */
 :is(main, .wp-block-post-content) > .alignfull + .alignfull,
-.wp-site-blocks > main:has(> .alignfull:last-child) + * {
+.wp-site-blocks > main:has(> .wp-block-post-content > .alignfull:first-child),
+.wp-site-blocks > main > .wp-block-post-content:has(> .alignfull:first-child),
+.wp-site-blocks > main:has(> .alignfull:not(.wp-block-post-content):last-child, > .wp-block-post-content:last-child > .alignfull:last-child) + * {
 	margin-block-start: 0;
 }
 
@@ -626,10 +629,15 @@ table,
 	padding-inline: var(--wp--preset--spacing--small);
 }
 
-.wp-block-navigation .wp-block-navigation__submenu-container {
-	color: var(--wp--preset--color--ink);
+/* Submenus: the same selectors as WordPress's white default, so the palette wins and a
+   menu the owner colors keeps its colors. */
+.wp-block-navigation:not(.has-background) .wp-block-navigation__submenu-container {
 	background-color: var(--wp--preset--color--paper);
 	border: 1px solid currentColor;
+}
+
+.wp-block-navigation:not(.has-text-color) .wp-block-navigation__submenu-container {
+	color: var(--wp--preset--color--ink);
 }
 
 .wp-block-navigation .current-menu-item > .wp-block-navigation-item__content {
@@ -655,11 +663,8 @@ table,
 	overflow-wrap: anywhere;
 }
 
-.site-footer .agile-base-footer-heading {
-	font-size: var(--wp--preset--font-size--large) !important;
-}
-
-.wp-block-social-links:empty {
+/* WordPress skips a social link with no URL but keeps the list: hide a list left empty. */
+.wp-block-social-links:not(:has(li)) {
 	display: none;
 }
 

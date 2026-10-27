@@ -189,7 +189,7 @@ Constrained flow: content 960px, wide 1280px, with root-padding-aware full-bleed
 
 The top is compact. The page has no padding above the header or below the footer; the header pads itself `x-small`, and the homepage hero meets it with no gap. The homepage hero is two columns, the serial (12%) and the headline, lead and buttons (two thirds), stacking on phones. At 1366×768 and 1440×900 the next section starts within 85% of the screen, and on a 375×812 phone the first button ends within 80% (`check-frontend --fold`; Velocity, the frozen 1.x look, is exempt).
 
-Spacing is a fluid seven-step scale (`x-small` 16px up to `3x-large` 96 to 176px, all `clamp()`), and block gap is a separate fluid gap scale (`--wp--custom--gap--*`, default `small`). Adjacent full-width sections touch edge to edge, with no gap between color fields, and the footer meets a full-width section that ends the page (`check-frontend` checks every page). Logical properties only (`margin-block`, `padding-inline`, `border-inline-end`, `inset-inline-start`, `text-align: end`) so right-to-left needs no overrides.
+Spacing is a fluid seven-step scale (`x-small` 16px up to `3x-large` 96 to 176px, all `clamp()`), and block gap is a separate fluid gap scale (`--wp--custom--gap--*`, default `small`). Adjacent full-width sections touch edge to edge, with no gap between color fields, and the header and footer meet a full-width section that opens or ends the page content (`check-frontend` checks every page). Logical properties only (`margin-block`, `padding-inline`, `border-inline-end`, `inset-inline-start`, `text-align: end`) so right-to-left needs no overrides.
 
 ## Elevation & Depth
 
@@ -215,9 +215,9 @@ Square. Buttons, fields, panels and post-navigation links have 0 radius (`bar`, 
 The hero and call to action: a full-width `primary` band, `on-primary` text, large headline and a bold lead sentence, two buttons. This is the one place the accent canvas appears.
 
 ### Section and block styles
-Field, Ink and Ruled apply to Group, Columns and Cover, with `small` padding on every side. Field pairs `primary` with `on-primary`; Ink pairs `ink` with `paper`; Ruled pairs `paper` with `ink` and adds hairlines above and below. Headings, links, filled buttons, boxed/outline buttons and focus rings follow the innermost section’s pair. Filled buttons invert to transparent; boxed/outline buttons invert to the section foreground fill.
+Field, Ink and Ruled apply to Group, Columns and Cover, with `small` padding on every side. Field pairs `primary` with `on-primary`; Ink pairs `ink` with `paper`; Ruled pairs `paper` with `ink` and adds hairlines above and below. Headings, links, filled buttons, boxed/outline buttons and focus rings follow the innermost section’s pair. Filled buttons invert to transparent; boxed/outline buttons invert to the section foreground fill. A button the owner colors keeps its colors.
 
-The Ruled Group block style is a complete hairline box with `small` padding; the Double rule Separator is a 3px double `currentColor` line. These are editable block styles, separate from full-width section composition.
+The Ruled box Group block style is a complete hairline box with `small` padding; the Double rule Separator is a 3px double `currentColor` line. These are editable block styles, separate from full-width section composition.
 
 ### Text and Image (`agile-base/text-image`)
 A `surface` band with a heading, a few sentences and a standard button on the left (5 of 12 columns) and a photo on the right (7 of 12), vertically centered, stacking text first on phones. On the homepage it follows the logo row, so light and tinted sections keep alternating. It carries the only bundled photo: a black-and-white CC0 placeholder (a potter's hands), 4:3, 2px radius, credited in `readme.txt`. Monochrome, so it holds against any palette. Every other image slot stays empty.
@@ -249,13 +249,13 @@ Plugin form fields, comment fields and core Search share the square field langua
 ### Navigation
 Header: logo, bold site title and navigation, `x-small` padding above and below, ruled below with a 1px line. Nav links are plain and underline on hover; the footer is ruled above with a 2px line. Header and footer variants (centered, minimal, columns) share these rules. Active navigation links stay underlined; submenus have a hairline border and the ink/paper pair. The mobile overlay also uses ink on paper, `small` padding and visible focus outlines. Open and close controls have a `small` minimum target size.
 
-The Button header adds a “Book a call” button beside navigation; below 600px the actions take their own row, with menu and button at opposite ends. Long titles and button labels wrap. The Business footer uses three columns for identity/tagline, contact details and opening hours, followed by wrapping legal navigation, logos-only social links and the shared credit. Empty social lists disappear; footer headings keep the `large` scale.
+The Button header adds a “Book a call” button beside navigation; below 600px the actions take their own row, with menu and button at opposite ends. Long titles and button labels wrap. The Business footer uses three columns for identity/tagline, contact details and opening hours, followed by wrapping legal navigation, logos-only social links and the shared credit. Empty social lists disappear; footer headings use the `large` scale, which owners can change.
 
 ### Optional author bio
 An insertable About the Author pattern, absent from the default Single template: round 64px Avatar, linked Post Author Name in the mono role, and Post Author Biography. Hairlines above and below and `small` vertical padding frame the wrapping row. Text wraps beneath the avatar when space is tight; biography measure is capped at 65ch. It reads WordPress profile data rather than placeholder biography text.
 
 ### Landing template
-A compact ruled identity header with logo and site title, full-width editable content, and a ruled credit footer. The page title remains an accessible, visually hidden h1; page content supplies the visible opening. This reduced chrome omits navigation and keeps the same global spacing, type and color roles.
+A compact ruled identity header with logo and site title, full-width editable content, and a ruled one-line credit footer with `small` padding, aligned to the wide edge. Content that opens or ends with a full-width section meets the header and footer rules. The page title remains an accessible, visually hidden h1; page content supplies the visible opening. This reduced chrome omits navigation and keeps the same global spacing, type and color roles.
 
 ### Motion
 Short and functional: 0.1 to 0.2s (`--wp--custom--motion--*`) color and background transitions only, ease timing, all disabled under `prefers-reduced-motion: reduce`.

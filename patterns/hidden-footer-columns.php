@@ -26,8 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<!-- wp:column {"style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}}} -->
 		<div class="wp-block-column">
-			<!-- wp:heading {"className":"agile-base-footer-heading","fontSize":"large"} -->
-			<h2 class="wp-block-heading agile-base-footer-heading has-large-font-size"><?php esc_html_e( 'Explore', 'agile-base' ); ?></h2>
+			<!-- wp:heading {"fontSize":"large"} -->
+			<h2 class="wp-block-heading has-large-font-size"><?php esc_html_e( 'Explore', 'agile-base' ); ?></h2>
 			<!-- /wp:heading -->
 
 			<!-- wp:navigation {"ariaLabel":"<?php echo esc_attr_x( 'Footer', 'navigation landmark label', 'agile-base' ); ?>","overlayMenu":"never","layout":{"type":"flex","orientation":"vertical"}} /-->
@@ -36,8 +36,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<!-- wp:column {"style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}}} -->
 		<div class="wp-block-column">
-			<!-- wp:heading {"className":"agile-base-footer-heading","fontSize":"large"} -->
-			<h2 class="wp-block-heading agile-base-footer-heading has-large-font-size"><?php esc_html_e( 'Search', 'agile-base' ); ?></h2>
+			<!-- wp:heading {"fontSize":"large"} -->
+			<h2 class="wp-block-heading has-large-font-size"><?php esc_html_e( 'Search', 'agile-base' ); ?></h2>
 			<!-- /wp:heading -->
 
 			<!-- wp:search {"showLabel":false,"buttonPosition":"button-inside"} /-->

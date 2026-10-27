@@ -712,12 +712,6 @@
 					"blockGap": "var:preset|spacing|x-small"
 				}
 			},
-			"core/navigation-submenu": {
-				"color": {
-					"background": "var(--wp--preset--color--paper)",
-					"text": "var(--wp--preset--color--ink)"
-				}
-			},
 			"core/search": {
 				"border": {
 					"radius": "var(--wp--custom--radius--bar)"

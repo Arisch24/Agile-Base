@@ -24,8 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- /wp:column -->
 <!-- wp:column -->
 <div class="wp-block-column">
-<!-- wp:heading {"className":"agile-base-footer-heading","fontSize":"large"} -->
-<h2 class="wp-block-heading agile-base-footer-heading has-large-font-size"><?php esc_html_e( 'Contact', 'agile-base' ); ?></h2>
+<!-- wp:heading {"fontSize":"large"} -->
+<h2 class="wp-block-heading has-large-font-size"><?php esc_html_e( 'Contact', 'agile-base' ); ?></h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
 <p><a href="mailto:hello@example.com"><?php esc_html_e( 'hello@example.com', 'agile-base' ); ?></a></p>
@@ -40,8 +40,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- /wp:column -->
 <!-- wp:column -->
 <div class="wp-block-column">
-<!-- wp:heading {"className":"agile-base-footer-heading","fontSize":"large"} -->
-<h2 class="wp-block-heading agile-base-footer-heading has-large-font-size"><?php esc_html_e( 'Opening hours', 'agile-base' ); ?></h2>
+<!-- wp:heading {"fontSize":"large"} -->
+<h2 class="wp-block-heading has-large-font-size"><?php esc_html_e( 'Opening hours', 'agile-base' ); ?></h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
 <p><?php esc_html_e( 'Monday to Friday, 9am to 5pm', 'agile-base' ); ?></p>
@@ -60,7 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- /wp:social-links -->
 </div>
 <!-- /wp:group -->
-<!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<!-- wp:group {"align":"wide","layout":{"type":"flex","flexWrap":"wrap"}} -->
 <div class="wp-block-group alignwide">
 <!-- wp:pattern {"slug":"agile-base/hidden-footer-credit"} /-->
 </div>
