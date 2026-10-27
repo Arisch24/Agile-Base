@@ -129,7 +129,7 @@ for (const file of markupFiles) {
 }
 
 // 8. Style variations and section styles are valid theme.json version 3.
-for (const file of [...list('styles', '.json'), ...list('styles/sections', '.json'), ...list('styles/colors', '.json'), ...list('styles/typography', '.json')]) {
+for (const file of [...list('styles', '.json'), ...list('styles/sections', '.json'), ...list('styles/colors', '.json'), ...list('styles/typography', '.json'), ...list('styles/blocks', '.json')]) {
   try {
     if (JSON.parse(read(file)).version !== 3) fail(file, 'not theme.json version 3');
   } catch {

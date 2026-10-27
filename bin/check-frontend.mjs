@@ -173,14 +173,26 @@ try {
         dir: document.documentElement.dir,
         h1Font: getComputedStyle(document.querySelector('h1') || document.body).fontFamily,
         loadedFonts: [...document.fonts].filter((font) => font.status === 'loaded').map((font) => font.family.replace(/["']/g, '')),
-        // Full-width sections touch each other, and the footer meets one that ends the page:
-        // no block gap above either (a white sliver beside a color field).
-        sectionGaps: [...document.querySelectorAll('.alignfull')]
-          .filter((el) => el.previousElementSibling?.classList.contains('alignfull'))
-          .concat([...document.querySelectorAll('.wp-site-blocks > main')]
-            .filter((main) => main.lastElementChild?.classList.contains('alignfull') && main.nextElementSibling)
-            .map((main) => main.nextElementSibling))
-          .filter((el) => parseFloat(getComputedStyle(el).marginBlockStart) !== 0).length,
+        // Full-width sections touch each other, the header meets one that opens the page and
+        // the footer one that ends it: no block gap beside a color field. A post content
+        // wrapper is full width too, so look inside it.
+        sectionGaps: (() => {
+          const section = (el) => (el?.classList.contains('wp-block-post-content') ? null : el?.classList.contains('alignfull') ? el : null);
+          const mains = [...document.querySelectorAll('.wp-site-blocks > main')];
+          const opening = mains.filter((main) => {
+            const first = [...main.children].find((el) => el.offsetHeight > 0 && getComputedStyle(el).position !== 'absolute');
+            const full = section(first?.classList.contains('wp-block-post-content') ? first.firstElementChild : first);
+            return full && main.previousElementSibling && full.getBoundingClientRect().top - main.previousElementSibling.getBoundingClientRect().bottom > 0.5;
+          });
+          const closing = mains.filter((main) => {
+            const last = main.lastElementChild;
+            return main.nextElementSibling && section(last?.classList.contains('wp-block-post-content') ? last.lastElementChild : last);
+          }).map((main) => main.nextElementSibling);
+          return [...document.querySelectorAll('.alignfull')]
+            .filter((el) => el.previousElementSibling?.classList.contains('alignfull'))
+            .concat(closing)
+            .filter((el) => parseFloat(getComputedStyle(el).marginBlockStart) !== 0).length + opening.length;
+        })(),
         top: (() => {
           const box = (el) => (el ? el.getBoundingClientRect() : null);
           const hero = document.querySelector('main')?.firstElementChild;
@@ -206,7 +218,7 @@ try {
       if (expectFont && !(facts.h1Font.includes(expectFont) && facts.loadedFonts.includes(expectFont))) {
         problems.push(`<h1> font is ${facts.h1Font} (loaded: ${facts.loadedFonts.join(', ') || 'none'}), expected ${expectFont}`);
       }
-      if (facts.sectionGaps) problems.push(`${facts.sectionGaps} full-width sections leave a gap before the next`);
+      if (facts.sectionGaps) problems.push(`${facts.sectionGaps} full-width sections leave a gap to the next section, the header or the footer`);
       if (fold && name === 'home') {
         const { header, next, button } = facts.top;
         if (width >= 1366 && header > FOLD.header) problems.push(`header is ${header}px tall (at most ${FOLD.header})`);

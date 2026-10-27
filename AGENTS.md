@@ -34,6 +34,7 @@ Every change keeps these true:
   listing them as presets (`typography/system.json` downloads no fonts); `velocity.json`,
   the frozen 1.x look: never change it, except to add a palette color 2.0 patterns need
   (such as `on-primary`).
+- `styles/sections/` and `styles/blocks/` hold section and block styles.
 - `templates/` compose header part → `core/group` `tagName="main"` → footer part. Part text
   lives in `hidden-*` patterns (most parts are a single `wp:pattern` line) so it can be
   translated.
@@ -74,6 +75,10 @@ Every change keeps these true:
   category stay. Restyle them; never delete them.
 
 ## Verifying changes
+
+- `npm run check:menu -- <url> …`: mobile menu by keyboard at 375 px (focus in, Escape,
+  focus back). `npm run check:legacy`: every 1.4.1 inserter pattern as a page under the
+  current styles (overflow, console errors, axe); screenshots in `build/checks/legacy/`.
 
 - `npm test`: release structure, block markup and translatable text, 1.x contract. Add
   `tests/release-check.mjs` assertions when structure changes. CI also runs `php -l` and
