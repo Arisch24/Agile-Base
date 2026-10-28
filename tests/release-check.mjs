@@ -922,4 +922,15 @@ for (const file of readdirSync(new URL('../patterns/', import.meta.url)).filter(
 }
 assert.match(read('patterns/testimonial.php'), /^ \* Categories: agile-base, testimonials/m);
 
+// 2.0 Part 4b: every inserter pattern is findable and previews at a sensible width.
+for (const file of readdirSync(new URL('../patterns/', import.meta.url)).filter((f) => f.endsWith('.php'))) {
+  const source = read(`patterns/${file}`);
+  if (/^ \* Inserter: no$/m.test(source)) continue;
+  const categories = (source.match(/^ \* Categories: (.+)$/m) || [])[1]?.split(', ') ?? [];
+  assert.equal(categories[0], 'agile-base', `${file}: first category agile-base`);
+  assert.ok(categories.slice(1).some((c) => CORE_CATEGORIES.has(c)), `${file}: also a core category`);
+  for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${file}: ${header}`);
+}
+assert.match(read('patterns/testimonial.php'), /^ \* Categories: agile-base, testimonials/m);
+
 console.log('release source checks passed');

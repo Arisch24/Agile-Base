@@ -2,7 +2,7 @@
 /**
  * Title: Testimonial
  * Slug: agile-base/testimonial
- * Categories: agile-base, text, featured
+ * Categories: agile-base, testimonials, text
  * Keywords: testimonial, quote, review, customer
  * Viewport Width: 1400
  * Description: A large pull quote with attribution. Replace it with a real customer quote.
