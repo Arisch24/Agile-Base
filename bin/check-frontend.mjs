@@ -71,7 +71,7 @@ const revisions = () => Number(wp('eval', `echo count( wp_get_post_revisions( ${
 // --rtl drops a must-use plugin into the site for the run, the way the RTL Tester plugin
 // does it, and removes it afterwards (also at the start, after an interrupted run).
 const muPlugins = fileURLToPath(new URL('../../../mu-plugins/', import.meta.url));
-const rtlPlugin = `${muPlugins}zz-agile-base-check-rtl.php`;
+const rtlPlugin = `${muPlugins}test-agile-base-check-rtl.php`;
 let createdMuPlugins = false;
 const removeRtlPlugin = () => {
   rmSync(rtlPlugin, { force: true });

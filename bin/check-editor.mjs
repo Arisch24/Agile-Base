@@ -9,7 +9,7 @@ import { chromium } from 'playwright';
 const base = process.env.WP_URL || 'https://theme-dev-wp.ddev.site';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const theme = 'agile-base';
-const user = 'zz-editor-check';
+const user = 'test-editor-check';
 const filters = process.argv.slice(2);
 const wanted = (name) => !filters.length || filters.some((filter) => name.includes(filter));
 const wp = (...args) => execFileSync('ddev', ['wp', ...args], { cwd: root, encoding: 'utf8' }).trim();
@@ -69,7 +69,7 @@ try {
       $type = in_array( 'page', $p['postTypes'] ?? array(), true ) ? 'page' : 'post';
       $id = wp_insert_post( array(
         'post_type' => $type, 'post_status' => 'draft',
-        'post_title' => 'zz-editor-check ' . $p['name'],
+        'post_title' => 'Test: editor check ' . $p['name'],
         'post_author' => ${Number(userId)}, 'post_content' => $p['content'],
       ), true );
       if ( is_wp_error( $id ) ) { WP_CLI::error( $id->get_error_message() ); }

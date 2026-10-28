@@ -51,7 +51,7 @@ try {
 	foreach ( ${JSON.stringify(slugs).replace(/"/g, "'").replace(/^\[/, 'array(').replace(/\]$/, ')')} as $slug ) {
 		ob_start();
 		include get_theme_file_path( 'build/legacy-${TAG}/' . $slug . '.php' );
-		$out[ $slug ] = wp_insert_post( array( 'post_type' => 'page', 'post_status' => 'publish', 'post_title' => 'zz legacy ' . $slug, 'post_content' => ob_get_clean() ) );
+		$out[ $slug ] = wp_insert_post( array( 'post_type' => 'page', 'post_status' => 'publish', 'post_title' => 'Test: legacy ' . $slug, 'post_content' => ob_get_clean() ) );
 	}
 	echo wp_json_encode( $out );`));
 
