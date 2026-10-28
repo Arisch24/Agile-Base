@@ -881,4 +881,11 @@ for (const slug of ['services-grid', 'guarantees', 'testimonials-grid', 'contact
 const freelancerHome = read('patterns/hidden-home-freelancer.php');
 for (const slug of ['about-founder', 'services-list', 'case-studies', 'testimonial', 'call-to-action']) assert.match(freelancerHome, new RegExp(`"slug":"agile-base/${slug}"`), `Freelancer nests ${slug}`);
 
+// 2.0 Part 4b: Service Details, Portfolio and Case Study pages (spec §7.3).
+assertLayout('page-service', { title: 'Page: Service Details', category: 'services', nests: ['steps', 'pricing', 'faq', 'cta-banner'] });
+assertLayout('page-portfolio', { title: 'Page: Portfolio', category: 'portfolio', nests: ['case-studies', 'testimonials-grid', 'call-to-action'] });
+const caseStudy = assertLayout('page-case-study', { title: 'Page: Case Study', category: 'portfolio', nests: ['testimonial', 'cta-banner'] });
+assert.ok((caseStudy.match(/<h2\b/g) || []).length >= 3, 'Case Study: the challenge, the work and the result, each a heading');
+assert.doesNotMatch(caseStudy, /"url":|"mediaUrl"|src=/, 'Case Study: image slots are empty');
+
 console.log('release source checks passed');
