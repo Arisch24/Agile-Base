@@ -50,6 +50,34 @@ Tags: blog, portfolio, one-column, wide-blocks, block-patterns, block-styles, cu
 	z-index: 100000;
 }
 
+/* The ring contrasts with the surrounding surface, even when a button inverts.
+   Include native details and keyboard-scrollable tables, plus core search fields. */
+:root {
+	--agile-base-focus-color: var(--wp--preset--color--ink);
+}
+
+.has-paper-background-color,
+.has-surface-background-color,
+.is-style-section-ruled {
+	--agile-base-focus-color: var(--wp--preset--color--ink);
+}
+
+.has-ink-background-color,
+.is-style-section-ink {
+	--agile-base-focus-color: var(--wp--preset--color--paper);
+}
+
+.has-primary-background-color,
+.agile-base-field,
+.is-style-section-field {
+	--agile-base-focus-color: var(--wp--preset--color--on-primary);
+}
+
+:root :is(a, button, input, select, textarea, summary, [tabindex], .wp-block-table):focus-visible {
+	outline: 3px solid var(--agile-base-focus-color);
+	outline-offset: 3px;
+}
+
 /* Browser surfaces: the parts the browser draws, themed from the palette. */
 ::selection {
 	background-color: var(--wp--preset--color--primary);

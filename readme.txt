@@ -75,6 +75,7 @@ Archivo font, Copyright 2020 The Archivo Project Authors
 * License bundled at: assets/fonts/OFL-Archivo.txt
 
 JetBrains Mono font, Copyright 2020 The JetBrains Mono Project Authors
+* Modification: Latin font omits programming ligature features to reduce download size; glyph coverage and weight range are retained.
 * Source: https://github.com/JetBrains/JetBrainsMono
 * License: SIL Open Font License, 1.1
 * License URI: https://scripts.sil.org/OFL
