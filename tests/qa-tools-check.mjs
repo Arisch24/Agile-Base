@@ -29,6 +29,8 @@ await check('focus', fixture('<style>:focus-visible{outline:2px solid #111}main 
 await check('focus', fixture('<style>:focus-visible{outline:2px solid #111}</style><a href="#main">Skip to content</a><main id="main">' + Array.from({ length: 81 }, (_, i) => `<button>Control ${i}</button>`).join('') + '</main>'), 1);
 await check('focus', fixture('<main>No keyboard controls</main>'), 1);
 await check('focus', fixture('<style>:focus-visible{outline:2px solid #111}</style><a href="#main">Skip to content</a><main id="main"><button id="middle">Middle</button><button id="last">Last</button></main><script>document.addEventListener("keydown",e=>{if(e.key==="Tab"&&document.activeElement.id==="last"){e.preventDefault();document.getElementById("middle").focus()}})</script>'), 1);
+// A Cover's color is on its overlay layer: a dark ring on a dark cover fails.
+await check('focus', fixture('<style>:focus-visible{outline:2px solid #111}</style><a href="#main">Skip to content</a><main id="main"><div class="wp-block-cover"><span class="wp-block-cover__background" style="background:#111"></span><div class="wp-block-cover__inner-container"><button>Go</button></div></div></main>'), 1);
 // A button's own dark brand fill must not set a white ring on surrounding white.
 const css = readFileSync(`${root}style.css`, 'utf8');
 await check('focus', fixture(`<style>${css}:root{--wp--preset--color--paper:#fff;--wp--preset--color--ink:#16213e;--wp--preset--color--primary:#003366;--wp--preset--color--on-primary:#fff}.has-primary-background-color{background:#003366;color:#fff}</style><a href="#main">Skip to content</a><main id="main"><button class="has-primary-background-color">Continue</button></main>`), 0);

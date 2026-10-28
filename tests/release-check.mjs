@@ -660,6 +660,11 @@ for (const file of markupFiles) assert.doesNotMatch(read(file), /wp:search \{[^\
 for (const block of ['core/search', 'core/query-pagination', 'core/avatar', 'core/social-links']) {
   assert.ok(themeJson.styles.blocks[block], `theme.json styles.blocks["${block}"]`);
 }
+// Only a search with its button inside is one paper box; with the button outside, the
+// section shows between the field and the button.
+const searchCss = themeJson.styles.blocks['core/search'].css;
+assert.match(searchCss, /&\.wp-block-search__button-inside \.wp-block-search__inside-wrapper \{[^}]*background-color: var\(--wp--preset--color--paper\)/);
+assert.doesNotMatch(searchCss, /& \.wp-block-search__inside-wrapper \{[^}]*(background|color|border)/, 'search: no paper box behind a button outside the field');
 
 // 2.0 Part 3: blog listings. No label above any heading; the card keeps its contract class
 // and its byline blocks; the 1.4.0 author header keeps wrapping on phones.

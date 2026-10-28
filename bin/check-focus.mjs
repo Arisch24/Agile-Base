@@ -45,8 +45,10 @@ try {
           .reduce((sum, c, k) => sum + c * [0.2126, 0.7152, 0.0722][k], 0);
         let background = [255, 255, 255, 255];
         for (let node = el.parentElement; node; node = node.parentElement) {
-          const color = rgba(getComputedStyle(node).backgroundColor);
-          if (color[3] > 200) { background = color; break; }
+          // A Cover block paints its color on an overlay layer, not on itself.
+          const overlay = node.matches('.wp-block-cover') && node.querySelector(':scope > .wp-block-cover__background');
+          const color = rgba(getComputedStyle(overlay || node).backgroundColor);
+          if (color[3] > 200 && (!overlay || parseFloat(getComputedStyle(overlay).opacity) >= 0.8)) { background = color; break; }
         }
         const style = getComputedStyle(el);
         const width = style.outlineStyle === 'none' ? 0 : parseFloat(style.outlineWidth);
