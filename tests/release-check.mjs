@@ -210,15 +210,14 @@ const assertPagePattern = (slug, category) => {
 };
 const pageSlugs = (source) => [...source.matchAll(/wp:pattern \{"slug":"agile-base\/([a-z-]+)"\}/g)].map((m) => m[1]);
 
-assert.deepEqual(pageSlugs(assertPagePattern('page-about', 'about')), ['stats', 'team', 'testimonial', 'call-to-action']);
+assert.deepEqual(pageSlugs(assertPagePattern('page-about', 'about')), ['stats', 'team', 'testimonials-grid', 'call-to-action']);
 assert.deepEqual(pageSlugs(assertPagePattern('page-team', 'team')), ['team', 'call-to-action']);
 
 assert.deepEqual(pageSlugs(assertPagePattern('page-services', 'services')), ['services-grid', 'steps', 'testimonial', 'faq', 'call-to-action']);
 assert.deepEqual(pageSlugs(assertPagePattern('page-pricing', 'call-to-action')), ['pricing', 'faq', 'call-to-action']);
 
 const pageContact = assertPagePattern('page-contact', 'contact');
-assert.deepEqual(pageSlugs(pageContact), ['faq']);
-assert.match(pageContact, /href="mailto:hello@example\.com"/);
+assert.deepEqual(pageSlugs(pageContact), ['contact-details', 'faq']);
 assert.doesNotMatch(pageContact, /<form|wp:jetpack|contact-form/);
 
 // Phase 4: Archive (List) design.
@@ -821,5 +820,34 @@ const pricingCards = read('patterns/pricing.php');
 assert.equal((pricingCards.match(/"className":"agile-base-stat-number",[^\n]*"fontSize":"3-x-large"/g) || []).length, 3, 'Pricing: each price is a data point with tight leading');
 assert.equal((pricingCards.match(/"dimensions":\{"minHeight":"100%"\}/g) || []).length, 3, 'Pricing: the cards share a height');
 for (const source of [latestGrid, latestList]) assert.match(source, /wp:post-title \{[^}]*"fontSize":"large"/, 'latest posts titles use the post card size');
+
+// 2.0 Part 4b: page layouts. The Page template shows the title (the <h1>); a layout's intro
+// adds no label and no heading of its own, so nothing repeats the page name; sections follow.
+const assertLayout = (slug, { title, category, nests }) => {
+  const source = read(`patterns/${slug}.php`);
+  if (title) assert.match(source, new RegExp(`^ \\* Title: ${title.replace(/[()]/g, '\\$&')}$`, 'm'), `${slug}: title`);
+  assert.match(source, new RegExp(`^ \\* Categories: agile-base, ${category}$`, 'm'), `${slug}: categories`);
+  assert.match(source, /^ \* Block Types: core\/post-content$/m, `${slug}: offered in the new-page modal`);
+  assert.match(source, /^ \* Post Types: page$/m);
+  for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${slug}: ${header}`);
+  assert.match(source, /^ \* Description: .*(Page \(Full Width\)|Landing Page) template/m, `${slug}: the Description names the template to use`);
+  // The page opens with a lead paragraph that isn't a label: no heading, section or eyebrow first.
+  const body = source.slice(source.indexOf('?>') + 2);
+  const lead = body.indexOf('<!-- wp:paragraph');
+  const firstHeading = body.search(/<!-- wp:heading\b/);
+  const firstSection = body.indexOf('<!-- wp:pattern');
+  assert.ok(firstSection > -1, `${slug}: nests sections`);
+  assert.ok(lead > -1 && lead < firstSection && (firstHeading === -1 || lead < firstHeading), `${slug}: opens with a lead paragraph, not a heading or a section`);
+  assert.doesNotMatch(body.slice(lead, body.indexOf('<!-- /wp:paragraph -->', lead)), /agile-base-eyebrow/, `${slug}: the intro repeats nothing (no label paragraph)`);
+  assert.doesNotMatch(source, /<h1\b|"level":1\b|agile-base\/hero"|href="#"/, `${slug}: no <h1>, no hero, no dead links`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.equal(marketsTheme(source), false, `${slug}: copy does not market the theme`);
+  if (nests) assert.deepEqual(pageSlugs(source), nests, `${slug}: sections`);
+  return source;
+};
+assertLayout('page-about', { category: 'about', nests: ['stats', 'team', 'testimonials-grid', 'call-to-action'] });
+assertLayout('page-pricing', { category: 'call-to-action', nests: ['pricing', 'faq', 'call-to-action'] });
+assertLayout('page-team', { category: 'team', nests: ['team', 'call-to-action'] });
+assertLayout('page-contact', { category: 'contact', nests: ['contact-details', 'faq'] });
 
 console.log('release source checks passed');
