@@ -17,18 +17,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--2-x-large)">
-<!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<!-- wp:group {"align":"wide","layout":{"type":"default"}} -->
 <div class="wp-block-group alignwide">
 <!-- wp:heading -->
 <h2 class="wp-block-heading"><?php esc_html_e( 'Latest news', 'agile-base' ); ?></h2>
 <!-- /wp:heading -->
 <!-- wp:query {"queryId":13,"className":"agile-base-posts-grid","query":{"perPage":6,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","sticky":"ignore","inherit":false}} -->
 <div class="wp-block-query agile-base-posts-grid">
-<!-- wp:post-template {"layout":{"type":"grid","minimumColumnWidth":"18rem"}} -->
-<!-- wp:group {"className":"post-card","layout":{"type":"constrained"}} -->
+<!-- wp:post-template {"layout":{"type":"grid","columnCount":3,"minimumColumnWidth":"18rem"}} -->
+<!-- wp:group {"className":"post-card","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group post-card">
 <!-- wp:post-featured-image {"aspectRatio":"16/9","style":{"border":{"radius":"var:custom|radius|card"}}} /-->
-<!-- wp:post-title {"isLink":true,"level":3} /-->
+<!-- wp:post-title {"isLink":true,"level":3,"fontSize":"large"} /-->
 <!-- wp:post-date {"className":"agile-base-meta","fontSize":"small"} /-->
 </div>
 <!-- /wp:group -->

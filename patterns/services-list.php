@@ -17,13 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--2-x-large)">
-<!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<!-- wp:group {"align":"wide","layout":{"type":"default"}} -->
 <div class="wp-block-group alignwide">
 <!-- wp:heading -->
 <h2 class="wp-block-heading"><?php esc_html_e( 'Services', 'agile-base' ); ?></h2>
 <!-- /wp:heading -->
-<!-- wp:group {"className":"is-style-section-ruled","layout":{"type":"constrained"}} -->
-<div class="wp-block-group is-style-section-ruled">
+<!-- wp:group {"style":{"spacing":{"blockGap":"0"}},"layout":{"type":"default"}} -->
+<div class="wp-block-group">
+<!-- wp:group {"className":"agile-base-list-item","style":{"spacing":{"padding":{"top":"var:preset|spacing|medium","bottom":"var:preset|spacing|medium"}}},"layout":{"type":"default"}} -->
+<div class="wp-block-group agile-base-list-item" style="padding-top:var(--wp--preset--spacing--medium);padding-bottom:var(--wp--preset--spacing--medium)">
 <!-- wp:media-text {"mediaPosition":"left","mediaType":"image","isStackedOnMobile":true,"className":"agile-base-media"} -->
 <div class="wp-block-media-text is-stacked-on-mobile agile-base-media"><figure class="wp-block-media-text__media"></figure><div class="wp-block-media-text__content">
 <!-- wp:heading {"level":3} -->
@@ -43,8 +45,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- /wp:media-text -->
 </div>
 <!-- /wp:group -->
-<!-- wp:group {"className":"is-style-section-ruled","layout":{"type":"constrained"}} -->
-<div class="wp-block-group is-style-section-ruled">
+<!-- wp:group {"className":"agile-base-list-item","style":{"spacing":{"padding":{"top":"var:preset|spacing|medium","bottom":"var:preset|spacing|medium"}}},"layout":{"type":"default"}} -->
+<div class="wp-block-group agile-base-list-item" style="padding-top:var(--wp--preset--spacing--medium);padding-bottom:var(--wp--preset--spacing--medium)">
 <!-- wp:media-text {"mediaPosition":"right","mediaType":"image","isStackedOnMobile":true,"className":"agile-base-media"} -->
 <div class="wp-block-media-text has-media-on-the-right is-stacked-on-mobile agile-base-media"><div class="wp-block-media-text__content">
 <!-- wp:heading {"level":3} -->
@@ -64,8 +66,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- /wp:media-text -->
 </div>
 <!-- /wp:group -->
-<!-- wp:group {"className":"is-style-section-ruled","layout":{"type":"constrained"}} -->
-<div class="wp-block-group is-style-section-ruled">
+<!-- wp:group {"className":"agile-base-list-item","style":{"spacing":{"padding":{"top":"var:preset|spacing|medium","bottom":"var:preset|spacing|medium"}}},"layout":{"type":"default"}} -->
+<div class="wp-block-group agile-base-list-item" style="padding-top:var(--wp--preset--spacing--medium);padding-bottom:var(--wp--preset--spacing--medium)">
 <!-- wp:media-text {"mediaPosition":"left","mediaType":"image","isStackedOnMobile":true,"className":"agile-base-media"} -->
 <div class="wp-block-media-text is-stacked-on-mobile agile-base-media"><figure class="wp-block-media-text__media"></figure><div class="wp-block-media-text__content">
 <!-- wp:heading {"level":3} -->
@@ -83,6 +85,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- /wp:buttons -->
 </div></div>
 <!-- /wp:media-text -->
+</div>
+<!-- /wp:group -->
 </div>
 <!-- /wp:group -->
 </div>

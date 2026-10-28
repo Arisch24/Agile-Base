@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--2-x-large)">
-<!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<!-- wp:group {"align":"wide","layout":{"type":"default"}} -->
 <div class="wp-block-group alignwide">
 <!-- wp:heading -->
 <h2 class="wp-block-heading"><?php esc_html_e( 'Recent posts', 'agile-base' ); ?></h2>
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- wp:group {"className":"agile-base-list-item","style":{"spacing":{"padding":{"top":"var:preset|spacing|x-small","bottom":"var:preset|spacing|x-small"}}},"layout":{"type":"flex","flexWrap":"wrap","verticalAlignment":"baseline"}} -->
 <div class="wp-block-group agile-base-list-item" style="padding-top:var(--wp--preset--spacing--x-small);padding-bottom:var(--wp--preset--spacing--x-small)">
 <!-- wp:post-date {"className":"agile-base-meta","fontSize":"small"} /-->
-<!-- wp:post-title {"isLink":true,"level":3} /-->
+<!-- wp:post-title {"isLink":true,"level":3,"fontSize":"large"} /-->
 </div>
 <!-- /wp:group -->
 

@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <!-- wp:group {"align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"}}},"layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--2-x-large)">
-<!-- wp:group {"align":"wide","layout":{"type":"constrained"}} -->
+<!-- wp:group {"align":"wide","layout":{"type":"default"}} -->
 <div class="wp-block-group alignwide">
 <!-- wp:heading -->
 <h2 class="wp-block-heading"><?php esc_html_e( 'Choose the right plan', 'agile-base' ); ?></h2>
@@ -29,13 +29,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="wp-block-columns">
 <!-- wp:column -->
 <div class="wp-block-column">
-<!-- wp:group {"className":"is-style-ruled","layout":{"type":"constrained"}} -->
-<div class="wp-block-group is-style-ruled">
+<!-- wp:group {"className":"is-style-ruled","style":{"dimensions":{"minHeight":"100%"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group is-style-ruled" style="min-height:100%">
 <!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading"><?php esc_html_e( 'Starter', 'agile-base' ); ?></h3>
 <!-- /wp:heading -->
-<!-- wp:paragraph {"fontSize":"3-x-large"} -->
-<p class="has-3-x-large-font-size"><?php esc_html_e( 'Your price', 'agile-base' ); ?></p>
+<!-- wp:paragraph {"className":"agile-base-stat-number","style":{"spacing":{"margin":{"top":"var:preset|spacing|x-small"}}},"fontSize":"3-x-large"} -->
+<p class="agile-base-stat-number has-3-x-large-font-size" style="margin-top:var(--wp--preset--spacing--x-small)"><?php esc_html_e( 'Your price', 'agile-base' ); ?></p>
 <!-- /wp:paragraph -->
 <!-- wp:paragraph -->
 <p><?php esc_html_e( 'Say who this plan is for.', 'agile-base' ); ?></p>
@@ -66,13 +66,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- /wp:column -->
 <!-- wp:column -->
 <div class="wp-block-column">
-<!-- wp:group {"className":"is-style-section-field","layout":{"type":"constrained"}} -->
-<div class="wp-block-group is-style-section-field">
+<!-- wp:group {"className":"is-style-section-field","style":{"dimensions":{"minHeight":"100%"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group is-style-section-field" style="min-height:100%">
 <!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading"><?php esc_html_e( 'Standard', 'agile-base' ); ?></h3>
 <!-- /wp:heading -->
-<!-- wp:paragraph {"fontSize":"3-x-large"} -->
-<p class="has-3-x-large-font-size"><?php esc_html_e( 'Your price', 'agile-base' ); ?></p>
+<!-- wp:paragraph {"className":"agile-base-stat-number","style":{"spacing":{"margin":{"top":"var:preset|spacing|x-small"}}},"fontSize":"3-x-large"} -->
+<p class="agile-base-stat-number has-3-x-large-font-size" style="margin-top:var(--wp--preset--spacing--x-small)"><?php esc_html_e( 'Your price', 'agile-base' ); ?></p>
 <!-- /wp:paragraph -->
 <!-- wp:paragraph -->
 <p><?php esc_html_e( 'Recommended for most projects.', 'agile-base' ); ?></p>
@@ -103,13 +103,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 <!-- /wp:column -->
 <!-- wp:column -->
 <div class="wp-block-column">
-<!-- wp:group {"className":"is-style-ruled","layout":{"type":"constrained"}} -->
-<div class="wp-block-group is-style-ruled">
+<!-- wp:group {"className":"is-style-ruled","style":{"dimensions":{"minHeight":"100%"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group is-style-ruled" style="min-height:100%">
 <!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading"><?php esc_html_e( 'Complete', 'agile-base' ); ?></h3>
 <!-- /wp:heading -->
-<!-- wp:paragraph {"fontSize":"3-x-large"} -->
-<p class="has-3-x-large-font-size"><?php esc_html_e( 'Your price', 'agile-base' ); ?></p>
+<!-- wp:paragraph {"className":"agile-base-stat-number","style":{"spacing":{"margin":{"top":"var:preset|spacing|x-small"}}},"fontSize":"3-x-large"} -->
+<p class="agile-base-stat-number has-3-x-large-font-size" style="margin-top:var(--wp--preset--spacing--x-small)"><?php esc_html_e( 'Your price', 'agile-base' ); ?></p>
 <!-- /wp:paragraph -->
 <!-- wp:paragraph -->
 <p><?php esc_html_e( 'Say who this plan is for.', 'agile-base' ); ?></p>

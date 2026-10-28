@@ -226,7 +226,7 @@ A `surface` band with a heading, a few sentences and a standard button on the le
 Hero (Split), Services List and About the Founder use Media & Text with an empty image slot. Until an image or video is chosen, the block becomes a single text column with no reserved media space or inner side padding. With media, it uses the core two-column layout and stacks on phones. The split hero has two actions; the existing Text and Image section keeps its one action and bundled photo.
 
 ### Latest posts
-Latest Posts (Grid) reuses the ruled `post-card` treatment for image, linked h3 title and mono date. Its responsive grid uses an 18rem minimum; a lone item spans all tracks (`agile-base-posts-grid`). Latest Posts (List) uses wrapping date/title rows with the existing `agile-base-list-item` rule. Both own their queries, keep sticky posts in date order, and show “Nothing published yet.” when empty. The grid's All posts action links to the configured posts page, or home when none is set.
+Latest Posts (Grid) reuses the ruled `post-card` treatment for image, linked h3 title at the `large` size and mono date. Its responsive grid holds three columns at most, with an 18rem minimum; a lone item spans all tracks (`agile-base-posts-grid`). Latest Posts (List) uses wrapping date/title rows with the existing `agile-base-list-item` rule. Both own their queries, keep sticky posts in date order (on WordPress 6.6 and 6.7 too), and show “Nothing published yet.” when empty. The grid's All posts action links to the configured posts page, or home when none is set.
 
 ### Ruled row (`agile-base-ruled`)
 A hairline above and below, used for the logo row. The feature strip uses 2px rules above and below.

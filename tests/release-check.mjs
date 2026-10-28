@@ -180,7 +180,7 @@ assert.match(teamSection, /^ \* Slug: agile-base\/team$/m);
 assert.match(teamSection, /^ \* Categories: agile-base, team$/m);
 assert.doesNotMatch(teamSection, /^ \* Inserter: no$/m);
 assert.equal((teamSection.match(/class="agile-base-avatar"/g) || []).length, 4);
-assert.match(teamSection, /"layout":\{"type":"grid","minimumColumnWidth":"14rem"\}/);
+assert.match(teamSection, /"layout":\{"type":"grid","columnCount":4,"minimumColumnWidth":"14rem"\}/);
 assert.doesNotMatch(teamSection, /<h1|"level":1/);
 assert.doesNotMatch(teamSection, RAW_ENGLISH);
 
@@ -803,5 +803,23 @@ assert.match(stylesheet, /\.agile-base-posts-grid[^}]*:only-child\s*\{[^}]*grid-
 for (const source of [latestGrid, latestList]) {
   assert.equal(queriesIn(source)[0].query.sticky, 'ignore', 'latest posts ignore sticky promotion');
 }
+// "ignore" arrived in WordPress 6.8; before it, core reads it as "exclude".
+assert.match(read('functions.php'), /add_filter\( 'query_loop_block_query_vars', 'agile_base_query_ignore_sticky', 10, 2 \);/, 'sticky posts stay in Latest Posts on WordPress 6.6 and 6.7');
+
+// Part 4a review: content sits at the wide size, like the Part 2 sections (a constrained
+// wide group held it to 960px); card grids cap their columns, so a wide row doesn't open
+// an empty track.
+for (const slug of ['hero-split', 'hero-cover', 'services-list', 'case-studies', 'testimonials-grid', 'guarantees', 'contact-details', 'cta-banner', 'about-founder', 'subscribe', 'posts-grid', 'posts-compact', 'team', 'pricing', 'style-guide']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.doesNotMatch(source, /"align":"wide","layout":\{"type":"constrained"/, `${slug}: the wide group holds its content at the wide size`);
+  for (const [grid] of source.matchAll(/"layout":\{"type":"grid"[^}]*\}/g)) assert.match(grid, /"columnCount":\d/, `${slug}: the grid sets a column count`);
+}
+assert.match(heroCover, /wp:cover \{[^\n]*"layout":\{"type":"constrained"\}/, 'Hero (Cover): the cover holds its wide group at the wide size');
+assert.doesNotMatch(servicesList, /is-style-section-ruled/, 'Services List: one rule between rows, not a box per row');
+assert.equal((servicesList.match(/"className":"agile-base-list-item"/g) || []).length, serviceRows.length, 'Services List: each service is a ruled row');
+const pricingCards = read('patterns/pricing.php');
+assert.equal((pricingCards.match(/"className":"agile-base-stat-number",[^\n]*"fontSize":"3-x-large"/g) || []).length, 3, 'Pricing: each price is a data point with tight leading');
+assert.equal((pricingCards.match(/"dimensions":\{"minHeight":"100%"\}/g) || []).length, 3, 'Pricing: the cards share a height');
+for (const source of [latestGrid, latestList]) assert.match(source, /wp:post-title \{[^}]*"fontSize":"large"/, 'latest posts titles use the post card size');
 
 console.log('release source checks passed');
