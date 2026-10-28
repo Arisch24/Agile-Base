@@ -286,8 +286,6 @@ assert.doesNotMatch(postsList, /"columnCount"/);
 assert.match(readme, /^= 1\.0\.3 =$/m);
 
 // Hotfix 1.4.1: a screenshot of the homepage as it ships.
-assert.match(style, /^Version: 1\.4\.1$/m);
-assert.match(readme, /^Stable tag: 1\.4\.1$/m);
 assert.match(readme, /^= 1\.4\.1 =$/m);
 
 // 2.0 Part 1: role tokens. CSS reaches fonts, radii, shadows and motion through
@@ -662,6 +660,11 @@ for (const file of markupFiles) assert.doesNotMatch(read(file), /wp:search \{[^\
 for (const block of ['core/search', 'core/query-pagination', 'core/avatar', 'core/social-links']) {
   assert.ok(themeJson.styles.blocks[block], `theme.json styles.blocks["${block}"]`);
 }
+// Only a search with its button inside is one paper box; with the button outside, the
+// section shows between the field and the button.
+const searchCss = themeJson.styles.blocks['core/search'].css;
+assert.match(searchCss, /&\.wp-block-search__button-inside \.wp-block-search__inside-wrapper \{[^}]*background-color: var\(--wp--preset--color--paper\)/);
+assert.doesNotMatch(searchCss, /& \.wp-block-search__inside-wrapper \{[^}]*(background|color|border)/, 'search: no paper box behind a button outside the field');
 
 // 2.0 Part 3: blog listings. No label above any heading; the card keeps its contract class
 // and its byline blocks; the 1.4.0 author header keeps wrapping on phones.
@@ -964,5 +967,53 @@ for (const slug of ['hidden-home-local-business', 'hidden-home-freelancer', 'hid
     if (opener) assert.ok(lines[index + 1].startsWith(`${opener[1]}\t`), `${slug}:${index + 2}: indented one tab inside its container`);
   });
 }
+
+// 2.0 Part 5: release guards. Readme tags come from the WordPress.org list (read from
+// api.wordpress.org/themes/info/1.1/?action=feature_list on 2026-10-24) and match style.css;
+// the theme ships no JavaScript of its own; PHP stays 7.4-compatible.
+const ALLOWED_TAGS = new Set([
+  'grid-layout', 'one-column', 'two-columns', 'three-columns', 'four-columns', 'left-sidebar', 'right-sidebar', 'wide-blocks',
+  'accessibility-ready', 'block-patterns', 'block-styles', 'buddypress', 'custom-background', 'custom-colors', 'custom-header',
+  'custom-logo', 'custom-menu', 'editor-style', 'featured-image-header', 'featured-images', 'flexible-header', 'footer-widgets',
+  'front-page-post-form', 'full-site-editing', 'full-width-template', 'microformats', 'post-formats', 'rtl-language-support',
+  'sticky-post', 'style-variations', 'template-editing', 'theme-options', 'threaded-comments', 'translation-ready',
+  'blog', 'e-commerce', 'education', 'entertainment', 'food-and-drink', 'holiday', 'news', 'photography', 'portfolio',
+]);
+const SUBJECT_TAGS = new Set(['blog', 'e-commerce', 'education', 'entertainment', 'food-and-drink', 'holiday', 'news', 'photography', 'portfolio']);
+const readmeTags = readme.match(/^Tags: (.+)$/m)[1].split(', ');
+const styleTags = style.match(/^Tags: (.+)$/m)[1].split(', ');
+assert.deepEqual(styleTags, readmeTags, 'style.css and readme.txt list the same tags');
+for (const tag of readmeTags) assert.ok(ALLOWED_TAGS.has(tag), `tag "${tag}" is not a WordPress.org theme tag`);
+assert.ok(readmeTags.filter((tag) => SUBJECT_TAGS.has(tag)).length <= 3, 'at most three subject tags');
+for (const tag of ['block-styles', 'editor-style', 'full-width-template', 'one-column', 'portfolio', 'template-editing']) assert.ok(readmeTags.includes(tag), `2.0 qualifies for "${tag}"`);
+assert.ok(!readmeTags.includes('e-commerce'), 'e-commerce waits for 2.1');
+const enqueuedScripts = [...functions.matchAll(/wp_enqueue_script\(\s*'([^']+)'/g)].map((m) => m[1]);
+assert.deepEqual(enqueuedScripts, ['comment-reply'], 'the theme enqueues no JavaScript of its own');
+const php = [functions, ...readdirSync(new URL('../patterns/', import.meta.url)).map((f) => read(`patterns/${f}`))].join('\n');
+assert.doesNotMatch(php, /\?->|\bmatch\s*\(|#\[|\benum\s+\w+|\breadonly\s/, 'no PHP 8 syntax (Requires PHP: 7.4)');
+
+// 2.0 Part 5: accessibility-ready (spec §7.5, D7). The statement follows the WordPress
+// accessibility.txt format; the tag is claimed; the screen-reader-text class is styled.
+const statement = read('accessibility.txt');
+for (const section of ['=== Accessibility Statement ===', '== Quick Information ==', '== Testing Tools and Methodology ==', '== Screen Reader Text Class ==', '== Accessibility Help Contact ==', '== Where to Report Issues ==']) {
+  assert.ok(statement.includes(section), `accessibility.txt: "${section}"`);
+}
+assert.match(statement, /Accessibility audit completed: (Yes|No)/);
+assert.match(statement, /screen-reader-text/);
+assert.match(stylesheet, /\.screen-reader-text \{/);
+// The accessibility-ready tag remains gated by the owner's screen-reader walkthrough.
+
+// 2.0.0 release: the readme answers what site owners and builders ask first.
+assert.match(style, /^Version: 2\.0\.0$/m);
+assert.match(readme, /^Stable tag: 2\.0\.0$/m);
+assert.match(readme, /^= 2\.0\.0 =$/m);
+assert.match(readme, /^== Frequently Asked Questions ==$/m);
+for (const question of ['keep the old look', 'still look like 1.x', 'starter homepage', 'rebrand', 'form', 'Proudly powered by']) {
+  assert.match(readme, new RegExp(`^= [^\\n]*${question}[^\\n]* =$`, 'mi'), `readme FAQ answers "${question}"`);
+}
+assert.match(readme, /Velocity/, 'readme tells 1.x sites how to keep the 1.x look');
+assert.doesNotMatch(readme + style, /GeneratePress/i, 'no other theme named in public text');
+
+assert.ok(readmeTags.includes('rtl-language-support'), 'rtl-language-support tag (checked with check-frontend --rtl)');
 
 console.log('release source checks passed');

@@ -1,30 +1,25 @@
 # Agile Base
 
-A clean, fast **Full Site Editing (block) theme** for WordPress — built for blogs and
-simple sites. No page builder, no build step: everything is driven by `theme.json`,
-block templates, and core blocks.
+A fast WordPress block theme for business and client sites. Rebrand ready-made
+sections, pages and starter homepages in the Site Editor. No page builder, theme
+JavaScript or build step.
 
 Install it from the [WordPress.org theme directory](https://wordpress.org/themes/agile-base/),
 or in your dashboard under **Appearance → Themes → Add New Theme** (search for "Agile Base").
 
 ## Features
 
-- Full Site Editing with templates for the homepage, blog, posts, pages, archives,
-  author pages, search and 404 (`templates/`)
-- Extra templates to pick per post or page: **Post (Wide)**, **Page (Full Width)**,
-  **Page (No Title)** and **Blank Canvas** (no header or footer, for landing pages)
-- Three headers (default, **Centered**, **Minimal**) and two footers (default,
-  **Columns**) to swap in from the Site Editor (`parts/`)
-- Ready-made page layouts for **About**, **Services**, **Pricing**, **Team** and
-  **Contact**, offered when you create a new page
-- Section patterns: hero, logos, features, stats, testimonial, FAQ, team, pricing,
-  call to action and a style guide (`patterns/`)
-- Alternative designs for archives (**Archive (List)**) and the 404 page
-  (**404 (Search First)**), picked from the template's **Design** panel in the Site Editor
-- `theme.json` v3 design system — fluid typography, fluid spacing, color palette
-- **Light** and **Dark** style variations (`styles/`)
-- Self-hosted **Figtree**, **Space Grotesk**, and **Space Mono** fonts (no external requests)
-- Translation-ready (`agile-base` text domain)
+- Three starter homepages: Agency, Local Business and Freelancer, in the Front Page Design panel.
+- Page layouts for About, Services, Service Details, Pricing, Team, Contact, Portfolio, Case Study, Landing, Thank You and Legal.
+- Business sections: services, case studies, testimonials, pricing, FAQs, contact details, calls to action and more.
+- Four headers, including Header (Button), and three footers, including Footer (Business).
+- Landing Page (no menu), Blank Canvas, Page (Full Width), Page (No Title) and Post (Wide) templates.
+- Harbour, Terracotta and Contrast color presets; Classic, Friendly and System font presets. System downloads no fonts.
+- Field, Ink and Ruled section styles; Boxed, Double rule and Ruled box block styles.
+- Dark and Velocity variations. Velocity restores the 1.x colors, fonts and shapes.
+- Self-hosted Public Sans, Archivo, JetBrains Mono and Source Serif 4; legacy fonts remain for Velocity.
+- Fluid type and spacing, underlined text links, visible focus, reduced-motion support and [accessibility statement](accessibility.txt).
+- Right-to-left layouts with isolated phone/email links; translation-ready patterns and template parts.
 
 ## Requirements
 
@@ -41,7 +36,10 @@ handy for exporting Site Editor changes back to these files and for managing fon
 Checks (CI runs them on every pull request):
 
 ```sh
-node tests/release-check.mjs        # source checks: versions, changelog, templates, patterns
+npm test                           # source, block markup, 1.x compatibility and 2.x API
+npm run check:frontend -- --axe     # live DDEV pages and accessibility
+npm run check:editor                # templates, parts and patterns in WordPress editors
+npm run check:tools                 # browser QA tool regression fixtures
 bash tests/release-package-check.sh # builds a release zip and checks its contents
 composer install && vendor/bin/phpcs . # WordPress coding standards (phpcs.xml.dist)
 ```

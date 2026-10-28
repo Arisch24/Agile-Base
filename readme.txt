@@ -3,20 +3,72 @@ Contributors: arisch24
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.1
+Stable tag: 2.0.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, custom-colors, custom-logo, featured-images, threaded-comments, translation-ready
+Tags: blog, portfolio, one-column, wide-blocks, block-patterns, block-styles, custom-colors, custom-logo, editor-style, featured-images, full-site-editing, full-width-template, rtl-language-support, style-variations, template-editing, threaded-comments, translation-ready
 
-A clean, fast full site editing block theme for blogs and simple sites.
+A fast, rebrandable block theme for business and client sites.
 
 == Description ==
 
-Agile Base is a lightweight Full Site Editing theme. It ships a complete set of block
-templates, light and dark style variations, self-hosted fonts, and fluid typography
-and spacing — all configured through theme.json with no build step or page builder.
+Agile Base is a fast block theme for business and client sites. Start with a ready-made homepage or page layout, replace the text and images, and choose your colors and fonts in the Site Editor. No page builder, no theme JavaScript.
+
+* Three starter homepages: Agency, Local Business and Freelancer.
+* Page layouts for About, Services, Service Details, Pricing, Team, Contact, Portfolio, Case Study, Landing, Thank You and Legal pages.
+* Ready-made sections for services, testimonials, pricing, case studies, FAQs, contact details and more.
+* Four headers, including Header (Button), three footers, including Footer (Business), and a Landing Page template with no menu.
+* Harbour, Terracotta and Contrast color presets; Classic, Friendly and System font presets. System downloads no fonts.
+* Field, Ink and Ruled section styles; Boxed, Double rule and Ruled box block styles.
+* Dark style and Velocity, which restores the 1.x colors, fonts and shapes.
+* Underlined text links, visible keyboard focus, reduced-motion support and an accessibility statement.
+* Right-to-left layouts with isolated phone numbers and email addresses.
+* Self-hosted fonts, fluid typography and spacing, and translation-ready patterns.
+
+== Frequently Asked Questions ==
+
+= How do I start from a starter homepage? =
+
+Go to Appearance → Editor → Templates, open the Front Page, and choose Agency, Local Business or Freelancer in the Design panel. Then replace the placeholder text and add your images; every block says what belongs in it.
+
+= How do I rebrand the theme for a client? =
+
+In Appearance → Editor → Styles, pick a color preset or edit the palette, and pick a font preset (or install fonts in the Font Library and choose them for Body and Headings). The whole site follows. Corner radius and shadows can be changed in a child theme's theme.json under settings.custom.
+
+= Does it include a contact form? =
+
+No. Forms belong in a plugin, so use any form plugin you like: the theme styles its fields, labels and buttons to match. The Contact page layout leaves room for one.
+
+= How do I remove "Proudly powered by WordPress"? =
+
+Open Appearance → Editor → Patterns → Footer (or the footer you use), select the line, and delete or edit it.
+
+= I updated from 1.x. How do I keep the old look? =
+
+Go to Appearance → Editor → Styles → Browse styles and choose "Velocity". It restores the 1.x colors, fonts and shapes.
+
+= Some pages still look like 1.x after updating. Why? =
+
+Templates and template parts you changed in the Site Editor keep your version. To get the 2.0 design, open Appearance → Editor → Templates (or Patterns → Template Parts), choose the item, and use ⋯ → Reset. Your posts and pages are not affected.
 
 == Changelog ==
+
+= 2.0.0 =
+* Change: a new design for business and client sites, with bold type, color fields and fine rules inspired by a printed quote book. Choose "Velocity" to keep the 1.x look (see the FAQ).
+* Add: three starter homepages (Agency, Local Business, Freelancer), chosen in the Front Page template's Design panel.
+* Add: page layouts for Service Details, Portfolio, Case Study, Landing, Thank You and Legal pages; rebuilt About, Pricing, Team and Contact layouts.
+* Add: Services Grid, Services List, How It Works, Hero (Split), Hero (Cover), Case Studies, Testimonials Grid, Guarantees, Contact Details, CTA Banner, About the Founder, Subscribe, Text and Image, Latest Posts (Grid and List) and About the Author patterns.
+* Add: Header (Button), Footer (Business) and a Landing Page template with no menu.
+* Add: Harbour, Terracotta and Contrast color presets; Classic, Friendly and System font presets. System downloads no fonts.
+* Add: Field, Ink and Ruled section styles for Group, Columns and Cover blocks; Boxed, Double rule and Ruled box block styles.
+* Add: styling for form plugins' fields, labels and buttons.
+* Add: right-to-left language support.
+* Add: an accessibility statement, underlined links in text and visible focus outlines; automated contrast checks in every color preset.
+* Change: page layouts no longer repeat the page name as a label above the page.
+* Change: self-hosted Public Sans, Archivo, JetBrains Mono and Source Serif 4 fonts. Fonts are only preloaded while in use.
+* Fix: category links in post lists are large enough to tap on phones (WCAG 2.2).
+* Fix: long words, wide tables and long code lines no longer make posts scroll sideways on phones.
+* Fix: homepage feature labels, search, menu and post navigation labels, and style guide labels can now be translated.
 
 = 1.4.1 =
 * Fix: the theme screenshot now shows the homepage as it ships. The old one was taken from an earlier draft with hero buttons and a different feature strip.
@@ -75,6 +127,7 @@ Archivo font, Copyright 2020 The Archivo Project Authors
 * License bundled at: assets/fonts/OFL-Archivo.txt
 
 JetBrains Mono font, Copyright 2020 The JetBrains Mono Project Authors
+* Modification: Latin font omits programming ligature features to reduce download size; glyph coverage and weight range are retained.
 * Source: https://github.com/JetBrains/JetBrainsMono
 * License: SIL Open Font License, 1.1
 * License URI: https://scripts.sil.org/OFL
