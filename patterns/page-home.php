@@ -4,6 +4,8 @@
  * Slug: agile-base/page-home
  * Categories: agile-base, featured
  * Block Types: core/post-content
+ * Keywords: home, agency, studio, business
+ * Viewport Width: 1400
  * Description: An agency homepage: headline, logos, an introduction with a photo, services, reasons to choose you, figures, a testimonial, FAQ and a call to action.
  *
  * @package Agile_Base

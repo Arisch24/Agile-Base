@@ -23,6 +23,8 @@ When reporting information to me, be extremely concise and sacrifice grammar for
 - `patterns/`: building blocks (`Inserter: no`, including the `hidden-*` ones), sections
   (category `agile-base`), page layouts (`Block Types: core/post-content`, offered for
   new pages) and template designs (`Template Types:`, in the Site Editor's Design panel).
+  Starter homepages are `template-front-page-*` designs in the front page Design panel;
+  their content lives in `hidden-home-*` patterns (Agency uses `page-home`).
 - `style.css`: CSS blocks can't express, on `agile-base-` classes.
   `assets/styles/core-<block>.css` loads only on pages with that block;
   `assets/styles/legacy-presets.css` keeps the 1.x preset slugs.

@@ -6,6 +6,7 @@
  * Block Types: core/post-content
  * Post Types: page
  * Viewport Width: 1400
+ * Keywords: services, offerings, business, page
  * Description: A Services page: a short intro, your services as cards, three steps, a testimonial, an FAQ and a call to action. Looks best with the Page (Full Width) template.
  *
  * @package Agile_Base

@@ -5,6 +5,7 @@
  * Categories: agile-base, call-to-action
  * Block Types: core/post-content
  * Post Types: page
+ * Keywords: pricing, business, page, information
  * Viewport Width: 1400
  * Description: A Pricing page: a short intro, three plan cards, an FAQ and a call to action. Looks best with the Page (Full Width) template.
  *
@@ -16,14 +17,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|x-small","padding":{"bottom":"var:preset|spacing|large"}}},"layout":{"type":"constrained","contentSize":"720px","justifyContent":"left"}} -->
+<!-- wp:group {"style":{"spacing":{"padding":{"bottom":"var:preset|spacing|large"}}},"layout":{"type":"constrained","contentSize":"720px","justifyContent":"left"}} -->
 <div class="wp-block-group" style="padding-bottom:var(--wp--preset--spacing--large)">
-	<!-- wp:paragraph {"className":"agile-base-eyebrow"} -->
-	<p class="agile-base-eyebrow"><?php esc_html_e( 'Pricing', 'agile-base' ); ?></p>
-	<!-- /wp:paragraph -->
-
 	<!-- wp:paragraph {"fontSize":"x-large"} -->
-	<p class="has-x-large-font-size"><?php esc_html_e( 'Clear plans with no surprises. Start free and upgrade when you need more.', 'agile-base' ); ?></p>
+	<p class="has-x-large-font-size"><?php esc_html_e( 'Describe your packages, what each includes, and how customers choose the right one.', 'agile-base' ); ?></p>
 	<!-- /wp:paragraph -->
 </div>
 <!-- /wp:group -->
