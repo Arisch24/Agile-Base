@@ -888,4 +888,38 @@ const caseStudy = assertLayout('page-case-study', { title: 'Page: Case Study', c
 assert.ok((caseStudy.match(/<h2\b/g) || []).length >= 3, 'Case Study: the challenge, the work and the result, each a heading');
 assert.doesNotMatch(caseStudy, /"url":|"mediaUrl"|src=/, 'Case Study: image slots are empty');
 
+// 2.0 Part 4b: Landing, Thank You and Legal pages (spec §7.3). Legal pages say what to
+// write in every section; they never supply legal text (Review Focus 4).
+const landingContent = assertLayout('page-landing-content', { title: 'Page: Landing', category: 'call-to-action', nests: ['hidden-landing-offer', 'testimonials-grid', 'guarantees', 'hidden-landing-cta'] });
+for (const slug of ['hidden-landing-offer', 'hidden-landing-cta']) {
+  const campaign = read(`patterns/${slug}.php`);
+  assert.match(campaign, /Get the offer/);
+  assert.doesNotMatch(campaign, /href="tel:|Get in touch|Request a quote/);
+  assert.match(campaign, /home_url\( '\/contact\/' \)/);
+}
+assert.match(landingContent, /^ \* Description: .*Landing Page template/m);
+const thankYou = assertLayout('page-thank-you', { title: 'Page: Thank You', category: 'text' });
+assert.match(thankYou, /esc_url\( home_url\( '\/' \) \)/, 'Thank You: a way home');
+const legal = read('patterns/page-legal.php');
+assert.match(legal, /^ \* Title: Page: Legal$/m);
+assert.match(legal, /^ \* Block Types: core\/post-content$/m);
+assert.match(legal, /^ \* Post Types: page$/m);
+const legalSections = legal.split(/<!-- wp:heading -->/).slice(1);
+assert.ok(legalSections.length >= 4, 'Legal: at least four sections');
+for (const section of legalSections) {
+  assert.match(section, /<p[^>]*><\?php esc_html_e\( 'Replace this /, 'Legal: each section says what to write, not legal text');
+}
+assert.doesNotMatch(legal, /<h1\b|agile-base-eyebrow/);
+
+// 2.0 Part 4b: every inserter pattern is findable and previews at a sensible width.
+for (const file of readdirSync(new URL('../patterns/', import.meta.url)).filter((f) => f.endsWith('.php'))) {
+  const source = read(`patterns/${file}`);
+  if (/^ \* Inserter: no$/m.test(source)) continue;
+  const categories = (source.match(/^ \* Categories: (.+)$/m) || [])[1]?.split(', ') ?? [];
+  assert.equal(categories[0], 'agile-base', `${file}: first category agile-base`);
+  assert.ok(categories.slice(1).some((c) => CORE_CATEGORIES.has(c)), `${file}: also a core category`);
+  for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${file}: ${header}`);
+}
+assert.match(read('patterns/testimonial.php'), /^ \* Categories: agile-base, testimonials/m);
+
 console.log('release source checks passed');
