@@ -34,8 +34,8 @@ for (const url of urls) {
   await page.goto(url, { waitUntil: 'networkidle' });
   await Promise.all(pending);
   const problems = [];
-  if (kb(byType.font || 0) > BUDGET_KB.font) problems.push(`fonts ${kb(byType.font)} KB > ${BUDGET_KB.font} KB`);
-  if (kb(theme.css) > BUDGET_KB.themeCss) problems.push(`theme CSS ${kb(theme.css)} KB > ${BUDGET_KB.themeCss} KB`);
+  if ((byType.font || 0) > BUDGET_KB.font * 1024) problems.push(`fonts ${(byType.font / 1024).toFixed(3)} KB > ${BUDGET_KB.font} KB`);
+  if (theme.css > BUDGET_KB.themeCss * 1024) problems.push(`theme CSS ${(theme.css / 1024).toFixed(3)} KB > ${BUDGET_KB.themeCss} KB`);
   if (theme.js.length) problems.push(`theme JavaScript: ${theme.js.join(', ')}`);
   const summary = Object.entries(byType).map(([type, bytes]) => `${type} ${kb(bytes)} KB`).join(', ');
   if (problems.length) failed++;

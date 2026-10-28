@@ -11,7 +11,7 @@ Version: 2.0.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: agile-base
-Tags: blog, portfolio, one-column, wide-blocks, block-patterns, block-styles, custom-colors, custom-logo, editor-style, featured-images, full-site-editing, full-width-template, style-variations, template-editing, threaded-comments, translation-ready
+Tags: blog, portfolio, one-column, wide-blocks, block-patterns, block-styles, custom-colors, custom-logo, editor-style, featured-images, full-site-editing, full-width-template, rtl-language-support, style-variations, template-editing, threaded-comments, translation-ready
 */
 
 /*
@@ -56,18 +56,18 @@ Tags: blog, portfolio, one-column, wide-blocks, block-patterns, block-styles, cu
 	--agile-base-focus-color: var(--wp--preset--color--ink);
 }
 
-.has-paper-background-color,
-.has-surface-background-color,
+.has-paper-background-color:where(:not(a, button, input, select, textarea, summary)),
+.has-surface-background-color:where(:not(a, button, input, select, textarea, summary)),
 .is-style-section-ruled {
 	--agile-base-focus-color: var(--wp--preset--color--ink);
 }
 
-.has-ink-background-color,
+.has-ink-background-color:where(:not(a, button, input, select, textarea, summary)),
 .is-style-section-ink {
 	--agile-base-focus-color: var(--wp--preset--color--paper);
 }
 
-.has-primary-background-color,
+.has-primary-background-color:where(:not(a, button, input, select, textarea, summary)),
 .agile-base-field,
 .is-style-section-field {
 	--agile-base-focus-color: var(--wp--preset--color--on-primary);
@@ -76,6 +76,12 @@ Tags: blog, portfolio, one-column, wide-blocks, block-patterns, block-styles, cu
 :root :is(a, button, input, select, textarea, summary, [tabindex], .wp-block-table):focus-visible {
 	outline: 3px solid var(--agile-base-focus-color);
 	outline-offset: 3px;
+}
+
+/* Keep phone prefixes and email punctuation in reading order inside RTL text. */
+:where(a[href^="tel:"], a[href^="mailto:"]) {
+	direction: ltr;
+	unicode-bidi: isolate;
 }
 
 /* Browser surfaces: the parts the browser draws, themed from the palette. */
@@ -615,6 +621,7 @@ table,
 
 /* A very long word breaks instead of widening the page. */
 .wp-block-post-content,
+.wp-block-query-title,
 .wp-block-post-title,
 .wp-block-post-excerpt,
 .wp-block-comment-content {

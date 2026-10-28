@@ -19,7 +19,7 @@ or in your dashboard under **Appearance → Themes → Add New Theme** (search f
 - Dark and Velocity variations. Velocity restores the 1.x colors, fonts and shapes.
 - Self-hosted Public Sans, Archivo, JetBrains Mono and Source Serif 4; legacy fonts remain for Velocity.
 - Fluid type and spacing, underlined text links, visible focus, reduced-motion support and [accessibility statement](accessibility.txt).
-- Translation-ready patterns and template parts.
+- Right-to-left layouts with isolated phone/email links; translation-ready patterns and template parts.
 
 ## Requirements
 
@@ -39,6 +39,7 @@ Checks (CI runs them on every pull request):
 npm test                           # source, block markup, 1.x compatibility and 2.x API
 npm run check:frontend -- --axe     # live DDEV pages and accessibility
 npm run check:editor                # templates, parts and patterns in WordPress editors
+npm run check:tools                 # browser QA tool regression fixtures
 bash tests/release-package-check.sh # builds a release zip and checks its contents
 composer install && vendor/bin/phpcs . # WordPress coding standards (phpcs.xml.dist)
 ```

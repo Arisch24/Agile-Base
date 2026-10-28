@@ -13,7 +13,7 @@ const args = process.argv.slice(2);
 const widthAt = args.indexOf('--width');
 const width = widthAt >= 0 ? Number(args.splice(widthAt, 2)[1]) : 1440;
 const urls = args;
-if (!urls.length || !width) {
+if (!urls.length || !Number.isInteger(width) || width <= 0) {
   console.error('usage: node bin/check-focus.mjs [--width <px>] <url> [url ...]');
   process.exit(2);
 }
@@ -27,6 +27,7 @@ try {
     await page.goto(url, { waitUntil: 'networkidle' });
     const problems = [];
     const seen = [];
+    let finished = false;
     for (let i = 0; i < MAX_TABS; i++) {
       await page.keyboard.press('Tab');
       const focus = await page.evaluate(() => {
@@ -54,7 +55,7 @@ try {
         const name = `${el.tagName.toLowerCase()}${el.id ? `#${el.id}` : ''}${el.classList.length ? `.${[...el.classList].slice(0, 2).join('.')}` : ''}`;
         return {
           name,
-          key: `${name}|${el.getAttribute('href') ?? ''}|${el.textContent.trim().slice(0, 30)}`,
+          key: [...document.querySelectorAll('*')].indexOf(el),
           href: el.getAttribute('href') || '',
           text: el.textContent.trim().slice(0, 40),
           width,
@@ -62,14 +63,20 @@ try {
           visible: el.getClientRects().length > 0,
         };
       });
-      if (!focus) break; // focus left the page content: the end of the tab order
+      if (!focus) { finished = true; break; } // focus left the page content
       if (i === 0 && !/#wp--skip-link--target$|skip/i.test(`${focus.href} ${focus.text}`)) problems.push(`first Tab reached ${focus.name}, not the skip link`);
-      if (seen.includes(focus.key)) break; // wrapped round
+      if (seen.includes(focus.key)) {
+        if (focus.key !== seen[0]) problems.push(`focus trapped at ${focus.name}`);
+        finished = true;
+        break;
+      }
       seen.push(focus.key);
       if (!focus.visible) problems.push(`${focus.name} takes focus while hidden`);
       else if (focus.width < 2) problems.push(`${focus.name} has a ${focus.width}px focus outline`);
       else if (focus.contrast < 3) problems.push(`${focus.name} focus outline contrast ${focus.contrast.toFixed(2)}:1`);
     }
+    if (!seen.length) problems.push('no keyboard focus stops (missing skip link)');
+    if (!finished) problems.push(`tab traversal exceeded ${MAX_TABS} stops; incomplete check`);
     const unique = [...new Set(problems)];
     if (unique.length) failed++;
     console.log(`${unique.length ? 'FAIL' : 'ok  '} ${url} (${seen.length} stops @${width}) ${unique.slice(0, 6).join(' | ')}${unique.length > 6 ? ` | +${unique.length - 6} more` : ''}`);

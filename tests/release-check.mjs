@@ -1009,4 +1009,6 @@ for (const question of ['keep the old look', 'still look like 1.x', 'starter hom
 assert.match(readme, /Velocity/, 'readme tells 1.x sites how to keep the 1.x look');
 assert.doesNotMatch(readme + style, /GeneratePress/i, 'no other theme named in public text');
 
+assert.ok(readmeTags.includes('rtl-language-support'), 'rtl-language-support tag (checked with check-frontend --rtl)');
+
 console.log('release source checks passed');

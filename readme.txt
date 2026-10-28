@@ -6,7 +6,7 @@ Requires PHP: 7.4
 Stable tag: 2.0.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Tags: blog, portfolio, one-column, wide-blocks, block-patterns, block-styles, custom-colors, custom-logo, editor-style, featured-images, full-site-editing, full-width-template, style-variations, template-editing, threaded-comments, translation-ready
+Tags: blog, portfolio, one-column, wide-blocks, block-patterns, block-styles, custom-colors, custom-logo, editor-style, featured-images, full-site-editing, full-width-template, rtl-language-support, style-variations, template-editing, threaded-comments, translation-ready
 
 A fast, rebrandable block theme for business and client sites.
 
@@ -22,6 +22,7 @@ Agile Base is a fast block theme for business and client sites. Start with a rea
 * Field, Ink and Ruled section styles; Boxed, Double rule and Ruled box block styles.
 * Dark style and Velocity, which restores the 1.x colors, fonts and shapes.
 * Underlined text links, visible keyboard focus, reduced-motion support and an accessibility statement.
+* Right-to-left layouts with isolated phone numbers and email addresses.
 * Self-hosted fonts, fluid typography and spacing, and translation-ready patterns.
 
 == Frequently Asked Questions ==
@@ -61,6 +62,7 @@ Templates and template parts you changed in the Site Editor keep your version. T
 * Add: Harbour, Terracotta and Contrast color presets; Classic, Friendly and System font presets. System downloads no fonts.
 * Add: Field, Ink and Ruled section styles for Group, Columns and Cover blocks; Boxed, Double rule and Ruled box block styles.
 * Add: styling for form plugins' fields, labels and buttons.
+* Add: right-to-left language support.
 * Add: an accessibility statement, underlined links in text and visible focus outlines; automated contrast checks in every color preset.
 * Change: page layouts no longer repeat the page name as a label above the page.
 * Change: self-hosted Public Sans, Archivo, JetBrains Mono and Source Serif 4 fonts. Fonts are only preloaded while in use.
