@@ -30,6 +30,7 @@ When reporting information to me, be extremely concise and sacrifice grammar for
   `assets/styles/legacy-presets.css` keeps the 1.x preset slugs.
 - `functions.php`: `agile_base_` prefix, `function_exists`-wrapped, no classes. Preloads a
   font only while its role still uses the bundled family.
+- `accessibility.txt`: shipped statement; accessibility-ready requires the recorded manual walkthrough.
 
 ## Verifying changes
 

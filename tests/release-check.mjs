@@ -286,8 +286,6 @@ assert.doesNotMatch(postsList, /"columnCount"/);
 assert.match(readme, /^= 1\.0\.3 =$/m);
 
 // Hotfix 1.4.1: a screenshot of the homepage as it ships.
-assert.match(style, /^Version: 1\.4\.1$/m);
-assert.match(readme, /^Stable tag: 1\.4\.1$/m);
 assert.match(readme, /^= 1\.4\.1 =$/m);
 
 // 2.0 Part 1: role tokens. CSS reaches fonts, radii, shadows and motion through
@@ -988,5 +986,27 @@ const enqueuedScripts = [...functions.matchAll(/wp_enqueue_script\(\s*'([^']+)'/
 assert.deepEqual(enqueuedScripts, ['comment-reply'], 'the theme enqueues no JavaScript of its own');
 const php = [functions, ...readdirSync(new URL('../patterns/', import.meta.url)).map((f) => read(`patterns/${f}`))].join('\n');
 assert.doesNotMatch(php, /\?->|\bmatch\s*\(|#\[|\benum\s+\w+|\breadonly\s/, 'no PHP 8 syntax (Requires PHP: 7.4)');
+
+// 2.0 Part 5: accessibility-ready (spec §7.5, D7). The statement follows the WordPress
+// accessibility.txt format; the tag is claimed; the screen-reader-text class is styled.
+const statement = read('accessibility.txt');
+for (const section of ['=== Accessibility Statement ===', '== Quick Information ==', '== Testing Tools and Methodology ==', '== Screen Reader Text Class ==', '== Accessibility Help Contact ==', '== Where to Report Issues ==']) {
+  assert.ok(statement.includes(section), `accessibility.txt: "${section}"`);
+}
+assert.match(statement, /Accessibility audit completed: (Yes|No)/);
+assert.match(statement, /screen-reader-text/);
+assert.match(stylesheet, /\.screen-reader-text \{/);
+// The accessibility-ready tag remains gated by the owner's screen-reader walkthrough.
+
+// 2.0.0 release: the readme answers what site owners and builders ask first.
+assert.match(style, /^Version: 2\.0\.0$/m);
+assert.match(readme, /^Stable tag: 2\.0\.0$/m);
+assert.match(readme, /^= 2\.0\.0 =$/m);
+assert.match(readme, /^== Frequently Asked Questions ==$/m);
+for (const question of ['keep the old look', 'still look like 1.x', 'starter homepage', 'rebrand', 'form', 'Proudly powered by']) {
+  assert.match(readme, new RegExp(`^= [^\\n]*${question}[^\\n]* =$`, 'mi'), `readme FAQ answers "${question}"`);
+}
+assert.match(readme, /Velocity/, 'readme tells 1.x sites how to keep the 1.x look');
+assert.doesNotMatch(readme + style, /GeneratePress/i, 'no other theme named in public text');
 
 console.log('release source checks passed');

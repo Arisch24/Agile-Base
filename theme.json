@@ -722,7 +722,7 @@
 						"bottom": "var:preset|spacing|small"
 					}
 				},
-				"css": "& .wp-block-search__inside-wrapper { gap: var(--wp--custom--gap--x-small); } & .wp-block-search__input { min-inline-size: 0; } & .wp-block-search__button { margin-inline-start: 0; flex-shrink: 0; white-space: nowrap; }"
+				"css": "& .wp-block-search__inside-wrapper { gap: var(--wp--custom--gap--x-small); color: var(--wp--preset--color--ink); background-color: var(--wp--preset--color--paper); border-color: var(--wp--preset--color--ink); --agile-base-focus-color: var(--wp--preset--color--ink); } & .wp-block-search__input { min-inline-size: 0; } & .wp-block-search__button { margin-inline-start: 0; flex-shrink: 0; white-space: nowrap; }"
 			},
 			"core/query-pagination": {
 				"spacing": {

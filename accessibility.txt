@@ -1,0 +1,27 @@
+=== Accessibility Statement ===
+
+Agile Base aims to meet WCAG 2.2 level AA and the WordPress.org accessibility-ready requirements in its default style, its Dark style and every color preset it ships.
+
+== Quick Information ==
+
+Accessibility audit completed: No
+
+== Testing Tools and Methodology ==
+
+Repository checks cover axe-core (WCAG 2.2 A and AA rules), page types at phone, tablet and desktop widths, styles and color presets, keyboard focus (skip link first, a focus outline of at least 2px at 3:1 contrast), reduced motion and mobile menus. A manual keyboard and screen reader walkthrough of the WordPress.org accessibility-ready requirements is required before claiming the accessibility-ready tag. The checks live in the theme's repository: https://github.com/Arisch24/Agile-Base
+
+== Screen Reader Text Class ==
+
+screen-reader-text
+
+== Accessibility Features ==
+
+Right-to-left layouts; a System font preset that downloads no fonts; reduced-motion support; underlined links in text.
+
+== Accessibility Help Contact ==
+
+https://github.com/Arisch24/Agile-Base/issues
+
+== Where to Report Issues ==
+
+https://github.com/Arisch24/Agile-Base/issues
