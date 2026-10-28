@@ -850,4 +850,35 @@ assertLayout('page-pricing', { category: 'call-to-action', nests: ['pricing', 'f
 assertLayout('page-team', { category: 'team', nests: ['team', 'call-to-action'] });
 assertLayout('page-contact', { category: 'contact', nests: ['contact-details', 'faq'] });
 
+// 2.0 Part 4b: starter homepages (spec §7.3, D12). Front-page template designs; each is a
+// header part, one <main> nesting a content pattern with the page's only <h1>, and a footer part.
+const STARTERS = {
+  agency: { title: 'Home: Agency', content: 'page-home', header: 'header', footer: 'footer' },
+  'local-business': { title: 'Home: Local Business', content: 'hidden-home-local-business', header: 'header-cta', footer: 'footer-business' },
+  freelancer: { title: 'Home: Freelancer', content: 'hidden-home-freelancer', header: 'header', footer: 'footer' },
+};
+for (const [name, starter] of Object.entries(STARTERS)) {
+  const source = read(`patterns/template-front-page-${name}.php`);
+  assert.match(source, new RegExp(`^ \\* Title: ${starter.title}$`, 'm'), `${name}: title`);
+  assert.match(source, /^ \* Template Types: front-page$/m, `${name}: offered in the front page's Design panel`);
+  assert.match(source, /^ \* Inserter: no$/m);
+  assert.match(source, new RegExp(`wp:template-part \\{"slug":"${starter.header}","tagName":"header","area":"header"\\}`), `${name}: ${starter.header} part`);
+  assert.match(source, new RegExp(`wp:template-part \\{"slug":"${starter.footer}","tagName":"footer","area":"footer"\\}`), `${name}: ${starter.footer} part`);
+  assert.equal((source.match(/"tagName":"main"/g) || []).length, 1, `${name}: one <main>`);
+  assert.match(source, new RegExp(`wp:pattern \\{"slug":"agile-base/${starter.content}"\\}`), `${name}: nests ${starter.content}`);
+  if (starter.content.startsWith('hidden-')) {
+    const content = read(`patterns/${starter.content}.php`);
+    assert.match(content, /^ \* Inserter: no$/m);
+    assert.equal((content.match(/<h1\b/g) || []).length, 1, `${starter.content}: the front page's only <h1>`);
+    assert.equal(hasKicker(content), false);
+    assert.equal(marketsTheme(content), false);
+    assert.doesNotMatch(content, /href="#"/);
+  }
+}
+const localHome = read('patterns/hidden-home-local-business.php');
+assert.match(localHome, /href="tel:/, 'Local Business: the phone number is a link');
+for (const slug of ['services-grid', 'guarantees', 'testimonials-grid', 'contact-details', 'cta-banner']) assert.match(localHome, new RegExp(`"slug":"agile-base/${slug}"`), `Local Business nests ${slug}`);
+const freelancerHome = read('patterns/hidden-home-freelancer.php');
+for (const slug of ['about-founder', 'services-list', 'case-studies', 'testimonial', 'call-to-action']) assert.match(freelancerHome, new RegExp(`"slug":"agile-base/${slug}"`), `Freelancer nests ${slug}`);
+
 console.log('release source checks passed');
