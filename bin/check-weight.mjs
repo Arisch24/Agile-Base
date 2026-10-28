@@ -12,6 +12,10 @@ const BUDGET_KB = { font: 120, themeCss: 30 };
 const THEME_PATH = '/wp-content/themes/agile-base/';
 const kb = (bytes) => Math.round(bytes / 1024);
 const urls = process.argv.slice(2);
+if (!urls.length) {
+  console.error('usage: node bin/check-weight.mjs <url> [url ...]');
+  process.exit(2);
+}
 const browser = await chromium.launch();
 let failed = 0;
 for (const url of urls) {

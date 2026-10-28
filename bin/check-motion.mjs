@@ -10,6 +10,10 @@
 import { chromium } from 'playwright';
 
 const urls = process.argv.slice(2);
+if (!urls.length) {
+  console.error('usage: node bin/check-motion.mjs <url> [url ...]');
+  process.exit(2);
+}
 const browser = await chromium.launch();
 const page = await (await browser.newContext({ viewport: { width: 1440, height: 900 }, ignoreHTTPSErrors: true, reducedMotion: 'reduce' })).newPage();
 let failed = 0;
