@@ -7,7 +7,7 @@
  * Post Types: page
  * Keywords: about, business, page, information
  * Viewport Width: 1400
- * Description: An About page: a short intro, headline numbers, the team, a testimonial and a call to action. Looks best with the Page (Full Width) template.
+ * Description: An About page: a short intro, headline numbers, the team, client testimonials and a call to action. Looks best with the Page (Full Width) template.
  *
  * @package Agile_Base
  */

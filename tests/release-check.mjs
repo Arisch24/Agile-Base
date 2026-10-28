@@ -823,7 +823,7 @@ for (const source of [latestGrid, latestList]) assert.match(source, /wp:post-tit
 
 // 2.0 Part 4b: page layouts. The Page template shows the title (the <h1>); a layout's intro
 // adds no label and no heading of its own, so nothing repeats the page name; sections follow.
-const assertLayout = (slug, { title, category, nests }) => {
+const assertLayout = (slug, { title, category, nests, lead: opensWithLead = true }) => {
   const source = read(`patterns/${slug}.php`);
   if (title) assert.match(source, new RegExp(`^ \\* Title: ${title.replace(/[()]/g, '\\$&')}$`, 'm'), `${slug}: title`);
   assert.match(source, new RegExp(`^ \\* Categories: agile-base, ${category}$`, 'm'), `${slug}: categories`);
@@ -832,13 +832,18 @@ const assertLayout = (slug, { title, category, nests }) => {
   for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${slug}: ${header}`);
   assert.match(source, /^ \* Description: .*(Page \(Full Width\)|Landing Page) template/m, `${slug}: the Description names the template to use`);
   // The page opens with a lead paragraph that isn't a label: no heading, section or eyebrow first.
+  // A Landing page hides its title, so it opens on its hero section with nothing above it.
   const body = source.slice(source.indexOf('?>') + 2);
   const lead = body.indexOf('<!-- wp:paragraph');
   const firstHeading = body.search(/<!-- wp:heading\b/);
   const firstSection = body.indexOf('<!-- wp:pattern');
   assert.ok(firstSection > -1, `${slug}: nests sections`);
-  assert.ok(lead > -1 && lead < firstSection && (firstHeading === -1 || lead < firstHeading), `${slug}: opens with a lead paragraph, not a heading or a section`);
-  assert.doesNotMatch(body.slice(lead, body.indexOf('<!-- /wp:paragraph -->', lead)), /agile-base-eyebrow/, `${slug}: the intro repeats nothing (no label paragraph)`);
+  if (opensWithLead) {
+    assert.ok(lead > -1 && lead < firstSection && (firstHeading === -1 || lead < firstHeading), `${slug}: opens with a lead paragraph, not a heading or a section`);
+    assert.doesNotMatch(body.slice(lead, body.indexOf('<!-- /wp:paragraph -->', lead)), /agile-base-eyebrow/, `${slug}: the intro repeats nothing (no label paragraph)`);
+  } else {
+    assert.equal(body.trimStart().indexOf('<!-- wp:pattern'), 0, `${slug}: opens on its hero section, with nothing above it`);
+  }
   assert.doesNotMatch(source, /<h1\b|"level":1\b|agile-base\/hero"|href="#"/, `${slug}: no <h1>, no hero, no dead links`);
   assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
   assert.equal(marketsTheme(source), false, `${slug}: copy does not market the theme`);
@@ -880,6 +885,24 @@ assert.match(localHome, /href="tel:/, 'Local Business: the phone number is a lin
 for (const slug of ['services-grid', 'guarantees', 'testimonials-grid', 'contact-details', 'cta-banner']) assert.match(localHome, new RegExp(`"slug":"agile-base/${slug}"`), `Local Business nests ${slug}`);
 const freelancerHome = read('patterns/hidden-home-freelancer.php');
 for (const slug of ['about-founder', 'services-list', 'case-studies', 'testimonial', 'call-to-action']) assert.match(freelancerHome, new RegExp(`"slug":"agile-base/${slug}"`), `Freelancer nests ${slug}`);
+// Every starter opens with the Agency hero's composition (DESIGN.md "Layout"): the color field,
+// a serial column, the display headline, a bold lead sentence and two buttons.
+for (const slug of ['hidden-home-local-business', 'hidden-home-freelancer']) {
+  const hero = read(`patterns/${slug}.php`).split('<!-- wp:pattern')[0];
+  assert.match(hero, /"className":"agile-base-field"[^\n]*"backgroundColor":"primary","textColor":"on-primary"/, `${slug}: the hero is the color field`);
+  assert.match(hero, /wp:column \{"width":"12%"\}[\s\S]*esc_html_x\( 'No\. 001', 'serial number of the first quote'/, `${slug}: serial column`);
+  assert.match(hero, /wp:heading \{"level":1,"fontSize":"5-x-large"\}/, `${slug}: display headline`);
+  assert.match(hero, /wp:paragraph \{"fontSize":"large","style":\{"typography":\{"fontWeight":"700"\}\}\}/, `${slug}: bold lead sentence`);
+  assert.equal((hero.match(/<!-- wp:button\b/g) || []).length, 2, `${slug}: two buttons`);
+  assert.match(hero, /wp:button \{"className":"is-style-outline"\}/, `${slug}: the second button is outlined`);
+}
+assert.match(localHome, /is-style-outline"><a class="wp-block-button__link wp-element-button" href="tel:/, 'Local Business: calling is the second hero action');
+const buttonLabels = (source) => [...source.matchAll(/esc_html_e\( '([^']+)', 'agile-base' \); \?><\/a><\/div>/g)].map((match) => match[1]);
+const founderLabels = buttonLabels(read('patterns/about-founder.php'));
+assert.ok(founderLabels.length > 0);
+for (const label of buttonLabels(freelancerHome.split('<!-- wp:pattern')[0])) {
+  assert.ok(!founderLabels.includes(label), `Freelancer: "${label}" is not repeated by About the Founder right below the hero`);
+}
 
 // 2.0 Part 4b: Service Details, Portfolio and Case Study pages (spec §7.3).
 assertLayout('page-service', { title: 'Page: Service Details', category: 'services', nests: ['steps', 'pricing', 'faq', 'cta-banner'] });
@@ -887,10 +910,11 @@ assertLayout('page-portfolio', { title: 'Page: Portfolio', category: 'portfolio'
 const caseStudy = assertLayout('page-case-study', { title: 'Page: Case Study', category: 'portfolio', nests: ['testimonial', 'cta-banner'] });
 assert.ok((caseStudy.match(/<h2\b/g) || []).length >= 3, 'Case Study: the challenge, the work and the result, each a heading');
 assert.doesNotMatch(caseStudy, /"url":|"mediaUrl"|src=/, 'Case Study: image slots are empty');
+assert.equal((caseStudy.match(/"className":"agile-base-reason"/g) || []).length, 3, 'Case Study: the results are ruled columns, apart from the section heading');
 
 // 2.0 Part 4b: Landing, Thank You and Legal pages (spec §7.3). Legal pages say what to
 // write in every section; they never supply legal text (Review Focus 4).
-const landingContent = assertLayout('page-landing-content', { title: 'Page: Landing', category: 'call-to-action', nests: ['hidden-landing-offer', 'testimonials-grid', 'guarantees', 'hidden-landing-cta'] });
+const landingContent = assertLayout('page-landing-content', { title: 'Page: Landing', category: 'call-to-action', lead: false, nests: ['hidden-landing-offer', 'features', 'testimonials-grid', 'guarantees', 'hidden-landing-cta'] });
 for (const slug of ['hidden-landing-offer', 'hidden-landing-cta']) {
   const campaign = read(`patterns/${slug}.php`);
   assert.match(campaign, /Get the offer/);
@@ -900,6 +924,7 @@ for (const slug of ['hidden-landing-offer', 'hidden-landing-cta']) {
 assert.match(landingContent, /^ \* Description: .*Landing Page template/m);
 const thankYou = assertLayout('page-thank-you', { title: 'Page: Thank You', category: 'text' });
 assert.match(thankYou, /esc_url\( home_url\( '\/' \) \)/, 'Thank You: a way home');
+assert.equal((thankYou.match(/<!-- wp:buttons\b/g) || []).length, 1, 'Thank You: both actions sit in one row');
 const legal = read('patterns/page-legal.php');
 assert.match(legal, /^ \* Title: Page: Legal$/m);
 assert.match(legal, /^ \* Block Types: core\/post-content$/m);
@@ -922,15 +947,22 @@ for (const file of readdirSync(new URL('../patterns/', import.meta.url)).filter(
 }
 assert.match(read('patterns/testimonial.php'), /^ \* Categories: agile-base, testimonials/m);
 
-// 2.0 Part 4b: every inserter pattern is findable and previews at a sensible width.
-for (const file of readdirSync(new URL('../patterns/', import.meta.url)).filter((f) => f.endsWith('.php'))) {
-  const source = read(`patterns/${file}`);
-  if (/^ \* Inserter: no$/m.test(source)) continue;
-  const categories = (source.match(/^ \* Categories: (.+)$/m) || [])[1]?.split(', ') ?? [];
-  assert.equal(categories[0], 'agile-base', `${file}: first category agile-base`);
-  assert.ok(categories.slice(1).some((c) => CORE_CATEGORIES.has(c)), `${file}: also a core category`);
-  for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${file}: ${header}`);
+// 2.0 Part 4b: the Page (Full Width) template the page layouts name keeps the page title in the
+// content column, with the side gutter every other template has, while sections run full width.
+const fullWidth = read('templates/page-full-width.html');
+assert.match(fullWidth, /wp:group \{"tagName":"main"[^\n]*"layout":\{"type":"constrained"\}/, 'Page (Full Width): the title is not flush with the screen edge');
+assert.match(fullWidth, /wp:post-content \{"align":"full"/, 'Page (Full Width): sections still run full width');
+// A long menu in the Header (Button) wraps its links instead of running off the screen.
+assert.doesNotMatch(read('style.css'), /\.agile-base-header-actions \.wp-block-navigation \{\s*flex-shrink: 0;/, 'Header (Button): the menu can shrink and wrap');
+
+// 2.0 Part 4b: pattern markup is indented like the rest of the theme: a container's inner
+// blocks sit one tab deeper than the container's opening tag.
+for (const slug of ['hidden-home-local-business', 'hidden-home-freelancer', 'hidden-landing-offer', 'hidden-landing-cta', 'page-service', 'page-portfolio', 'page-case-study', 'page-landing-content', 'page-thank-you', 'page-legal', 'template-front-page-agency', 'template-front-page-local-business', 'template-front-page-freelancer']) {
+  const lines = read(`patterns/${slug}.php`).split('\n');
+  lines.forEach((line, index) => {
+    const opener = line.match(/^(\t*)<(?:div|main|ul|ol)\b[^>]*>(?:<span[^>]*><\/span><div class="wp-block-cover__inner-container">)?$/);
+    if (opener) assert.ok(lines[index + 1].startsWith(`${opener[1]}\t`), `${slug}:${index + 2}: indented one tab inside its container`);
+  });
 }
-assert.match(read('patterns/testimonial.php'), /^ \* Categories: agile-base, testimonials/m);
 
 console.log('release source checks passed');

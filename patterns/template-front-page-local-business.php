@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <!-- wp:group {"tagName":"main","style":{"spacing":{"margin":{"top":"0"}}},"layout":{"type":"constrained"}} -->
 <main class="wp-block-group" style="margin-top:0">
-<!-- wp:pattern {"slug":"agile-base/hidden-home-local-business"} /-->
+	<!-- wp:pattern {"slug":"agile-base/hidden-home-local-business"} /-->
 </main>
 <!-- /wp:group -->
 

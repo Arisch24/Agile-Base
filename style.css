@@ -655,10 +655,6 @@ table,
 	max-inline-size: 100%;
 }
 
-.agile-base-header-actions .wp-block-navigation {
-	flex-shrink: 0;
-}
-
 .agile-base-header-actions .wp-block-button__link {
 	overflow-wrap: anywhere;
 }
