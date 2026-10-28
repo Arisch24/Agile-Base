@@ -193,3 +193,30 @@ if ( ! function_exists( 'agile_base_preload_resources' ) ) :
 	}
 endif;
 add_filter( 'wp_preload_resources', 'agile_base_preload_resources' );
+
+if ( ! function_exists( 'agile_base_query_ignore_sticky' ) ) :
+	/**
+	 * Keep sticky posts, in date order, in a Query Loop set to ignore stickiness (the
+	 * Latest Posts sections). WordPress 6.8 added that setting; before it, core treats
+	 * it as "exclude" and leaves sticky posts out.
+	 *
+	 * @param array    $query Query vars for the Query Loop.
+	 * @param WP_Block $block The Post Template block.
+	 * @return array
+	 */
+	function agile_base_query_ignore_sticky( $query, $block ): array {
+		if ( is_wp_version_compatible( '6.8' ) || 'ignore' !== ( $block->context['query']['sticky'] ?? '' ) ) {
+			return $query;
+		}
+
+		// Sticky posts the owner also excluded by hand stay excluded.
+		$excluded = array_map( 'intval', (array) ( $block->context['query']['exclude'] ?? array() ) );
+		$sticky   = array_diff( array_map( 'intval', (array) get_option( 'sticky_posts' ) ), $excluded );
+
+		$query['post__not_in']        = array_values( array_diff( (array) ( $query['post__not_in'] ?? array() ), $sticky ) );
+		$query['ignore_sticky_posts'] = 1;
+
+		return $query;
+	}
+endif;
+add_filter( 'query_loop_block_query_vars', 'agile_base_query_ignore_sticky', 10, 2 );

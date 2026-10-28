@@ -180,7 +180,7 @@ assert.match(teamSection, /^ \* Slug: agile-base\/team$/m);
 assert.match(teamSection, /^ \* Categories: agile-base, team$/m);
 assert.doesNotMatch(teamSection, /^ \* Inserter: no$/m);
 assert.equal((teamSection.match(/class="agile-base-avatar"/g) || []).length, 4);
-assert.match(teamSection, /"layout":\{"type":"grid","minimumColumnWidth":"14rem"\}/);
+assert.match(teamSection, /"layout":\{"type":"grid","columnCount":4,"minimumColumnWidth":"14rem"\}/);
 assert.doesNotMatch(teamSection, /<h1|"level":1/);
 assert.doesNotMatch(teamSection, RAW_ENGLISH);
 
@@ -188,9 +188,9 @@ assert.doesNotMatch(teamSection, RAW_ENGLISH);
 const pricingSection = read('patterns/pricing.php');
 assert.match(pricingSection, /^ \* Slug: agile-base\/pricing$/m);
 assert.match(pricingSection, /^ \* Categories: agile-base, call-to-action$/m);
-assert.equal((pricingSection.match(/<!-- wp:column \{/g) || []).length, 3);
+assert.equal((pricingSection.match(/<!-- wp:column(?: \{| -->)/g) || []).length, 3);
 assert.equal((pricingSection.match(/<!-- wp:list -->/g) || []).length, 3);
-assert.doesNotMatch(pricingSection, /<a\b/);
+// 2.0 plans link to contact; destination assertions below replace the 1.x no-links check.
 assert.doesNotMatch(pricingSection, /<h1|"level":1/);
 assert.doesNotMatch(pricingSection, RAW_ENGLISH);
 
@@ -708,5 +708,118 @@ assert.match(landing, /wp:post-content \{[^\n]*"align":"full"/, 'Landing Page: c
 assert.match(landing, /"slug":"agile-base\/hidden-footer-credit"/);
 assert.match(landing, /"tagName":"footer"[^\n]*"padding":\{"top":"var:preset\|spacing\|[a-z-]+","bottom":"var:preset\|spacing\|[a-z-]+"\}/, 'Landing Page: the credit footer has room above and below');
 assert.equal((landing.match(/"tagName":"main"/g) || []).length, 1);
+
+// 2.0 Part 4a: Team, Pricing, Style Guide. No labels above headings; pricing buttons go
+// somewhere real; the Style Guide shows the whole 2.0 system, so it stays complete.
+for (const slug of ['team', 'pricing', 'style-guide']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /agile-base-eyebrow/, `${slug}: no eyebrow label`);
+}
+const guide = read('patterns/style-guide.php');
+const kebabSlug = (slug) => slug.replace(/([a-z])([0-9])/g, '$1-$2').replace(/([0-9])([a-z])/g, '$1-$2');
+for (const { slug } of themeJson.settings.color.palette) assert.match(guide, new RegExp(`has-${slug}-background-color`), `style guide shows color ${slug}`);
+for (const { slug } of themeJson.settings.typography.fontSizes) assert.match(guide, new RegExp(`"fontSize":"${kebabSlug(slug)}"`), `style guide shows font size ${slug}`);
+for (const { slug } of themeJson.settings.spacing.spacingSizes) assert.match(guide, new RegExp(`--wp--preset--spacing--${kebabSlug(slug)}\\b`), `style guide shows spacing ${slug}`);
+for (const [, partial] of [...partials('styles/sections'), ...partials('styles/blocks')]) assert.match(guide, new RegExp(`is-style-${partial.slug}\\b`), `style guide shows ${partial.slug}`);
+assert.doesNotMatch(read('patterns/pricing.php'), /<a(?![^>]*href=)|href="#"/, 'every pricing button goes somewhere real');
+
+// 2.0 Part 4a: heroes (spec §7.2). An <h2> (pages supply the <h1>), real actions, and an
+// empty image slot or an overlay color from the palette (no bundled images).
+const heroSplit = assertNewPattern('hero-split', { title: 'Hero (Split)', categories: ['agile-base', 'banner'] });
+assert.match(heroSplit, /<h2\b/);
+assert.match(heroSplit, /wp:media-text \{/, 'a Media & Text block holds the image slot');
+assert.doesNotMatch(heroSplit, /"mediaUrl"|"mediaId"|<img\b/, 'the image slot is empty');
+assert.equal((heroSplit.match(/<!-- wp:button\b/g) || []).length, 2, 'two actions');
+const heroCover = assertNewPattern('hero-cover', { title: 'Hero (Cover)', categories: ['agile-base', 'banner'] });
+assert.match(heroCover, /wp:cover \{[^\n]*"overlayColor":"[a-z0-9-]+"/, 'overlay color from the palette');
+assert.doesNotMatch(heroCover, /"url":|"customOverlayColor"|<img\b/, 'no bundled image or literal color');
+assert.match(heroCover, /<h2\b/);
+assert.ok((heroCover.match(/<!-- wp:button\b/g) || []).length >= 1, 'an action');
+
+// 2.0 Part 4a: Services List (spec §7.2). Alternating Media & Text rows, each a service
+// with a heading and a real link, image slots empty.
+const servicesList = assertNewPattern('services-list', { title: 'Services List', categories: ['agile-base', 'services'] });
+const serviceRows = [...servicesList.matchAll(/<!-- wp:media-text (\{[^\n]*\}) -->/g)].map((m) => JSON.parse(m[1]));
+assert.ok(serviceRows.length >= 3, 'at least three services');
+assert.ok(new Set(serviceRows.map((row) => row.mediaPosition ?? 'left')).size === 2, 'the rows alternate sides');
+assert.ok(serviceRows.every((row) => row.isStackedOnMobile !== false), 'rows stack on phones');
+assert.doesNotMatch(servicesList, /"mediaUrl"|"mediaId"|<img\b/, 'image slots are empty');
+assert.equal((servicesList.match(/<h3\b/g) || []).length, serviceRows.length, 'a heading per service');
+
+// 2.0 Part 4a: proof sections (spec §7.2).
+const caseStudies = assertNewPattern('case-studies', { title: 'Case Studies', categories: ['agile-base', 'portfolio'] });
+assert.equal((caseStudies.match(/<h3\b/g) || []).length, 3, 'three case studies, each with a heading');
+assert.ok((caseStudies.match(/<!-- wp:image\b/g) || []).length >= 3, 'an image slot per case study');
+assert.doesNotMatch(caseStudies, /"url":|"id":\d|src=/, 'image slots are empty');
+const testimonialsGrid = assertNewPattern('testimonials-grid', { title: 'Testimonials Grid', categories: ['agile-base', 'testimonials'] });
+assert.equal((testimonialsGrid.match(/<!-- wp:quote\b/g) || []).length, 3, 'three quotes, as quote blocks');
+assert.equal((testimonialsGrid.match(/<cite\b/g) || []).length, 3, 'each quote names its person');
+const guarantees = assertNewPattern('guarantees', { title: 'Guarantees', categories: ['agile-base', 'about'] });
+assert.equal((guarantees.match(/<h3\b/g) || []).length, 3, 'three guarantees, each with a heading');
+
+// 2.0 Part 4a: contact and conversion sections (spec §7.2).
+const contactDetails = assertNewPattern('contact-details', { title: 'Contact Details', categories: ['agile-base', 'contact'] });
+assert.match(contactDetails, /href="mailto:/);
+assert.match(contactDetails, /href="tel:/);
+assert.equal((contactDetails.match(/<h3\b/g) || []).length, 4, 'email, phone, address and hours, each a small heading');
+assert.doesNotMatch(contactDetails, /<form|wp:jetpack|contact-form/, 'no forms: plugin territory');
+const ctaBanner = assertNewPattern('cta-banner', { title: 'CTA Banner', categories: ['agile-base', 'call-to-action'] });
+assert.match(ctaBanner, /href="tel:/, 'a phone link');
+assert.ok((ctaBanner.match(/<!-- wp:button\b/g) || []).length >= 1, 'a button');
+assert.match(ctaBanner, /"align":"full"/);
+const aboutFounder = assertNewPattern('about-founder', { title: 'About the Founder', categories: ['agile-base', 'about'] });
+assert.match(aboutFounder, /<!-- wp:image\b|wp:media-text \{/, 'a portrait slot');
+assert.doesNotMatch(aboutFounder, /"url":|"mediaUrl"|src=/, 'the portrait slot is empty');
+assert.ok((aboutFounder.match(/<!-- wp:button\b/g) || []).length >= 1, 'a button');
+
+// 2.0 Part 4a: Subscribe (spec §7.2).
+const subscribe = assertNewPattern('subscribe', { title: 'Subscribe', categories: ['agile-base', 'call-to-action'] });
+assert.match(subscribe, /esc_url\( get_feed_link\(\) \)/, 'the RSS button links to the real feed');
+assert.match(subscribe, /wp:social-links /);
+assert.doesNotMatch(subscribe, /<form\b/, 'no forms: plugin territory');
+assert.equal(existsSync(new URL('../patterns/media-text.php', import.meta.url)), false, 'Image and Text is agile-base/text-image (Part 2b): no second one');
+
+// 2.0 Part 4a: latest posts (spec §7.2). Own queries (never the page's), distinct ids, and
+// an empty state for a site with no posts.
+const latestGrid = assertNewPattern('posts-grid', { title: 'Latest Posts (Grid)', categories: ['agile-base', 'posts'] });
+assert.equal(queriesIn(latestGrid)[0].query.perPage, 6);
+assert.match(latestGrid, /wp:post-template \{[^\n]*"type":"grid"[^\n]*"minimumColumnWidth"/, 'a responsive grid, not a fixed column count');
+const latestList = assertNewPattern('posts-compact', { title: 'Latest Posts (List)', categories: ['agile-base', 'posts'] });
+assert.equal(queriesIn(latestList)[0].query.perPage, 5);
+assert.doesNotMatch(latestList, /wp:post-featured-image/, 'the list has no images');
+for (const [slug, source] of [['posts-grid', latestGrid], ['posts-compact', latestList]]) {
+  const queries = queriesIn(source);
+  assert.ok(queries.length >= 1 && queries.every((q) => q.query.inherit === false && q.query.postType === 'post'), `${slug}: own post queries`);
+  assert.equal(new Set(queries.map((q) => q.queryId)).size, queries.length, `${slug}: distinct queryIds`);
+  assert.equal((source.match(/wp:query-no-results/g) || []).length / 2, queries.length, `${slug}: an empty state per query`);
+}
+
+// One post fills the responsive grid instead of leaving unused tracks.
+assert.match(latestGrid, /"className":"agile-base-posts-grid"/);
+assert.match(stylesheet, /\.agile-base-posts-grid[^}]*:only-child\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/);
+
+// Sticky posts remain in date order and never inflate the advertised limits.
+for (const source of [latestGrid, latestList]) {
+  assert.equal(queriesIn(source)[0].query.sticky, 'ignore', 'latest posts ignore sticky promotion');
+}
+// "ignore" arrived in WordPress 6.8; before it, core reads it as "exclude".
+assert.match(read('functions.php'), /add_filter\( 'query_loop_block_query_vars', 'agile_base_query_ignore_sticky', 10, 2 \);/, 'sticky posts stay in Latest Posts on WordPress 6.6 and 6.7');
+
+// Part 4a review: content sits at the wide size, like the Part 2 sections (a constrained
+// wide group held it to 960px); card grids cap their columns, so a wide row doesn't open
+// an empty track.
+for (const slug of ['hero-split', 'hero-cover', 'services-list', 'case-studies', 'testimonials-grid', 'guarantees', 'contact-details', 'cta-banner', 'about-founder', 'subscribe', 'posts-grid', 'posts-compact', 'team', 'pricing', 'style-guide']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.doesNotMatch(source, /"align":"wide","layout":\{"type":"constrained"/, `${slug}: the wide group holds its content at the wide size`);
+  for (const [grid] of source.matchAll(/"layout":\{"type":"grid"[^}]*\}/g)) assert.match(grid, /"columnCount":\d/, `${slug}: the grid sets a column count`);
+}
+assert.match(heroCover, /wp:cover \{[^\n]*"layout":\{"type":"constrained"\}/, 'Hero (Cover): the cover holds its wide group at the wide size');
+assert.doesNotMatch(servicesList, /is-style-section-ruled/, 'Services List: one rule between rows, not a box per row');
+assert.equal((servicesList.match(/"className":"agile-base-list-item"/g) || []).length, serviceRows.length, 'Services List: each service is a ruled row');
+const pricingCards = read('patterns/pricing.php');
+assert.equal((pricingCards.match(/"className":"agile-base-stat-number",[^\n]*"fontSize":"3-x-large"/g) || []).length, 3, 'Pricing: each price is a data point with tight leading');
+assert.equal((pricingCards.match(/"dimensions":\{"minHeight":"100%"\}/g) || []).length, 3, 'Pricing: the cards share a height');
+for (const source of [latestGrid, latestList]) assert.match(source, /wp:post-title \{[^}]*"fontSize":"large"/, 'latest posts titles use the post card size');
 
 console.log('release source checks passed');

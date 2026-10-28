@@ -719,3 +719,26 @@ table,
 :where(legend) {
 	padding-inline: 0.35em;
 }
+
+/* Optional media: keep the copy complete before an owner chooses an image. */
+.agile-base-media:not(:has(> .wp-block-media-text__media :is(img, video))) {
+	display: block;
+}
+
+.agile-base-media > .wp-block-media-text__content {
+	padding-inline: var(--wp--preset--spacing--small);
+}
+
+/* Core fixes the grid direction; text follows the document independently. */
+.agile-base-media:dir(rtl) > .wp-block-media-text__content {
+	direction: rtl;
+}
+
+.agile-base-media:not(:has(> .wp-block-media-text__media :is(img, video))) > .wp-block-media-text__content {
+	padding-inline: 0;
+}
+
+/* A single news item uses the row rather than sitting beside empty grid tracks. */
+.agile-base-posts-grid > .wp-block-post-template > :only-child {
+	grid-column: 1 / -1;
+}
