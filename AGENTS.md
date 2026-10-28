@@ -30,3 +30,10 @@ When reporting information to me, be extremely concise and sacrifice grammar for
   `assets/styles/legacy-presets.css` keeps the 1.x preset slugs.
 - `functions.php`: `agile_base_` prefix, `function_exists`-wrapped, no classes. Preloads a
   font only while its role still uses the bundled family.
+
+## Verifying changes
+
+- `npm test`: release, markup and compatibility guards.
+- `npm run check:motion -- <url> …`: reduced motion (color fades allowed).
+- `npm run check:weight -- <url> …`: ≤120 KB fonts, ≤30 KB theme CSS, no theme JS.
+- `npm run check:focus -- [--width 375] <url> …`: skip link first, ≥2px outlines at 3:1.

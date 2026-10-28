@@ -6,7 +6,7 @@ Requires PHP: 7.4
 Stable tag: 1.4.1
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Tags: blog, full-site-editing, block-patterns, style-variations, wide-blocks, custom-colors, custom-logo, featured-images, threaded-comments, translation-ready
+Tags: blog, portfolio, one-column, wide-blocks, block-patterns, block-styles, custom-colors, custom-logo, editor-style, featured-images, full-site-editing, full-width-template, style-variations, template-editing, threaded-comments, translation-ready
 
 A clean, fast full site editing block theme for blogs and simple sites.
 

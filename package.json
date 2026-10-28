@@ -8,7 +8,10 @@
 		"check:editor": "node bin/check-editor.mjs",
 		"check:frontend": "node bin/check-frontend.mjs",
 		"check:menu": "node bin/check-menu.mjs",
-		"check:legacy": "node bin/check-legacy-content.mjs --axe"
+		"check:legacy": "node bin/check-legacy-content.mjs --axe",
+		"check:motion": "node bin/check-motion.mjs",
+		"check:weight": "node bin/check-weight.mjs",
+		"check:focus": "node bin/check-focus.mjs"
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "4.13.0",
