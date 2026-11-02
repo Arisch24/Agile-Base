@@ -18,7 +18,7 @@ or in your dashboard under **Appearance → Themes → Add New Theme** (search f
 - Field, Ink and Ruled section styles; Boxed, Double rule and Ruled box block styles.
 - Dark and Velocity variations. Velocity restores the 1.x colors, fonts and shapes.
 - Self-hosted Public Sans, Archivo, JetBrains Mono and Source Serif 4; legacy fonts remain for Velocity.
-- Fluid type and spacing, underlined text links, visible focus, reduced-motion support and [accessibility statement](accessibility.txt).
+- Accessibility-ready: underlined text links, visible focus, reduced-motion support and an [accessibility statement](accessibility.txt). Fluid type and spacing.
 - Right-to-left layouts with isolated phone/email links; translation-ready patterns and template parts.
 
 ## Requirements

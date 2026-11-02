@@ -1000,10 +1000,12 @@ const statement = read('accessibility.txt');
 for (const section of ['=== Accessibility Statement ===', '== Quick Information ==', '== Testing Tools and Methodology ==', '== Screen Reader Text Class ==', '== Accessibility Help Contact ==', '== Where to Report Issues ==']) {
   assert.ok(statement.includes(section), `accessibility.txt: "${section}"`);
 }
-assert.match(statement, /Accessibility audit completed: (Yes|No)/);
 assert.match(statement, /screen-reader-text/);
 assert.match(stylesheet, /\.screen-reader-text \{/);
-// The accessibility-ready tag remains gated by the owner's screen-reader walkthrough.
+// The owner's keyboard and screen-reader walkthrough passed for 2.0.0, so the tag is claimed.
+assert.match(statement, /Accessibility audit completed: Yes/);
+assert.ok(readmeTags.includes('accessibility-ready'), 'the accessibility-ready tag is claimed');
+assert.doesNotMatch(statement, /is required before claiming/, 'the statement no longer says the walkthrough is pending');
 
 // 2.0.0 release: the readme answers what site owners and builders ask first.
 assert.match(style, /^Version: 2\.0\.0$/m);
