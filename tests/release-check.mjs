@@ -555,8 +555,10 @@ assert.match(css, /::selection\s*\{[^}]*background-color:\s*var\(--wp--preset--c
 // 2.0 Part 2b: a compact top (spec D17). The header and footer pad themselves, so the page
 // has no padding above the header; the homepage hero meets the header; the inserter hero
 // shares the homepage hero's padding. Sizes are checked live by check-frontend --fold.
-assert.equal(themeJson.styles.spacing.padding.top, '0', 'no page padding above the header');
-assert.equal(themeJson.styles.spacing.padding.bottom, '0', 'no page padding below the footer');
+// Units required: WordPress pads the mobile menu with clamp(1rem, <root padding>, 20rem),
+// and a unitless 0 there voids all of the menu's padding.
+assert.equal(themeJson.styles.spacing.padding.top, '0px', 'no page padding above the header');
+assert.equal(themeJson.styles.spacing.padding.bottom, '0px', 'no page padding below the footer');
 assert.match(frontPage, /<!-- wp:group \{"tagName":"main","style":\{"spacing":\{"margin":\{"top":"0"\}\}\}/, 'the homepage hero meets the header');
 assert.match(frontPage, /<main class="wp-block-group" style="margin-top:0">/, 'front-page main markup matches its attributes');
 const fieldPadding = (source) => source.match(/"className":"agile-base-field","style":\{"spacing":\{"padding":(\{[^}]*\})/)?.[1];
