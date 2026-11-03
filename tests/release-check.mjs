@@ -624,6 +624,8 @@ assert.deepEqual(templatePart('footer-business'), { name: 'footer-business', tit
 // WordPress leaves line breaks in a list whose links have no URL, so :empty never matches.
 assert.match(stylesheet, /\.wp-block-social-links:not\(:has\(li\)\)\s*\{\s*display:\s*none;?\s*\}/, 'no gap when no social link is filled in');
 assert.match(stylesheet, /\.wp-block-navigation:not\(\.has-background\) \.wp-block-navigation__submenu-container \{[^}]*background-color: var\(--wp--preset--color--paper\)/, 'submenus outweigh WordPress\'s white default');
+assert.match(stylesheet, /\.wp-block-navigation:not\(\.has-background\) \.wp-block-navigation__responsive-container\.is-menu-open:not\(\.disable-default-overlay\) \{[^}]*background-color: var\(--wp--preset--color--paper\)/, 'the open mobile menu outweighs WordPress\'s white default');
+assert.match(stylesheet, /\.wp-block-navigation:not\(\.has-text-color\) \.wp-block-navigation__responsive-container\.is-menu-open:not\(\.disable-default-overlay\) \{[^}]*color: var\(--wp--preset--color--ink\)/, 'the open mobile menu outweighs WordPress\'s black default');
 assert.equal(themeJson.styles.blocks['core/navigation-submenu'], undefined, 'submenu colors live on the container, not the menu item');
 
 // 2.0 Part 3: section styles and block style variations (theme.json partials, WP 6.6+).

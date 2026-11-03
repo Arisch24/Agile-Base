@@ -658,10 +658,18 @@ table,
 }
 
 .wp-block-navigation__responsive-container.is-menu-open {
-	color: var(--wp--preset--color--ink);
-	background-color: var(--wp--preset--color--paper);
 	padding-block: var(--wp--preset--spacing--small);
 	padding-inline: var(--wp--preset--spacing--small);
+}
+
+/* The open mobile menu: WordPress's white-and-black default selectors, so the palette
+   wins and a menu given its own overlay colors keeps them. */
+.wp-block-navigation:not(.has-background) .wp-block-navigation__responsive-container.is-menu-open:not(.disable-default-overlay) {
+	background-color: var(--wp--preset--color--paper);
+}
+
+.wp-block-navigation:not(.has-text-color) .wp-block-navigation__responsive-container.is-menu-open:not(.disable-default-overlay) {
+	color: var(--wp--preset--color--ink);
 }
 
 /* Submenus: the same selectors as WordPress's white default, so the palette wins and a
