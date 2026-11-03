@@ -39,6 +39,9 @@ jobs:
             - name: Check 1.x compatibility contract
               run: node tests/compat-check.mjs
 
+            - name: Check the 2.x public API
+              run: node tests/api-check.mjs
+
             - name: Check PHP syntax
               run: find . -type f -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -print0 | xargs -0 -n1 php -l
 

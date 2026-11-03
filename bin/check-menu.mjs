@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Open and close the mobile navigation overlay with the keyboard on each URL:
- * the toggle opens it, focus moves into it, Escape closes it, and focus returns
- * to the toggle. Fails on the first URL where any of that does not happen.
+ * the toggle opens it, focus moves into it, its links keep clear of the screen
+ * edges, Escape closes it, and focus returns to the toggle. Fails on the first URL where any of that does not happen.
  *
  * Usage: node bin/check-menu.mjs <url> [url ...]   (default: the homepage)
  */
@@ -28,6 +28,12 @@ try {
       await page.waitForTimeout(300); // WordPress moves focus into the menu just after it opens.
       const focusInside = await page.evaluate(() => Boolean(document.activeElement?.closest('.wp-block-navigation__responsive-container.is-menu-open')));
       if (!focusInside) problems.push('focus did not move into the open menu');
+      // WordPress keeps at least 1rem between the menu's links and the screen edges.
+      const offEdge = await page.evaluate(() => [...document.querySelectorAll('.is-menu-open .wp-block-navigation-item__content')]
+        .filter((link) => link.getClientRects().length)
+        .filter((link) => { const box = link.getBoundingClientRect(); return box.left < 15.5 || box.right > innerWidth - 15.5; })
+        .map((link) => link.textContent.trim().slice(0, 30)));
+      if (offEdge.length) problems.push(`links within 1rem of the screen edge: ${offEdge.slice(0, 3).join(', ')}`);
       await page.keyboard.press('Escape');
       await page.waitForTimeout(400);
       if (await overlay.isVisible()) problems.push('Escape did not close the menu');

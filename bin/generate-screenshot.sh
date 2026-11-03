@@ -3,24 +3,27 @@
 # Generate the theme's screenshot.png from a live rendering of the homepage.
 #
 # WordPress.org requires screenshot.png to be 1200x900 (a 4:3 ratio). This
-# drives a headless Chromium at that exact viewport and captures it directly,
-# so no post-hoc cropping/resizing is needed.
+# drives a headless Chromium at a 1600x1200 desktop viewport drawn at 0.75 scale,
+# so the 1200x900 capture shows the hero and the sections after it, with no
+# post-hoc cropping or resizing.
 #
 # Usage:
 #   bin/generate-screenshot.sh [url] [output-path]
 #
 # Env overrides:
 #   CHROME_BIN   path to a Chromium/Chrome binary (auto-detected otherwise)
-#   WIDTH        viewport width  (default 1200)
-#   HEIGHT       viewport height (default 900)
+#   WIDTH        viewport width  (default 1600)
+#   HEIGHT       viewport height (default 1200)
+#   SCALE        device scale factor (default 0.75; the image is WIDTH*SCALE x HEIGHT*SCALE)
 
 set -euo pipefail
 
 THEME_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 URL="${1:-${SCREENSHOT_URL:-https://theme-dev-wp.ddev.site/}}"
 OUTPUT="${2:-$THEME_DIR/screenshot.png}"
-WIDTH="${WIDTH:-1200}"
-HEIGHT="${HEIGHT:-900}"
+WIDTH="${WIDTH:-1600}"
+HEIGHT="${HEIGHT:-1200}"
+SCALE="${SCALE:-0.75}"
 
 find_chrome() {
 	if [[ -n "${CHROME_BIN:-}" ]] && [[ -x "$CHROME_BIN" ]]; then
@@ -61,13 +64,13 @@ CHROME_BIN="$(find_chrome)" || {
 
 echo "Using Chrome: $CHROME_BIN"
 echo "Capturing:    $URL"
-echo "Viewport:     ${WIDTH}x${HEIGHT}"
+echo "Viewport:     ${WIDTH}x${HEIGHT} at ${SCALE}x"
 
 "$CHROME_BIN" \
 	--headless=new \
 	--disable-gpu \
 	--hide-scrollbars \
-	--force-device-scale-factor=1 \
+	--force-device-scale-factor="$SCALE" \
 	--ignore-certificate-errors \
 	--window-size="${WIDTH},${HEIGHT}" \
 	--screenshot="$OUTPUT" \

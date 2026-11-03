@@ -171,6 +171,8 @@ try {
         noAlt: [...document.images].filter((img) => !img.hasAttribute('alt')).length,
         empty: ['header', 'footer'].filter((tag) => !document.querySelector(tag)?.innerText.trim()),
         dir: document.documentElement.dir,
+        contactDirections: [...document.querySelectorAll('a[href^="tel:"], a[href^="mailto:"]')]
+          .filter((el) => getComputedStyle(el).direction !== 'ltr' || getComputedStyle(el).unicodeBidi !== 'isolate').length,
         h1Font: getComputedStyle(document.querySelector('h1') || document.body).fontFamily,
         loadedFonts: [...document.fonts].filter((font) => font.status === 'loaded').map((font) => font.family.replace(/["']/g, '')),
         // Full-width sections touch each other, the header meets one that opens the page and
@@ -212,6 +214,7 @@ try {
       if (facts.noAlt) problems.push(`${facts.noAlt} images without alt`);
       if (facts.empty.length) problems.push(`empty or missing ${facts.empty.join(' and ')}`);
       if (rtl && facts.dir !== 'rtl') problems.push(`page is not right to left (dir="${facts.dir}")`);
+      if (rtl && facts.contactDirections) problems.push(`${facts.contactDirections} phone/email links lack LTR isolation`);
       if (errors.length) problems.push(`console error: ${errors[0].slice(0, 160)}`);
       if (external.size) problems.push(`requests to ${[...external].join(', ')}`);
       if (noWebfonts && fontFiles.size) problems.push(`downloads fonts: ${[...fontFiles].join(', ')}`);
