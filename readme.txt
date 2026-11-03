@@ -151,7 +151,7 @@ Space Mono font, Copyright 2016 The Space Mono Project Authors
 * License URI: https://scripts.sil.org/OFL
 * License bundled at: assets/fonts/OFL-Space-Mono.txt
 
-Logo mark and screenshot, Copyright 2026 Arischvaran Puvanesvaran
+Screenshot, Copyright 2026 Arischvaran Puvanesvaran
 * Source: Original artwork created for Agile Base
 * License: GNU General Public License v2 or later
 * License URI: https://www.gnu.org/licenses/gpl-2.0.html

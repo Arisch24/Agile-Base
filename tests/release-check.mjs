@@ -56,7 +56,7 @@ for (const file of [
   assert.equal(existsSync(new URL(`../${file}`, import.meta.url)), true, `${file} must exist`);
 }
 
-for (const resource of ['Figtree', 'Space Grotesk', 'Space Mono', 'logo mark', 'screenshot']) {
+for (const resource of ['Figtree', 'Space Grotesk', 'Space Mono', 'screenshot']) {
   assert.match(readme, new RegExp(resource, 'i'));
 }
 
