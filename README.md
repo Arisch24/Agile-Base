@@ -33,10 +33,13 @@ This is a no-build theme. Edit `theme.json`, the `.html` templates/parts, and th
 [Create Block Theme](https://wordpress.org/plugins/create-block-theme/) plugin is
 handy for exporting Site Editor changes back to these files and for managing fonts.
 
-CI runs `npm test`, PHP lint and phpcs on every pull request. The browser checks
-need the local DDEV site, so run them before opening a pull request:
+CI runs every check on each pull request: `npm test`, PHP lint, phpcs and the
+release package check, then the browser checks against a fresh WordPress site with
+test content (`bin/check-site.sh`; screenshots are kept as run artifacts for 7 days).
+Locally, against the DDEV site:
 
 ```sh
+npm run check:site -- [pages] [styles] [editor] # every browser check below (default all)
 npm test                           # source, block markup, 1.x compatibility and 2.x API
 npm run check:frontend -- --axe     # live DDEV pages and accessibility
 npm run check:editor                # templates, parts and patterns in WordPress editors

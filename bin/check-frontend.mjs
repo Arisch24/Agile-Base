@@ -58,7 +58,9 @@ const siteHost = new URL(base).host;
 // WordPress core loads avatars from Gravatar; every other asset must come from the site.
 const ALLOWED_HOSTS = [/(^|\.)gravatar\.com$/];
 const FOLD = { header: 124, next: 0.85, button: 0.8 };
-const wp = (...args) => execFileSync('ddev', ['wp', ...args], { cwd: root, encoding: 'utf8' }).trim();
+// WP-CLI runs through DDEV unless WP_CLI names another command (CI sets it to `wp`).
+const [wpCommand, ...wpPrefix] = (process.env.WP_CLI || 'ddev wp').split(' ');
+const wp = (...args) => execFileSync(wpCommand, [...wpPrefix, ...args], { cwd: root, encoding: 'utf8' }).trim();
 const globalStylesId = 'WP_Theme_JSON_Resolver::get_user_global_styles_post_id()';
 // Swapping styles must not add entries to the owner's Styles > Revisions history.
 const setGlobalStyles = (expression) => wp('eval', `

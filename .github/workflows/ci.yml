@@ -13,6 +13,11 @@ on:
 permissions:
     contents: read
 
+# A newer push to a pull request cancels the run it replaces.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
     quality:
         name: Theme quality checks
@@ -50,3 +55,99 @@ jobs:
 
             - name: Run WordPress coding standards
               run: vendor/bin/phpcs .
+
+            - name: Check the release package
+              run: bash tests/release-package-check.sh
+
+    site:
+        # A fresh WordPress with test content, built where the local DDEV site keeps the
+        # theme (wp-content/themes/agile-base), so bin/check-site.sh runs unchanged.
+        name: Site checks (${{ matrix.group }})
+        runs-on: ubuntu-latest
+        timeout-minutes: 45
+        strategy:
+            fail-fast: false
+            matrix:
+                group: [pages, styles, editor]
+        env:
+            WP_URL: http://127.0.0.1:8080
+            WP_CLI: wp
+        defaults:
+            run:
+                working-directory: site/wp-content/themes/agile-base
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+              with:
+                  path: site/wp-content/themes/agile-base
+                  fetch-depth: 0 # the 1.x content check reads the 1.4.1 tag
+                  persist-credentials: false
+
+            - name: Install PHP
+              uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # 2.37.2
+              with:
+                  php-version: '8.4'
+                  coverage: none
+                  extensions: mysqli, gd
+                  tools: wp-cli
+
+            - name: Install Node
+              uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version: 22
+                  cache: npm
+                  cache-dependency-path: site/wp-content/themes/agile-base/package-lock.json
+
+            - name: Install Playwright
+              run: |
+                  npm ci
+                  npx playwright install --with-deps chromium
+
+            - name: Install WordPress
+              run: |
+                  sudo systemctl start mysql.service
+                  wp core download --path=../../.. --skip-content
+                  wp config create --dbname=wordpress --dbuser=root --dbpass=root --dbhost=127.0.0.1 --extra-php <<< "define( 'WP_DEBUG', true );"
+                  wp db create
+                  wp core install --url="$WP_URL" --title='Agile Base' --admin_user=admin --admin_password=admin --admin_email=admin@example.com --skip-email
+                  wp theme activate agile-base
+                  wp rewrite structure '/%year%/%monthnum%/%day%/%postname%/'
+
+            - name: Add test content
+              # Enough posts to paginate, categories, tags, featured images and comments.
+              run: |
+                  photo=$(wp media import assets/images/placeholder-photo.webp --title='Test: photo' --porcelain)
+                  categories=()
+                  for name in News Guides 'Case studies'; do
+                      categories+=("$(wp term create category "$name" --porcelain)")
+                  done
+                  body='<!-- wp:paragraph --><p>A short opening paragraph with <a href="#more">a link</a>, so the post has some text to read.</p><!-- /wp:paragraph --><!-- wp:heading --><h2 class="wp-block-heading" id="more">A section heading</h2><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list"><!-- wp:list-item --><li>First point</li><!-- /wp:list-item --><!-- wp:list-item --><li>Second point</li><!-- /wp:list-item --></ul><!-- /wp:list --><!-- wp:quote --><blockquote class="wp-block-quote"><!-- wp:paragraph --><p>A quotation to set apart.</p><!-- /wp:paragraph --></blockquote><!-- /wp:quote -->'
+                  wp post update 1 --post_date='2026-01-01 08:00:00'
+                  for i in $(seq 1 11); do
+                      id=$(wp post create --post_status=publish --post_title="Test: post $i" --post_excerpt="A one-line summary of test post $i." --post_content="$body" --post_category="${categories[i % 3]}" --tags_input=checks --post_date="2026-01-$(printf %02d "$((i + 1))") 09:00:00" --porcelain)
+                      if [ $((i % 2)) -eq 1 ]; then wp post meta set "$id" _thumbnail_id "$photo"; fi
+                  done
+                  wp comment create --comment_post_ID="$id" --comment_author='Test: commenter' --comment_content='A reply, so the comment list renders.' --comment_approved=1
+
+            - name: Start WordPress
+              run: |
+                  PHP_CLI_SERVER_WORKERS=8 nohup wp server --host=127.0.0.1 --port=8080 > "$RUNNER_TEMP/server.log" 2>&1 &
+                  timeout 60 bash -c 'until curl -fsS -o /dev/null "$WP_URL/"; do sleep 1; done'
+
+            - name: Run the site checks
+              env:
+                  GROUP: ${{ matrix.group }}
+              run: bash bin/check-site.sh "$GROUP"
+
+            - name: Show the server log
+              if: failure()
+              run: tail -n 200 "$RUNNER_TEMP/server.log"
+
+            - name: Upload screenshots
+              if: always()
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+              with:
+                  name: screenshots-${{ matrix.group }}
+                  path: site/wp-content/themes/agile-base/build/checks/
+                  retention-days: 7
+                  if-no-files-found: ignore
