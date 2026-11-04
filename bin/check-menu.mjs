@@ -2,7 +2,8 @@
 /**
  * Open and close the mobile navigation overlay with the keyboard on each URL:
  * the toggle opens it, focus moves into it, its links keep clear of the screen
- * edges, Escape closes it, and focus returns to the toggle. Fails on the first URL where any of that does not happen.
+ * edges, it uses the page's colors, Escape closes it, and focus returns to the
+ * toggle. Fails on the first URL where any of that does not happen.
  *
  * Usage: node bin/check-menu.mjs <url> [url ...]   (default: the homepage)
  */
@@ -34,6 +35,15 @@ try {
         .filter((link) => { const box = link.getBoundingClientRect(); return box.left < 15.5 || box.right > innerWidth - 15.5; })
         .map((link) => link.textContent.trim().slice(0, 30)));
       if (offEdge.length) problems.push(`links within 1rem of the screen edge: ${offEdge.slice(0, 3).join(', ')}`);
+      // Unless the menu sets its own overlay colors, the open menu uses the page's colors.
+      const colors = await page.evaluate(() => {
+        const menu = document.querySelector('.wp-block-navigation__responsive-container.is-menu-open');
+        if (menu.matches('.has-background, .has-text-color')) return null;
+        const [own, body] = [getComputedStyle(menu), getComputedStyle(document.body)];
+        return own.backgroundColor === body.backgroundColor && own.color === body.color ? null
+          : `menu ${own.color} on ${own.backgroundColor}, page ${body.color} on ${body.backgroundColor}`;
+      });
+      if (colors) problems.push(`open menu colors differ from the page: ${colors}`);
       await page.keyboard.press('Escape');
       await page.waitForTimeout(400);
       if (await overlay.isVisible()) problems.push('Escape did not close the menu');

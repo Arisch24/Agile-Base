@@ -38,6 +38,7 @@ When reporting information to me, be extremely concise and sacrifice grammar for
 - `npm run check:motion -- <url> …`: reduced motion (color fades allowed).
 - `npm run check:weight -- <url> …`: ≤120 KB fonts, ≤30 KB theme CSS, no theme JS.
 - `npm run check:focus -- [--width 375] <url> …`: skip link first, ≥2px outlines at 3:1.
+- `npm run check:menu -- <url> …`: mobile menu: keyboard, 1rem screen-edge gap, page colors.
 
 ## Compatibility
 
