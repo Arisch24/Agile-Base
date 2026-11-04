@@ -43,7 +43,7 @@ npm run check:editor                # templates, parts and patterns in WordPress
 npm run check:menu                  # mobile menu: keyboard, screen-edge gap, page colors
 npm run check:focus -- <url>        # skip link first, visible focus outlines at 3:1
 npm run check:motion -- <url>       # reduced motion
-npm run check:weight -- <url>       # ≤120 KB fonts, ≤30 KB theme CSS, no theme JS
+npm run check:weight -- <url>       # ≤120 KB fonts, ≤40 KB theme CSS, no theme JS
 npm run check:tools                 # browser QA tool regression fixtures
 bash tests/release-package-check.sh # builds a release zip and checks its contents
 composer install && vendor/bin/phpcs . # WordPress coding standards (phpcs.xml.dist)

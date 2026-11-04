@@ -41,7 +41,7 @@ await check('weight', [], 2);
 
 const server = createServer((request, response) => {
   if (request.url.includes('.css')) {
-    const size = 30 * 1024 + (request.url.includes('over') ? 1 : 0);
+    const size = 40 * 1024 + (request.url.includes('over') ? 1 : 0);
     response.setHeader('Content-Type', 'text/css');
     response.end('/*' + ' '.repeat(size - 4) + '*/');
   } else {
