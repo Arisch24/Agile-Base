@@ -9,6 +9,7 @@ on:
         branches:
             - main
             - 'release/**'
+    workflow_dispatch:
 
 permissions:
     contents: read
@@ -59,16 +60,69 @@ jobs:
             - name: Check the release package
               run: bash tests/release-package-check.sh
 
+    changes:
+        # Which browser checks to run. Pull requests into a release branch get only the
+        # quality checks; the browser checks run after each merge into it, on pull requests
+        # to main and on demand (Run workflow). They skip changes to docs alone, and the
+        # editor check runs only when something it opens could have changed.
+        name: Pick the site checks
+        runs-on: ubuntu-latest
+        outputs:
+            groups: ${{ steps.pick.outputs.groups }}
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+              with:
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Pick the site checks
+              id: pick
+              env:
+                  EVENT: ${{ github.event_name }}
+                  BASE_REF: ${{ github.base_ref }}
+                  BEFORE: ${{ github.event.pull_request.base.sha || github.event.before }}
+                  AFTER: ${{ github.event.pull_request.head.sha || github.sha }}
+              run: |
+                  if [ "$EVENT" = pull_request ] && [ "$BASE_REF" != main ]; then
+                      reason="a pull request into $BASE_REF: they run after the merge"
+                      groups='[]'
+                  elif [ "$EVENT" = workflow_dispatch ] || ! changed=$(git diff --name-only "$BEFORE...$AFTER" 2> /dev/null); then
+                      reason="$EVENT: every check"
+                      groups='["pages","styles","editor"]'
+                  else
+                      # Files no browser check reads: docs, translations, and what only the quality checks use.
+                      unread='\.(md|txt)$|^screenshot\.png$|^languages/|^\.impeccable/|^\.github/(review/|workflows/claude)|^(composer\.(json|lock)|phpcs\.xml\.dist|\.editorconfig|\.gitignore|\.gitattributes)$|^tests/((release|markup|compat|api)-check\.mjs|release-package-check\.sh)$|^bin/(build-release\.sh|freeze-api\.mjs)$'
+                      # Files the editor check opens, or that run it.
+                      opened='^(patterns|templates|parts|styles)/|^theme\.json$|\.php$|^bin/check-(editor\.mjs|site\.sh)$|^package(-lock)?\.json$|^\.github/workflows/ci\.yml$'
+                      site=$(grep -vE "$unread" <<< "$changed" || true)
+                      editor=$(grep -E "$opened" <<< "$site" || true)
+                      if [ -z "$site" ]; then
+                          reason='only docs or files the quality checks use'
+                          groups='[]'
+                      elif [ -z "$editor" ]; then
+                          reason='nothing the editor check opens changed'
+                          groups='["pages","styles"]'
+                      else
+                          reason='site files changed'
+                          groups='["pages","styles","editor"]'
+                      fi
+                  fi
+                  echo "groups=$groups" >> "$GITHUB_OUTPUT"
+                  echo "Site checks: $groups ($reason)" | tee -a "$GITHUB_STEP_SUMMARY"
+
     site:
         # A fresh WordPress with test content, built where the local DDEV site keeps the
         # theme (wp-content/themes/agile-base), so bin/check-site.sh runs unchanged.
         name: Site checks (${{ matrix.group }})
+        needs: changes
+        if: needs.changes.outputs.groups != '[]'
         runs-on: ubuntu-latest
         timeout-minutes: 45
         strategy:
             fail-fast: false
             matrix:
-                group: [pages, styles, editor]
+                group: ${{ fromJSON(needs.changes.outputs.groups) }}
         env:
             WP_URL: http://127.0.0.1:8080
             WP_CLI: wp
