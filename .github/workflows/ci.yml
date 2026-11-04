@@ -124,7 +124,7 @@ jobs:
                   body='<!-- wp:paragraph --><p>A short opening paragraph with <a href="#more">a link</a>, so the post has some text to read.</p><!-- /wp:paragraph --><!-- wp:heading --><h2 class="wp-block-heading" id="more">A section heading</h2><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list"><!-- wp:list-item --><li>First point</li><!-- /wp:list-item --><!-- wp:list-item --><li>Second point</li><!-- /wp:list-item --></ul><!-- /wp:list --><!-- wp:quote --><blockquote class="wp-block-quote"><!-- wp:paragraph --><p>A quotation to set apart.</p><!-- /wp:paragraph --></blockquote><!-- /wp:quote -->'
                   wp post update 1 --post_date='2026-01-01 08:00:00'
                   for i in $(seq 1 11); do
-                      id=$(wp post create --post_status=publish --post_title="Test: post $i" --post_excerpt="A one-line summary of test post $i." --post_content="$body" --post_category="${categories[i % 3]}" --tags_input=checks --post_date="2026-01-$(printf %02d "$((i + 1))") 09:00:00" --porcelain)
+                      id=$(wp post create --post_status=publish --post_author=1 --post_title="Test: post $i" --post_excerpt="A one-line summary of test post $i." --post_content="$body" --post_category="${categories[i % 3]}" --tags_input=checks --post_date="2026-01-$(printf %02d "$((i + 1))") 09:00:00" --porcelain)
                       if [ $((i % 2)) -eq 1 ]; then wp post meta set "$id" _thumbnail_id "$photo"; fi
                   done
                   wp comment create --comment_post_ID="$id" --comment_author='Test: commenter' --comment_content='A reply, so the comment list renders.' --comment_approved=1

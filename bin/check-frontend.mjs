@@ -61,7 +61,10 @@ const FOLD = { header: 124, next: 0.85, button: 0.8 };
 // WP-CLI runs through DDEV unless WP_CLI names another command (CI sets it to `wp`).
 const [wpCommand, ...wpPrefix] = (process.env.WP_CLI || 'ddev wp').split(' ');
 const wp = (...args) => execFileSync(wpCommand, [...wpPrefix, ...args], { cwd: root, encoding: 'utf8' }).trim();
-const globalStylesId = 'WP_Theme_JSON_Resolver::get_user_global_styles_post_id()';
+// WordPress creates the global styles post on first use but tags it with the theme only for a
+// user who may assign terms. WP-CLI runs as no user, and an untagged post is never loaded, so a
+// fresh site (CI) would ignore every style swap. Tag it.
+const globalStylesId = '( function () { $id = WP_Theme_JSON_Resolver::get_user_global_styles_post_id(); wp_set_post_terms( $id, array( get_stylesheet() ), "wp_theme" ); return $id; } )()';
 // Swapping styles must not add entries to the owner's Styles > Revisions history.
 const setGlobalStyles = (expression) => wp('eval', `
   kses_remove_filters();
