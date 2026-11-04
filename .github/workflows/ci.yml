@@ -114,7 +114,7 @@ jobs:
     site:
         # A fresh WordPress with test content, built where the local DDEV site keeps the
         # theme (wp-content/themes/agile-base), so bin/check-site.sh runs unchanged.
-        name: Site checks (${{ matrix.group }})
+        name: Site checks # GitHub adds the group: Site checks (pages)
         needs: changes
         if: needs.changes.outputs.groups != '[]'
         runs-on: ubuntu-latest
