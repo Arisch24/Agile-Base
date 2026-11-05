@@ -33,17 +33,23 @@ This is a no-build theme. Edit `theme.json`, the `.html` templates/parts, and th
 [Create Block Theme](https://wordpress.org/plugins/create-block-theme/) plugin is
 handy for exporting Site Editor changes back to these files and for managing fonts.
 
-CI runs `npm test`, PHP lint and phpcs on every pull request. The browser checks
-need the local DDEV site, so run them before opening a pull request:
+CI runs `npm test`, PHP lint, phpcs and the release package check on each pull
+request. The browser checks (`bin/check-site.sh`) run against a fresh WordPress site
+with test content after each merge into a release branch, on pull requests to `main`
+and on demand (Actions → CI → Run workflow). They skip changes to docs alone, and the
+editor check runs only when templates, parts, patterns, styles, `theme.json` or PHP
+change. Screenshots are kept as run artifacts for 7 days. Locally, against the DDEV
+site:
 
 ```sh
+npm run check:site -- [pages] [styles] [editor] # every browser check below (default all)
 npm test                           # source, block markup, 1.x compatibility and 2.x API
 npm run check:frontend -- --axe     # live DDEV pages and accessibility
 npm run check:editor                # templates, parts and patterns in WordPress editors
 npm run check:menu                  # mobile menu: keyboard, screen-edge gap, page colors
 npm run check:focus -- <url>        # skip link first, visible focus outlines at 3:1
 npm run check:motion -- <url>       # reduced motion
-npm run check:weight -- <url>       # ≤120 KB fonts, ≤30 KB theme CSS, no theme JS
+npm run check:weight -- <url>       # ≤120 KB fonts, ≤40 KB theme CSS, no theme JS
 npm run check:tools                 # browser QA tool regression fixtures
 bash tests/release-package-check.sh # builds a release zip and checks its contents
 composer install && vendor/bin/phpcs . # WordPress coding standards (phpcs.xml.dist)

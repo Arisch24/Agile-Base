@@ -12,9 +12,11 @@ const theme = 'agile-base';
 const user = 'test-editor-check';
 const filters = process.argv.slice(2);
 const wanted = (name) => !filters.length || filters.some((filter) => name.includes(filter));
-const wp = (...args) => execFileSync('ddev', ['wp', ...args], { cwd: root, encoding: 'utf8' }).trim();
+// WP-CLI runs through DDEV unless WP_CLI names another command (CI sets it to `wp`).
+const [wpCommand, ...wpPrefix] = (process.env.WP_CLI || 'ddev wp').split(' ');
+const wp = (...args) => execFileSync(wpCommand, [...wpPrefix, ...args], { cwd: root, encoding: 'utf8' }).trim();
 const slugs = (dir, ext) => readdirSync(`${root}${dir}`).filter((file) => file.endsWith(ext)).map((file) => file.slice(0, -ext.length)).sort();
-const quiet = (...args) => execFileSync('ddev', ['wp', ...args], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+const quiet = (...args) => execFileSync(wpCommand, [...wpPrefix, ...args], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
 
 // Only posts owned by this reserved temporary user are eligible for deletion.
 // This includes its auto-drafts and Trash, leaving other users' content intact.

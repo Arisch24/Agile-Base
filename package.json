@@ -12,7 +12,8 @@
 		"check:motion": "node bin/check-motion.mjs",
 		"check:weight": "node bin/check-weight.mjs",
 		"check:focus": "node bin/check-focus.mjs",
-		"check:tools": "node tests/qa-tools-check.mjs"
+		"check:tools": "node tests/qa-tools-check.mjs",
+		"check:site": "bash bin/check-site.sh"
 	},
 	"devDependencies": {
 		"@axe-core/playwright": "4.13.0",

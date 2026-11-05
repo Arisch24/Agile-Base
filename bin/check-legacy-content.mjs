@@ -6,7 +6,7 @@
  * errors, and screenshotted for review, so the 2.0 styles can be seen to keep
  * 1.x content looking intentional. The pages are deleted when it finishes.
  *
- * Needs the ddev site running, `npm install`, and the 1.4.1 git tag.
+ * Needs the ddev site (or WP_URL and WP_CLI), `npm install`, and the 1.4.1 git tag.
  *
  * Usage: node bin/check-legacy-content.mjs [--axe] [label]
  */
@@ -26,7 +26,9 @@ const label = args[0] || 'legacy';
 const OUT = `${ROOT}build/checks/${label}`;
 const STAGE = `${ROOT}build/legacy-${TAG}`;
 const git = (...a) => execFileSync('git', a, { cwd: ROOT, encoding: 'utf8' });
-const wp = (...a) => execFileSync('ddev', ['wp', ...a], { cwd: ROOT, encoding: 'utf8' }).trim();
+// WP-CLI runs through DDEV unless WP_CLI names another command (CI sets it to `wp`).
+const [wpCommand, ...wpPrefix] = (process.env.WP_CLI || 'ddev wp').split(' ');
+const wp = (...a) => execFileSync(wpCommand, [...wpPrefix, ...a], { cwd: ROOT, encoding: 'utf8' }).trim();
 
 // The 1.4.1 pattern files that were in the inserter, i.e. could be in saved content.
 const files = git('ls-tree', '--name-only', `${TAG}:patterns`).split('\n').filter((f) => f.endsWith('.php'));

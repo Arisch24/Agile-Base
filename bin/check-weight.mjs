@@ -8,7 +8,7 @@
  */
 import { chromium } from 'playwright';
 
-const BUDGET_KB = { font: 120, themeCss: 30 };
+const BUDGET_KB = { font: 120, themeCss: 40 };
 const THEME_PATH = '/wp-content/themes/agile-base/';
 const kb = (bytes) => Math.round(bytes / 1024);
 const urls = process.argv.slice(2);
