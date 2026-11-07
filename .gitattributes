@@ -31,6 +31,10 @@
 /bin export-ignore
 /composer.json export-ignore
 /composer.lock export-ignore
+/package.json export-ignore
+/package-lock.json export-ignore
+/PRODUCT.md export-ignore
+/DESIGN.md export-ignore
 /docs export-ignore
 /.impeccable export-ignore
 /phpcs.xml.dist export-ignore

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 
 const read = (file) => readFileSync(new URL(`../${file}`, import.meta.url), 'utf8');
 
@@ -33,7 +33,6 @@ assert.doesNotMatch(notFound, /href="\/"/);
 assert.doesNotMatch(hero, /<a(?![^>]*href=)/);
 assert.doesNotMatch(callToAction, /<a(?![^>]*href=)/);
 assert.doesNotMatch(styleGuide, /<a(?![^>]*href=)/);
-assert.doesNotMatch(hero, /11 block patterns/);
 assert.doesNotMatch(stylesheet, /animation:\s*agile-base-marquee/);
 assert.doesNotMatch(stylesheet, /will-change:\s*transform/);
 
@@ -57,7 +56,7 @@ for (const file of [
   assert.equal(existsSync(new URL(`../${file}`, import.meta.url)), true, `${file} must exist`);
 }
 
-for (const resource of ['Figtree', 'Space Grotesk', 'Space Mono', 'logo mark', 'screenshot']) {
+for (const resource of ['Figtree', 'Space Grotesk', 'Space Mono', 'screenshot']) {
   assert.match(readme, new RegExp(resource, 'i'));
 }
 
@@ -86,6 +85,9 @@ assert.match(postHeader, /wp:post-author-name/);
 assert.match(postHeader, /wp:post-title \{[^\n]*"level":1/);
 assert.doesNotMatch(postHeader, /wp:post-author(?![-\w])/);
 assert.match(singleTemplate, /"slug":"agile-base\/hidden-post-header"/);
+assert.match(singleTemplate, /"slug":"agile-base\/hidden-post-navigation"/);
+assert.match(read('templates/single-wide.html'), /"slug":"agile-base\/hidden-post-navigation"/);
+assert.match(read('patterns/hidden-post-navigation.php'), /"className":"agile-base-postnav"/);
 assert.doesNotMatch(singleTemplate, /wp:post-author(?![-\w])/);
 assert.doesNotMatch(singleTemplate, /wp:post-title/);
 
@@ -139,18 +141,24 @@ assert.match(postsList, /wp:post-author-name/);
 // Phase 2: Header (Centered).
 const themeJsonParts = JSON.parse(read('theme.json')).templateParts;
 const templatePart = (name) => themeJsonParts.find((p) => p.name === name);
-const headerCentered = read('parts/header-centered.html');
+// Header markup lives in hidden patterns so the navigation label can be translated.
+const PRIMARY_NAV = String.raw`wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( 'Primary', 'navigation landmark label', 'agile-base' \); \?>"`;
+for (const part of ['header', 'header-centered', 'header-minimal']) {
+  assert.equal(read(`parts/${part}.html`).trim(), `<!-- wp:pattern {"slug":"agile-base/hidden-${part}"} /-->`);
+  assert.match(read(`patterns/hidden-${part}.php`), /^ \* Inserter: no$/m);
+}
+const headerCentered = read('patterns/hidden-header-centered.php');
 assert.match(headerCentered, /wp:site-logo/);
 assert.match(headerCentered, /wp:site-title/);
-assert.match(headerCentered, /wp:navigation \{"ariaLabel":"Primary","overlayMenu":"mobile"[^\n]*"justifyContent":"center"/);
+assert.match(headerCentered, new RegExp(`${PRIMARY_NAV},"overlayMenu":"mobile"[^\\n]*"justifyContent":"center"`));
 assert.match(headerCentered, /"orientation":"vertical","justifyContent":"center"/);
 assert.deepEqual(templatePart('header-centered'), { name: 'header-centered', title: 'Header (Centered)', area: 'header' });
 
 // Phase 2: Header (Minimal).
-const headerMinimal = read('parts/header-minimal.html');
+const headerMinimal = read('patterns/hidden-header-minimal.php');
 assert.doesNotMatch(headerMinimal, /wp:site-logo/);
 assert.match(headerMinimal, /wp:site-title/);
-assert.match(headerMinimal, /wp:navigation \{"ariaLabel":"Primary","overlayMenu":"always"/);
+assert.match(headerMinimal, new RegExp(`${PRIMARY_NAV},"overlayMenu":"always"`));
 assert.match(headerMinimal, /var:preset\|spacing\|x-small/);
 assert.deepEqual(templatePart('header-minimal'), { name: 'header-minimal', title: 'Header (Minimal)', area: 'header' });
 
@@ -160,7 +168,7 @@ const footerColumns = read('patterns/hidden-footer-columns.php');
 assert.equal(footerColumnsPart.trim(), '<!-- wp:pattern {"slug":"agile-base/hidden-footer-columns"} /-->');
 assert.match(footerColumns, /^ \* Slug: agile-base\/hidden-footer-columns$/m);
 assert.match(footerColumns, /^ \* Inserter: no$/m);
-assert.match(footerColumns, /wp:navigation \{"ariaLabel":"Footer"/);
+assert.match(footerColumns, /wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( 'Footer', 'navigation landmark label', 'agile-base' \); \?>"/);
 assert.match(footerColumns, /wp:search/);
 assert.match(footerColumns, /"slug":"agile-base\/hidden-footer-credit"/);
 assert.doesNotMatch(footerColumns, RAW_ENGLISH);
@@ -172,7 +180,7 @@ assert.match(teamSection, /^ \* Slug: agile-base\/team$/m);
 assert.match(teamSection, /^ \* Categories: agile-base, team$/m);
 assert.doesNotMatch(teamSection, /^ \* Inserter: no$/m);
 assert.equal((teamSection.match(/class="agile-base-avatar"/g) || []).length, 4);
-assert.match(teamSection, /"layout":\{"type":"grid","minimumColumnWidth":"14rem"\}/);
+assert.match(teamSection, /"layout":\{"type":"grid","columnCount":4,"minimumColumnWidth":"14rem"\}/);
 assert.doesNotMatch(teamSection, /<h1|"level":1/);
 assert.doesNotMatch(teamSection, RAW_ENGLISH);
 
@@ -180,9 +188,9 @@ assert.doesNotMatch(teamSection, RAW_ENGLISH);
 const pricingSection = read('patterns/pricing.php');
 assert.match(pricingSection, /^ \* Slug: agile-base\/pricing$/m);
 assert.match(pricingSection, /^ \* Categories: agile-base, call-to-action$/m);
-assert.equal((pricingSection.match(/<!-- wp:column \{/g) || []).length, 3);
+assert.equal((pricingSection.match(/<!-- wp:column(?: \{| -->)/g) || []).length, 3);
 assert.equal((pricingSection.match(/<!-- wp:list -->/g) || []).length, 3);
-assert.doesNotMatch(pricingSection, /<a\b/);
+// 2.0 plans link to contact; destination assertions below replace the 1.x no-links check.
 assert.doesNotMatch(pricingSection, /<h1|"level":1/);
 assert.doesNotMatch(pricingSection, RAW_ENGLISH);
 
@@ -202,15 +210,14 @@ const assertPagePattern = (slug, category) => {
 };
 const pageSlugs = (source) => [...source.matchAll(/wp:pattern \{"slug":"agile-base\/([a-z-]+)"\}/g)].map((m) => m[1]);
 
-assert.deepEqual(pageSlugs(assertPagePattern('page-about', 'about')), ['stats', 'team', 'testimonial', 'call-to-action']);
+assert.deepEqual(pageSlugs(assertPagePattern('page-about', 'about')), ['stats', 'team', 'testimonials-grid', 'call-to-action']);
 assert.deepEqual(pageSlugs(assertPagePattern('page-team', 'team')), ['team', 'call-to-action']);
 
-assert.deepEqual(pageSlugs(assertPagePattern('page-services', 'services')), ['features', 'testimonial', 'faq', 'call-to-action']);
+assert.deepEqual(pageSlugs(assertPagePattern('page-services', 'services')), ['services-grid', 'steps', 'testimonial', 'faq', 'call-to-action']);
 assert.deepEqual(pageSlugs(assertPagePattern('page-pricing', 'call-to-action')), ['pricing', 'faq', 'call-to-action']);
 
 const pageContact = assertPagePattern('page-contact', 'contact');
-assert.deepEqual(pageSlugs(pageContact), ['faq']);
-assert.match(pageContact, /href="mailto:hello@example\.com"/);
+assert.deepEqual(pageSlugs(pageContact), ['contact-details', 'faq']);
 assert.doesNotMatch(pageContact, /<form|wp:jetpack|contact-form/);
 
 // Phase 4: Archive (List) design.
@@ -252,7 +259,7 @@ const PILL = ':where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)
 for (const part of ['', ' .wp-block-post-terms__separator', ' a', ' a::before', ' a:hover', ' a:focus-visible']) {
   assert.ok(postTermsCss.includes(PILL + part), `pill selector missing for "${part || 'container'}"`);
 }
-assert.match(postTermsCss, /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\) \{[^}]*font-family: var\(--wp--preset--font-family--space-mono\);[^}]*font-size: var\(--wp--preset--font-size--small\);/);
+assert.match(postTermsCss, /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\) \{[^}]*font-family: var\(--wp--custom--font--mono\);[^}]*font-size: var\(--wp--preset--font-size--small\);/);
 assert.match(postTermsCss, /content: "#" \/ "";/);
 assert.doesNotMatch(postTermsCss, /agile-base-tags|taxonomy-category|\.single /);
 for (const line of postTermsCss.split('\n').filter((l) => /\{\s*$/.test(l) && !l.startsWith('@media'))) {
@@ -260,7 +267,7 @@ for (const line of postTermsCss.split('\n').filter((l) => /\{\s*$/.test(l) && !l
 }
 assert.doesNotMatch(stylesheet, /agile-base-tags/);
 assert.match(functions, /wp_enqueue_block_style\(/);
-assert.match(functions, /add_editor_style\( array\( 'style\.css', 'assets\/styles\/core-post-terms\.css' \) \)/);
+assert.match(functions, /add_editor_style\( array\( 'style\.css', 'assets\/styles\/core-post-terms\.css', 'assets\/styles\/legacy-presets\.css' \) \)/);
 assert.match(singleTagsTemplate, /<!-- wp:post-terms \{"term":"post_tag","style":\{"spacing":\{"margin":\{"top":"var:preset\|spacing\|medium"\}\}\}\} \/-->/);
 assert.doesNotMatch(singleTagsTemplate, /agile-base-tags/);
 
@@ -279,8 +286,740 @@ assert.doesNotMatch(postsList, /"columnCount"/);
 assert.match(readme, /^= 1\.0\.3 =$/m);
 
 // Hotfix 1.4.1: a screenshot of the homepage as it ships.
-assert.match(style, /^Version: 1\.4\.1$/m);
-assert.match(readme, /^Stable tag: 1\.4\.1$/m);
 assert.match(readme, /^= 1\.4\.1 =$/m);
+
+// 2.0 Part 1: role tokens. CSS reaches fonts, radii, shadows and motion through
+// theme.json tokens, so a style variation (Velocity) or the 2.0 design can change them.
+for (const [file, source] of [['style.css', stylesheet], ['assets/styles/core-post-terms.css', read('assets/styles/core-post-terms.css')]]) {
+  assert.doesNotMatch(source, /--wp--preset--font-family--/, `${file}: use --wp--custom--font--*`);
+  assert.doesNotMatch(source, /border-radius:[^;]*\d+px/, `${file}: use --wp--custom--radius--*`);
+  assert.doesNotMatch(source, /box-shadow:\s*\d/, `${file}: use --wp--preset--shadow--*`);
+  assert.doesNotMatch(source, /transition:[^;]*\d*\.\d+s/, `${file}: use --wp--custom--motion--*`);
+}
+assert.deepEqual(Object.keys(themeJson.settings.custom.font), ['body', 'display', 'mono']);
+assert.deepEqual(Object.keys(themeJson.settings.custom.radius), ['bar', 'card', 'icon', 'panel', 'pill', 'round']);
+assert.deepEqual(Object.keys(themeJson.settings.custom.motion), ['fast', 'base', 'slow', 'slower']);
+assert.ok(themeJson.settings.shadow.presets.some((p) => p.slug === 'card'), 'shadow preset "card"');
+assert.equal(themeJson.styles.typography.fontFamily, 'var(--wp--custom--font--body)');
+assert.equal(themeJson.styles.elements.heading.typography.fontFamily, 'var(--wp--custom--font--display)');
+
+// 2.0 Part 1: Velocity freezes the 1.x look. It carries its own font faces, so it
+// still works after 2.0 replaces the fonts in theme.json.
+const velocity = JSON.parse(read('styles/velocity.json'));
+assert.equal(velocity.title, 'Velocity');
+assert.equal(velocity.settings.custom.color.primary, '262 100% 62%');
+assert.equal(velocity.settings.custom.color.paper, '40 30% 98%');
+assert.equal(velocity.settings.custom.font.display, 'var(--wp--preset--font-family--space-grotesk)');
+assert.equal(velocity.settings.custom.radius.card, '8px');
+assert.deepEqual(velocity.settings.layout, { contentSize: '960px', wideSize: '1280px' });
+assert.equal(velocity.settings.typography.fluid, true);
+assert.equal(velocity.settings.useRootPaddingAwareAlignments, true);
+assert.equal(velocity.styles.elements.heading.typography.fontFamily, 'var(--wp--custom--font--display)');
+for (const slug of ['figtree', 'space-grotesk', 'space-mono']) {
+  const family = velocity.settings.typography.fontFamilies.find((f) => f.slug === slug);
+  assert.ok(family && family.fontFace.length, `Velocity must define the ${slug} font faces`);
+  for (const face of family.fontFace) {
+    for (const src of face.src.filter((s) => s.startsWith('file:./'))) {
+      assert.equal(existsSync(new URL(`../${src.slice('file:./'.length)}`, import.meta.url)), true, `${src} must exist`);
+    }
+  }
+}
+assert.equal(velocity.settings.color.palette.length, 25);
+
+// 2.0 Part 2: fonts (spec §4). Role presets body/display/mono, which the tokens point at,
+// so font presets and a client's brand can swap them; every bundled face is a local file
+// with its OFL file and readme credit; preloads follow the role tokens.
+const fontFamilies = (json) => json.settings?.typography?.fontFamilies ?? [];
+const styleFiles = (dir) => (existsSync(new URL(`../${dir}`, import.meta.url))
+  ? readdirSync(new URL(`../${dir}`, import.meta.url)).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(read(`${dir}/${f}`)))
+  : []);
+for (const family of [themeJson, ...styleFiles('styles'), ...styleFiles('styles/typography')].flatMap(fontFamilies).filter((f) => f.fontFace?.length)) {
+  for (const src of family.fontFace.flatMap((face) => face.src)) {
+    assert.ok(src.startsWith('file:./') || src.startsWith('local('), `${family.name}: ${src} must be self-hosted`);
+    if (src.startsWith('file:./')) assert.equal(existsSync(new URL(`../${src.slice(7)}`, import.meta.url)), true, `${src} must exist`);
+  }
+  if (family.fontFace.some((face) => face.src.some((s) => s.startsWith('file:./')))) {
+    assert.equal(existsSync(new URL(`../assets/fonts/OFL-${family.name.replace(/\s+/g, '-')}.txt`, import.meta.url)), true, `OFL file for ${family.name}`);
+    assert.match(readme, new RegExp(`^${family.name} font, Copyright`, 'm'), `readme credit for ${family.name}`);
+  }
+}
+const roleFamilies = Object.fromEntries(fontFamilies(themeJson).map((f) => [f.slug, f]));
+for (const role of ['body', 'display', 'mono']) {
+  assert.ok(roleFamilies[role], `theme.json has the "${role}" role font preset (spec §4)`);
+  assert.equal(themeJson.settings.custom.font[role], `var(--wp--preset--font-family--${role})`, `custom.font.${role} points at the ${role} preset`);
+}
+assert.doesNotMatch(roleFamilies.display.fontFamily, /Space Grotesk/, '2.0 replaces the 1.x display face');
+const preloadCode = functions.slice(functions.indexOf('function agile_base_preload_resources'), functions.indexOf("add_filter( 'wp_preload_resources'"));
+const preloadFiles = [...preloadCode.matchAll(/'file'\s*=>\s*'([a-z0-9-]+\/[a-z0-9-]+)'/g)].map((m) => m[1]);
+assert.ok(preloadFiles.length >= 1, 'the preload list is found');
+for (const file of preloadFiles) {
+  assert.equal(existsSync(new URL(`../assets/fonts/${file}.woff2`, import.meta.url)), true, `preloaded assets/fonts/${file}.woff2 must exist`);
+}
+assert.match(preloadCode, /wp_get_global_settings\( array\( 'custom', 'font' \) \)/, 'preloads follow the role tokens');
+
+// 2.0 Part 2: tokens and global styles (spec §4, §7.5). Theme CSS takes colors only from
+// palette presets (which color presets can change), uses logical properties so right-to-left
+// works, and styles form fields; links in text are underlined and every control gets a
+// 2px focus outline; headings no longer force margin: 0 !important; Dark only recolors.
+const SR_FOCUS = /\.screen-reader-text:focus \{[^}]*\}/; // WordPress's standard snippet
+const themeCssFiles = ['style.css', ...readdirSync(new URL('../assets/styles/', import.meta.url)).filter((f) => f.endsWith('.css')).map((f) => `assets/styles/${f}`)];
+for (const file of themeCssFiles) {
+  const source = read(file).replace(SR_FOCUS, '').replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.doesNotMatch(source, /#[0-9a-f]{3,8}\b|\brgba?\(|\bhsla?\(/i, `${file}: colors come from palette presets, not literals`);
+  assert.doesNotMatch(source, /--wp--custom--color--/, `${file}: read colors as --wp--preset--color--*, which color presets can change`);
+  assert.doesNotMatch(source, /\b(margin|padding|border)-(left|right)\b|(^|[\s;{])(left|right)\s*:|text-align:\s*(left|right)|float:\s*(left|right)/m, `${file}: logical properties (inline-start/end), so right-to-left works`);
+}
+const css = read('style.css').replace(/\/\*[\s\S]*?\*\//g, '');
+for (const field of ['input', 'select', 'textarea']) assert.match(css, new RegExp(`(^|[\\s,(])${field}\\b[^{]*\\{`, 'm'), `style.css styles ${field} fields (spec D14)`);
+assert.match(css, /(input|select|textarea)[^{]*:focus-visible[^{]*\{/, 'form fields have a focus style');
+assert.ok(themeJson.settings.color.palette.every((c) => !/var\(/.test(c.color)), 'palette colors are plain values (spec §4)');
+const link = themeJson.styles.elements.link;
+assert.equal(link.typography?.textDecoration, 'underline', 'links in text are underlined (accessibility-ready)');
+assert.ok(link[':hover']?.typography?.textDecoration && link[':hover'].typography.textDecoration !== 'underline', 'the underline changes on hover, not only the color');
+for (const element of ['link', 'button']) {
+  const focus = themeJson.styles.elements[element][':focus-visible'];
+  assert.ok(focus?.outline && parseFloat(focus.outline.width) >= 2, `${element}: a focus-visible outline of at least 2px`);
+}
+assert.doesNotMatch(JSON.stringify(themeJson.styles.elements.heading), /!important/, 'heading margins without !important');
+// The editor counts a style file as a color (or font) preset only if it holds nothing else.
+const onlyKeys = (object, keys) => Object.fromEntries(Object.entries(object).flatMap(([key, value]) => {
+  if (keys.includes(key)) return [[key, value]];
+  if (value && typeof value === 'object') {
+    const kept = onlyKeys(value, keys);
+    return Object.keys(kept).length ? [[key, kept]] : [];
+  }
+  return [];
+}));
+const isPreset = (json, keys) => ['settings', 'styles'].every((part) => JSON.stringify(onlyKeys(json[part] ?? {}, keys)) === JSON.stringify(json[part] ?? {}));
+const dark = JSON.parse(read('styles/dark.json'));
+assert.ok(isPreset(dark, ['color']), 'Dark only recolors (the Site Editor lists it under Colors)');
+assert.ok(themeJson.settings.custom.radius.card !== '8px' || themeJson.settings.custom.motion.base !== '0.15s' || themeJson.settings.custom.color?.primary !== '262 100% 62%', '2.0 sets its own token values');
+
+// 2.0 Part 2: brand presets (spec §4, D13). Color presets hold only colors and redefine the
+// whole palette; font presets hold only typography and redefine the three role fonts; System
+// downloads nothing; the client-brand fixture changes every brand value at once.
+const presetFiles = (dir) => (existsSync(new URL(`../${dir}`, import.meta.url))
+  ? readdirSync(new URL(`../${dir}`, import.meta.url)).filter((f) => f.endsWith('.json')).map((f) => [f, JSON.parse(read(`${dir}/${f}`))])
+  : []);
+const paletteSlugs = themeJson.settings.color.palette.map((c) => c.slug).sort();
+const colorPresets = presetFiles('styles/colors');
+assert.ok(colorPresets.length >= 3, 'at least three color presets besides Dark');
+for (const [file, preset] of [...colorPresets, ['dark.json', dark]]) {
+  assert.ok(preset.title, `${file}: title`);
+  assert.ok(isPreset(preset, ['color']), `${file}: colors only, so the Site Editor lists it under Colors`);
+  assert.deepEqual(preset.settings.color.palette.map((c) => c.slug).sort(), paletteSlugs, `${file}: redefines every palette color`);
+  assert.ok(preset.settings.color.palette.every((c) => !/var\(/.test(c.color)), `${file}: plain color values`);
+}
+const fontPresets = presetFiles('styles/typography');
+assert.ok(fontPresets.length >= 3, 'at least two font presets plus System');
+for (const [file, preset] of fontPresets) {
+  assert.ok(preset.title, `${file}: title`);
+  assert.ok(isPreset(preset, ['typography']), `${file}: typography only, so the Site Editor lists it under Typography`);
+  assert.deepEqual(fontFamilies(preset).map((f) => f.slug).sort(), ['body', 'display', 'mono'], `${file}: redefines the three role fonts`);
+}
+const systemPreset = fontPresets.find(([file]) => file === 'system.json')?.[1];
+assert.ok(systemPreset, 'styles/typography/system.json (spec D13)');
+assert.ok(fontFamilies(systemPreset).every((f) => !f.fontFace), 'System downloads no fonts');
+const clientBrand = JSON.parse(read('tests/fixtures/client-brand.json'));
+assert.deepEqual(clientBrand.settings.color.palette.map((c) => c.slug).sort(), paletteSlugs, 'client-brand covers every palette color (re-run bin/make-client-brand.mjs)');
+assert.deepEqual(fontFamilies(clientBrand).map((f) => f.slug).sort(), ['body', 'display', 'mono']);
+assert.deepEqual(Object.keys(clientBrand.settings.custom.radius).sort(), Object.keys(themeJson.settings.custom.radius).sort(), 'client-brand covers every radius token');
+assert.ok(Object.values(clientBrand.settings.custom.radius).every((r) => r === '0'), 'client-brand squares every corner');
+
+// 2.0 Part 2: homepage. One <h1> wherever the hero goes (spec D5); no small label above a
+// heading (the 1.x eyebrow); demo copy never markets the theme (D4).
+const KICKER = [
+  /<!-- wp:paragraph \{[^\n]*agile-base-eyebrow[^\n]*\} -->\s*<p[^>]*>[\s\S]*?<\/p>\s*<!-- \/wp:paragraph -->\s*<!-- wp:(?:heading|post-title|query-title)\b/,
+  /<!-- wp:(?:post-terms|post-date)[^\n]*agile-base-eyebrow[^\n]*\/-->\s*<!-- wp:(?:heading|post-title|query-title)\b/,
+];
+const hasKicker = (source) => KICKER.some((re) => re.test(source));
+const marketsTheme = (source) => /Agile Base/.test(source.replace(/<\?php[\s\S]*?\?>/g, (php) => php.replace(/'agile-base'/g, '')));
+// Every new inserter pattern meets the same bar (spec §7).
+const CORE_CATEGORIES = new Set(['banner', 'buttons', 'columns', 'text', 'query', 'featured', 'call-to-action', 'team', 'testimonials', 'services', 'contact', 'about', 'portfolio', 'gallery', 'media', 'videos', 'audio', 'posts', 'footer', 'header', 'navigation']);
+const assertNewPattern = (slug, { title, categories }) => {
+  const source = read(`patterns/${slug}.php`);
+  assert.match(source, new RegExp(`^ \\* Title: ${title.replace(/[()]/g, '\\$&')}$`, 'm'), `${slug}: title`);
+  assert.match(source, new RegExp(`^ \\* Categories: ${categories.join(', ')}$`, 'm'), `${slug}: categories`);
+  assert.ok(categories[0] === 'agile-base' && categories.slice(1).some((c) => CORE_CATEGORIES.has(c)), `${slug}: agile-base plus a core category`);
+  for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${slug}: ${header}`);
+  assert.doesNotMatch(source, /href="#"/, `${slug}: no dead links`);
+  assert.equal(marketsTheme(source), false, `${slug}: copy does not market the theme`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /<h1\b|"level":1\b/, `${slug}: sections never add an <h1>`);
+  return source;
+};
+const queriesIn = (source) => [...source.matchAll(/<!-- wp:query (\{[^\n]*\}) -->/g)].map((m) => JSON.parse(m[1]));
+
+const homeHero = read('patterns/hidden-home-hero.php');
+assert.match(homeHero, /^ \* Inserter: no$/m);
+assert.equal((homeHero.match(/<h1\b/g) || []).length, 1, 'hidden-home-hero holds the homepage <h1>');
+assert.equal((read('patterns/hero.php').match(/<h1\b/g) || []).length, 0, 'the hero section must not add a second <h1>');
+assert.match(read('patterns/hero.php'), /<h2\b/);
+const servicesGrid = assertNewPattern('services-grid', { title: 'Services Grid', categories: ['agile-base', 'services'] });
+assert.ok((servicesGrid.match(/<h3\b/g) || []).length >= 3, 'at least three services, each with a heading');
+const pageHome = read('patterns/page-home.php');
+assert.match(pageHome, /^ \* Title: Page: Home \(Agency\)$/m);
+assert.ok(pageHome.indexOf('"slug":"agile-base/hidden-home-hero"') > -1 && pageHome.indexOf('"slug":"agile-base/hidden-home-hero"') < pageHome.indexOf('"slug":"agile-base/services-grid"'), 'the homepage opens with its hero, then shows the services');
+assert.doesNotMatch(pageHome, /wp:pattern \{"slug":"agile-base\/hero"\}/);
+for (const slug of ['hidden-home-hero', 'hero', 'logos', 'features', 'stats', 'testimonial', 'faq', 'call-to-action', 'page-home', 'hidden-header', 'hidden-footer-credit']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.equal(marketsTheme(source), false, `${slug}: demo copy must not market the theme`);
+}
+assert.doesNotMatch(read('patterns/hidden-header.php'), /agile-base-eyebrow/);
+
+// 2.0 Part 2: Services page (spec §7.3). The template shows the page title (the <h1>); the
+// layout's intro adds no label and no heading, so nothing repeats the page name.
+const steps = assertNewPattern('steps', { title: 'How It Works', categories: ['agile-base', 'services'] });
+assert.equal((steps.match(/<h3\b/g) || []).length, 3, 'three steps, each with a heading');
+const pageServices = read('patterns/page-services.php');
+const servicesIntro = pageServices.slice(pageServices.indexOf('?>'), pageServices.indexOf('<!-- wp:pattern'));
+assert.doesNotMatch(servicesIntro, /agile-base-eyebrow|wp:heading|<h1/, 'page-services: the intro repeats nothing');
+assert.equal(hasKicker(pageServices), false);
+
+// 2.0 Part 2: single post. The post header has no label above the title, both single
+// templates share the header, navigation and comments, and content blocks are styled in theme.json.
+const postHeader2 = read('patterns/hidden-post-header.php');
+assert.equal(hasKicker(postHeader2), false, 'hidden-post-header: no label above the title');
+assert.match(postHeader2, /wp:post-title \{[^\n]*"level":1/);
+for (const template of ['single', 'single-wide']) {
+  const source = read(`templates/${template}.html`);
+  for (const slug of ['hidden-post-header', 'hidden-post-navigation', 'comments']) assert.match(source, new RegExp(`"slug":"agile-base/${slug}"`), `${template}: ${slug}`);
+}
+for (const block of ['core/quote', 'core/pullquote', 'core/code', 'core/preformatted', 'core/table', 'core/separator']) {
+  assert.ok(themeJson.styles.blocks[block], `theme.json styles.blocks["${block}"]`);
+}
+assert.match(read('patterns/hidden-post-navigation.php'), /"className":"agile-base-postnav"/, 'the postnav class keeps a rule (contract)');
+assert.match(read('assets/styles/core-post-terms.css'), /:where\(\.wp-block-post-terms\.taxonomy-post_tag:not\(\.is-style-plain\)\)/, 'pill selector kept (contract)');
+
+// 2.0 Part 2b: Text on Primary (spec §4, D16). Whatever sits on a primary background takes
+// on-primary, so a dark brand primary gets light text. Every style file with a palette sets
+// it at 4.5:1 or more against its own primary, right after primary in the palette.
+const luminance = (rgb) => rgb.map((c) => { c /= 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; })
+  .reduce((sum, c, k) => sum + c * [0.2126, 0.7152, 0.0722][k], 0);
+const contrastOf = (a, b) => { const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x); return (hi + 0.05) / (lo + 0.05); };
+const hslToRgb = ([h, s, l]) => {
+  const a = (s / 100) * Math.min(l / 100, 1 - l / 100);
+  return [0, 8, 4].map((n) => { const k = (n + h / 30) % 12; return Math.round(255 * (l / 100 - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))); });
+};
+// Palette values are hex, or (Velocity) hsla(var(--wp--custom--color--<name>)) over "H S% L%" tokens.
+const rgbOf = (json, value) => {
+  const hex = value.match(/^#([0-9a-f]{6})$/i);
+  if (hex) return [0, 2, 4].map((i) => parseInt(hex[1].slice(i, i + 2), 16));
+  const token = value.match(/^hsla?\(var\(--wp--custom--color--([a-z-]+)\)\)$/);
+  assert.ok(token, `unreadable palette value ${value}`);
+  return hslToRgb(json.settings.custom.color[token[1].replace(/-([a-z])/g, (_, c) => c.toUpperCase())].split(/\s+/).map(parseFloat));
+};
+const palettes = [['theme.json', themeJson], ['styles/dark.json', dark], ['styles/velocity.json', velocity],
+  ['tests/fixtures/client-brand.json', clientBrand], ...colorPresets.map(([file, json]) => [`styles/colors/${file}`, json])];
+for (const [file, json] of palettes) {
+  const slugs = json.settings.color.palette.map((c) => c.slug);
+  assert.equal(slugs.indexOf('on-primary'), slugs.indexOf('primary') + 1, `${file}: Text on Primary sits right after Primary (spec D16)`);
+  const color = Object.fromEntries(json.settings.color.palette.map((c) => [c.slug, c.color]));
+  const ratio = contrastOf(rgbOf(json, color.primary), rgbOf(json, color['on-primary']));
+  assert.ok(ratio >= 4.5, `${file}: on-primary on primary is ${ratio.toFixed(2)}:1, needs 4.5:1`);
+}
+// Markup: a block with a primary background sets on-primary text (the style guide's empty
+// swatches excepted), and nothing inside a field sets its own black, ink, white or paper text.
+const markupFiles = ['patterns', 'templates', 'parts'].flatMap((dir) => readdirSync(new URL(`../${dir}/`, import.meta.url)).map((f) => `${dir}/${f}`));
+for (const file of markupFiles) {
+  const source = read(file);
+  for (const [comment] of source.matchAll(/<!-- wp:[a-z/-]+ \{.*?\} \/?-->/g)) {
+    if (/"backgroundColor":"primary"/.test(comment) && !/agile-base-swatch/.test(comment)) {
+      assert.match(comment, /"textColor":"on-primary"/, `${file}: text on a primary background uses on-primary (spec D16): ${comment.slice(0, 90)}`);
+    }
+  }
+  if (source.includes('agile-base-field')) assert.doesNotMatch(source, /"textColor":"(black|ink|white|paper)"/, `${file}: text inside a field inherits on-primary`);
+}
+// Style JSON (theme.json and every style file but frozen Velocity, including section styles
+// to come): a node that paints a primary background also sets on-primary text.
+const PRIMARY_BACKGROUND = /^(var\(--wp--preset--color--primary\)|var:preset\|color\|primary)$/;
+const checkPrimaryText = (node, where, file) => {
+  if (!node || typeof node !== 'object') return;
+  if (PRIMARY_BACKGROUND.test(node.color?.background ?? '')) assert.match(node.color.text ?? '', /on-primary/, `${file} ${where}: text on a primary background uses on-primary (spec D16)`);
+  for (const [key, value] of Object.entries(node)) checkPrimaryText(value, `${where}.${key}`, file);
+};
+const jsonFiles = (dir) => readdirSync(new URL(`../${dir}/`, import.meta.url), { withFileTypes: true })
+  .flatMap((entry) => (entry.isDirectory() ? jsonFiles(`${dir}/${entry.name}`) : entry.name.endsWith('.json') ? [`${dir}/${entry.name}`] : []));
+for (const file of ['theme.json', ...jsonFiles('styles').filter((f) => f !== 'styles/velocity.json')]) checkPrimaryText(JSON.parse(read(file)).styles, 'styles', file);
+// CSS: field rules take colors from primary and on-primary only; focus rings in a field and
+// selected text use on-primary.
+const fieldRules = [...css.matchAll(/([^{}]*\.agile-base-field[^{}]*)\{([^}]*)\}/g)];
+assert.ok(fieldRules.length >= 3, 'style.css styles the color field');
+for (const [, selector, body] of fieldRules) {
+  assert.doesNotMatch(body, /--color--(?!primary\)|on-primary\))/, `style.css ${selector.trim()}: field colors come from primary and on-primary only`);
+}
+assert.ok(fieldRules.some(([, selector, body]) => /:focus-visible/.test(selector) && /outline-color:\s*var\(--wp--preset--color--on-primary\)/.test(body)), 'focus rings in a field use on-primary');
+assert.match(css, /::selection\s*\{[^}]*background-color:\s*var\(--wp--preset--color--primary\);[^}]*color:\s*var\(--wp--preset--color--on-primary\)/, 'selected text: on-primary on primary');
+
+// 2.0 Part 2b: a compact top (spec D17). The header and footer pad themselves, so the page
+// has no padding above the header; the homepage hero meets the header; the inserter hero
+// shares the homepage hero's padding. Sizes are checked live by check-frontend --fold.
+// Units required: WordPress pads the mobile menu with clamp(1rem, <root padding>, 20rem),
+// and a unitless 0 there voids all of the menu's padding.
+assert.equal(themeJson.styles.spacing.padding.top, '0px', 'no page padding above the header');
+assert.equal(themeJson.styles.spacing.padding.bottom, '0px', 'no page padding below the footer');
+assert.match(frontPage, /<!-- wp:group \{"tagName":"main","style":\{"spacing":\{"margin":\{"top":"0"\}\}\}/, 'the homepage hero meets the header');
+assert.match(frontPage, /<main class="wp-block-group" style="margin-top:0">/, 'front-page main markup matches its attributes');
+const fieldPadding = (source) => source.match(/"className":"agile-base-field","style":\{"spacing":\{"padding":(\{[^}]*\})/)?.[1];
+assert.ok(fieldPadding(homeHero), 'the homepage hero sets its padding');
+assert.equal(fieldPadding(hero), fieldPadding(homeHero), 'the inserter hero and the homepage hero share their padding');
+
+// 2.0 Part 2b: one placeholder photo, in the Text and Image section on the homepage (spec
+// D3): CC0 and credited, a small bundled WebP (never hotlinked), translatable alt text, and
+// a fixed aspect ratio so the page doesn't move as it loads.
+const PHOTO = 'assets/images/placeholder-photo.webp';
+assert.ok(existsSync(new URL(`../${PHOTO}`, import.meta.url)), `${PHOTO} exists (spec D3)`);
+const photo = readFileSync(new URL(`../${PHOTO}`, import.meta.url));
+assert.ok(photo.subarray(0, 4).toString() === 'RIFF' && photo.subarray(8, 12).toString() === 'WEBP', `${PHOTO} is a WebP`);
+assert.ok(photo.length <= 80 * 1024, `${PHOTO} is ${Math.round(photo.length / 1024)} KB, at most 80 KB`);
+assert.match(readme, /^placeholder-photo\.webp, .+\n\* Source: https:\/\/\S+\n\* License: CC0 1\.0 Universal\n\* License URI: https:\/\/creativecommons\.org\/publicdomain\/zero\/1\.0\/$/m, 'readme credits the photo with its source and CC0 license');
+const textImage = assertNewPattern('text-image', { title: 'Text and Image', categories: ['agile-base', 'about'] });
+assert.match(textImage, /<img src="<\?php echo esc_url\( get_theme_file_uri\( 'assets\/images\/placeholder-photo\.webp' \) \); \?>" alt="<\?php echo esc_attr_x\( '[^']+', 'placeholder photo alt text', 'agile-base' \); \?>"/, 'the photo is bundled, with translatable alt text');
+assert.match(textImage, /<!-- wp:image \{"aspectRatio":"4\/3","scale":"cover"/, 'the photo keeps a 4:3 frame');
+assert.doesNotMatch(homeHero, /<img\b/, 'the homepage hero has no photo');
+assert.ok(pageHome.indexOf('"slug":"agile-base/logos"') < pageHome.indexOf('"slug":"agile-base/text-image"') && pageHome.indexOf('"slug":"agile-base/text-image"') < pageHome.indexOf('"slug":"agile-base/services-grid"'), 'the homepage shows the Text and Image section after the logos');
+for (const file of markupFiles) assert.doesNotMatch(read(file), /<img [^>]*src="https?:/, `${file}: images are bundled, never hotlinked`);
+// Full-width sections touch, on the homepage too, and meet the header and footer when a page
+// opens or ends with one (check-frontend measures it on every page).
+assert.match(css, /:is\(main, \.wp-block-post-content\) > \.alignfull \+ \.alignfull,\s*\.wp-site-blocks > main:has\(> \.wp-block-post-content > \.alignfull:first-child\),\s*\.wp-site-blocks > main > \.wp-block-post-content:has\(> \.alignfull:first-child\),\s*\.wp-site-blocks > main:has\(> \.alignfull:not\(\.wp-block-post-content\):last-child, > \.wp-block-post-content:last-child > \.alignfull:last-child\) \+ \* \{\s*margin-block-start: 0;/, 'full-width sections, the header and the footer sit edge to edge');
+
+// 2.0 Part 3: headers. Every header is one pattern line whose pattern keeps the site title
+// and an accessible, mobile-ready menu, with no label above anything; Header (Button)
+// adds one translatable call to action (spec §7.1).
+for (const part of ['header', 'header-centered', 'header-minimal', 'header-cta']) {
+  assert.equal(read(`parts/${part}.html`).trim(), `<!-- wp:pattern {"slug":"agile-base/hidden-${part}"} /-->`, `${part}: markup lives in its hidden pattern`);
+  const source = read(`patterns/hidden-${part}.php`);
+  assert.match(source, /^ \* Inserter: no$/m, `${part}: hidden pattern`);
+  assert.match(source, /wp:site-title /, `${part}: site title`);
+  assert.match(source, /wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( '[^']+', 'navigation landmark label', 'agile-base' \); \?>"[^\n]*"overlayMenu":"(mobile|always)"/, `${part}: labelled menu with a mobile overlay`);
+  assert.doesNotMatch(source, /agile-base-eyebrow/, `${part}: no eyebrow label`);
+}
+const headerCta = read('patterns/hidden-header-cta.php');
+assert.equal((headerCta.match(/<!-- wp:button\b/g) || []).length, 1, 'Header (Button): one call to action');
+assert.match(headerCta, /wp-block-button__link[^>]*href="<\?php echo esc_url\(/, 'Header (Button): the button links somewhere real');
+assert.match(headerCta, /esc_html_e\(|esc_html__\(/, 'Header (Button): translatable button text');
+assert.deepEqual(templatePart('header-cta'), { name: 'header-cta', title: 'Header (Button)', area: 'header' });
+assert.ok(themeJson.styles.blocks['core/navigation'], 'theme.json styles the navigation block');
+
+// 2.0 Part 3: footers. No eyebrow labels (1.x had four in Footer (Columns)); the columns
+// footer keeps its menu and search; Footer (Business) gives a business's contact details,
+// hours, legal links and social icons, all editable and translatable (spec §7.1).
+const footerColumns2 = read('patterns/hidden-footer-columns.php');
+assert.doesNotMatch(footerColumns2, /agile-base-eyebrow/, 'Footer (Columns): no eyebrow labels');
+assert.match(footerColumns2, /wp:navigation /);
+assert.match(footerColumns2, /wp:search /);
+assert.doesNotMatch(read('parts/footer.html'), /agile-base-eyebrow/);
+assert.equal(read('parts/footer-business.html').trim(), '<!-- wp:pattern {"slug":"agile-base/hidden-footer-business"} /-->');
+const footerBusiness = read('patterns/hidden-footer-business.php');
+assert.match(footerBusiness, /^ \* Inserter: no$/m);
+assert.match(footerBusiness, /href="mailto:/, 'Footer (Business): email link');
+assert.match(footerBusiness, /href="tel:/, 'Footer (Business): phone link');
+assert.match(footerBusiness, /wp:navigation \{"ariaLabel":"<\?php echo esc_attr_x\( '[^']+', 'navigation landmark label', 'agile-base' \); \?>"/, 'Footer (Business): a labelled legal-links menu');
+assert.match(footerBusiness, /wp:social-links /);
+assert.match(footerBusiness, /"slug":"agile-base\/hidden-footer-credit"/);
+assert.equal(hasKicker(footerBusiness), false);
+assert.doesNotMatch(footerBusiness, /agile-base-eyebrow/);
+assert.deepEqual(templatePart('footer-business'), { name: 'footer-business', title: 'Footer (Business)', area: 'footer' });
+// WordPress leaves line breaks in a list whose links have no URL, so :empty never matches.
+assert.match(stylesheet, /\.wp-block-social-links:not\(:has\(li\)\)\s*\{\s*display:\s*none;?\s*\}/, 'no gap when no social link is filled in');
+assert.match(stylesheet, /\.wp-block-navigation:not\(\.has-background\) \.wp-block-navigation__submenu-container \{[^}]*background-color: var\(--wp--preset--color--paper\)/, 'submenus outweigh WordPress\'s white default');
+assert.match(stylesheet, /\.wp-block-navigation:not\(\.has-background\) \.wp-block-navigation__responsive-container\.is-menu-open:not\(\.disable-default-overlay\) \{[^}]*background-color: var\(--wp--preset--color--paper\)/, 'the open mobile menu outweighs WordPress\'s white default');
+assert.match(stylesheet, /\.wp-block-navigation:not\(\.has-text-color\) \.wp-block-navigation__responsive-container\.is-menu-open:not\(\.disable-default-overlay\) \{[^}]*color: var\(--wp--preset--color--ink\)/, 'the open mobile menu outweighs WordPress\'s black default');
+assert.equal(themeJson.styles.blocks['core/navigation-submenu'], undefined, 'submenu colors live on the container, not the menu item');
+
+// 2.0 Part 3: section styles and block style variations (theme.json partials, WP 6.6+).
+// Each is a style-only partial for a fixed set of blocks, with colors from palette presets
+// so color presets and a client's brand recolor them.
+const partials = (dir) => presetFiles(dir);
+const sections = partials('styles/sections');
+assert.ok(sections.length >= 3, 'at least three section styles (spec §7.4)');
+const SECTION_BLOCKS = new Set(['core/group', 'core/columns', 'core/column', 'core/cover']);
+for (const [file, partial] of sections) {
+  assert.equal(partial.version, 3, file);
+  assert.match(partial.slug, /^section-[a-z0-9-]+$/, `${file}: slug section-*`);
+  assert.ok(partial.title, `${file}: title`);
+  assert.ok(partial.blockTypes?.length && partial.blockTypes.every((b) => SECTION_BLOCKS.has(b)), `${file}: blockTypes`);
+  assert.ok(partial.styles?.color?.background && partial.styles?.color?.text, `${file}: sets background and text`);
+  assert.ok(partial.styles?.elements?.link && partial.styles?.elements?.button, `${file}: restyles links and buttons for its background`);
+  assert.equal(partial.settings, undefined, `${file}: styles only`);
+  assert.doesNotMatch(JSON.stringify(partial.styles), /#[0-9a-f]{3,8}\b|rgba?\(|hsla?\(|--wp--custom--color--/i, `${file}: colors from palette presets`);
+  // WordPress splits custom CSS at "&" and drops a rule that lists two; a button the owner
+  // colors keeps its colors.
+  assert.doesNotMatch(partial.styles.css ?? '', /,\s*&/, `${file}: one "&" selector per rule`);
+  for (const rule of (partial.styles.css ?? '').match(/[^{}]*\{[^}]*[\s{;](?:color|background-color):[^}]*\}/g) ?? []) {
+    if (/\.wp-block-button__link/.test(rule)) assert.match(rule, /\.wp-block-button__link:not\(\.has-text-color, \.has-background\)/, `${file}: owner button colors win: ${rule.trim().slice(0, 80)}`);
+  }
+}
+for (const [file, partial] of partials('styles/blocks')) {
+  assert.equal(partial.version, 3, file);
+  assert.ok(partial.slug && partial.title && partial.blockTypes?.length && partial.styles, `${file}: slug, title, blockTypes, styles`);
+  // A block's Styles panel lists its section styles and block styles together.
+  for (const [sectionFile, section] of sections) {
+    if (partial.blockTypes.some((block) => section.blockTypes.includes(block))) assert.notEqual(partial.title, section.title, `${file} and ${sectionFile}: two "${partial.title}" styles in one Styles panel`);
+  }
+}
+// Every search box draws the same corners.
+for (const file of markupFiles) assert.doesNotMatch(read(file), /wp:search \{[^\n]*"radius":"var:custom\|radius\|(?!bar")/, `${file}: search uses the bar radius`);
+for (const block of ['core/search', 'core/query-pagination', 'core/avatar', 'core/social-links']) {
+  assert.ok(themeJson.styles.blocks[block], `theme.json styles.blocks["${block}"]`);
+}
+// Only a search with its button inside is one paper box; with the button outside, the
+// section shows between the field and the button.
+const searchCss = themeJson.styles.blocks['core/search'].css;
+assert.match(searchCss, /&\.wp-block-search__button-inside \.wp-block-search__inside-wrapper \{[^}]*background-color: var\(--wp--preset--color--paper\)/);
+assert.doesNotMatch(searchCss, /& \.wp-block-search__inside-wrapper \{[^}]*(background|color|border)/, 'search: no paper box behind a button outside the field');
+
+// 2.0 Part 3: blog listings. No label above any heading; the card keeps its contract class
+// and its byline blocks; the 1.4.0 author header keeps wrapping on phones.
+for (const slug of ['posts-list', 'hidden-blog-heading', 'hidden-no-results']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /agile-base-eyebrow/, `${slug}: no eyebrow label`);
+}
+for (const template of ['index', 'home', 'archive', 'search', 'author']) {
+  assert.equal(hasKicker(read(`templates/${template}.html`)), false, `${template}: no label above a heading`);
+}
+assert.match(read('patterns/posts-list.php'), /className":"post-card"/);
+assert.match(read('templates/author.html'), /"className":"agile-base-author"[^\n]*"flexWrap":"wrap"/);
+
+// 2.0 Part 3: About the Author (spec §7.2, D6): insertable, not in the templates.
+const authorBio = assertNewPattern('author-bio', { title: 'About the Author', categories: ['agile-base', 'text'] });
+assert.match(authorBio, /wp:avatar /);
+assert.match(authorBio, /wp:post-author-name \{[^\n]*"isLink":true/);
+assert.match(authorBio, /wp:post-author-biography /);
+for (const template of ['single', 'single-wide']) {
+  assert.doesNotMatch(read(`templates/${template}.html`), /agile-base\/author-bio/, `${template}: no author bio by default (D6)`);
+}
+
+// 2.0 Part 3: pages, 404 and template designs. No label above a heading anywhere; the
+// 1.x structural guarantees (search on 404, rows in Archive (List)) stay; the Landing Page
+// template has no menu and one hidden <h1> (spec §7.1).
+for (const slug of ['hidden-404', 'template-archive-list', 'template-404-search']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /agile-base-eyebrow/, `${slug}: no eyebrow label`);
+}
+for (const template of ['page', 'page-no-title', 'page-full-width', 'page-blank', '404', 'page-landing']) {
+  assert.equal(hasKicker(read(`templates/${template}.html`)), false, `${template}: no label above a heading`);
+}
+assert.match(read('patterns/hidden-404.php'), /wp:search /);
+assert.match(read('patterns/template-404-search.php'), /wp:search /);
+const landing = read('templates/page-landing.html');
+assert.deepEqual(customTemplate('page-landing'), { name: 'page-landing', title: 'Landing Page', postTypes: ['page'] });
+assert.doesNotMatch(landing, /wp:navigation|wp:template-part \{"slug":"header/, 'Landing Page: no menu');
+assert.match(landing, /wp:site-title /);
+assert.match(landing, /wp:post-title \{"level":1,"className":"screen-reader-text"\}/, 'Landing Page: the title is the hidden <h1>');
+assert.match(landing, /wp:post-content \{[^\n]*"align":"full"/, 'Landing Page: content full width');
+assert.match(landing, /"slug":"agile-base\/hidden-footer-credit"/);
+assert.match(landing, /"tagName":"footer"[^\n]*"padding":\{"top":"var:preset\|spacing\|[a-z-]+","bottom":"var:preset\|spacing\|[a-z-]+"\}/, 'Landing Page: the credit footer has room above and below');
+assert.equal((landing.match(/"tagName":"main"/g) || []).length, 1);
+
+// 2.0 Part 4a: Team, Pricing, Style Guide. No labels above headings; pricing buttons go
+// somewhere real; the Style Guide shows the whole 2.0 system, so it stays complete.
+for (const slug of ['team', 'pricing', 'style-guide']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.doesNotMatch(source, /agile-base-eyebrow/, `${slug}: no eyebrow label`);
+}
+const guide = read('patterns/style-guide.php');
+const kebabSlug = (slug) => slug.replace(/([a-z])([0-9])/g, '$1-$2').replace(/([0-9])([a-z])/g, '$1-$2');
+for (const { slug } of themeJson.settings.color.palette) assert.match(guide, new RegExp(`has-${slug}-background-color`), `style guide shows color ${slug}`);
+for (const { slug } of themeJson.settings.typography.fontSizes) assert.match(guide, new RegExp(`"fontSize":"${kebabSlug(slug)}"`), `style guide shows font size ${slug}`);
+for (const { slug } of themeJson.settings.spacing.spacingSizes) assert.match(guide, new RegExp(`--wp--preset--spacing--${kebabSlug(slug)}\\b`), `style guide shows spacing ${slug}`);
+for (const [, partial] of [...partials('styles/sections'), ...partials('styles/blocks')]) assert.match(guide, new RegExp(`is-style-${partial.slug}\\b`), `style guide shows ${partial.slug}`);
+assert.doesNotMatch(read('patterns/pricing.php'), /<a(?![^>]*href=)|href="#"/, 'every pricing button goes somewhere real');
+
+// 2.0 Part 4a: heroes (spec §7.2). An <h2> (pages supply the <h1>), real actions, and an
+// empty image slot or an overlay color from the palette (no bundled images).
+const heroSplit = assertNewPattern('hero-split', { title: 'Hero (Split)', categories: ['agile-base', 'banner'] });
+assert.match(heroSplit, /<h2\b/);
+assert.match(heroSplit, /wp:media-text \{/, 'a Media & Text block holds the image slot');
+assert.doesNotMatch(heroSplit, /"mediaUrl"|"mediaId"|<img\b/, 'the image slot is empty');
+assert.equal((heroSplit.match(/<!-- wp:button\b/g) || []).length, 2, 'two actions');
+const heroCover = assertNewPattern('hero-cover', { title: 'Hero (Cover)', categories: ['agile-base', 'banner'] });
+assert.match(heroCover, /wp:cover \{[^\n]*"overlayColor":"[a-z0-9-]+"/, 'overlay color from the palette');
+assert.doesNotMatch(heroCover, /"url":|"customOverlayColor"|<img\b/, 'no bundled image or literal color');
+assert.match(heroCover, /<h2\b/);
+assert.ok((heroCover.match(/<!-- wp:button\b/g) || []).length >= 1, 'an action');
+
+// 2.0 Part 4a: Services List (spec §7.2). Alternating Media & Text rows, each a service
+// with a heading and a real link, image slots empty.
+const servicesList = assertNewPattern('services-list', { title: 'Services List', categories: ['agile-base', 'services'] });
+const serviceRows = [...servicesList.matchAll(/<!-- wp:media-text (\{[^\n]*\}) -->/g)].map((m) => JSON.parse(m[1]));
+assert.ok(serviceRows.length >= 3, 'at least three services');
+assert.ok(new Set(serviceRows.map((row) => row.mediaPosition ?? 'left')).size === 2, 'the rows alternate sides');
+assert.ok(serviceRows.every((row) => row.isStackedOnMobile !== false), 'rows stack on phones');
+assert.doesNotMatch(servicesList, /"mediaUrl"|"mediaId"|<img\b/, 'image slots are empty');
+assert.equal((servicesList.match(/<h3\b/g) || []).length, serviceRows.length, 'a heading per service');
+
+// 2.0 Part 4a: proof sections (spec §7.2).
+const caseStudies = assertNewPattern('case-studies', { title: 'Case Studies', categories: ['agile-base', 'portfolio'] });
+assert.equal((caseStudies.match(/<h3\b/g) || []).length, 3, 'three case studies, each with a heading');
+assert.ok((caseStudies.match(/<!-- wp:image\b/g) || []).length >= 3, 'an image slot per case study');
+assert.doesNotMatch(caseStudies, /"url":|"id":\d|src=/, 'image slots are empty');
+const testimonialsGrid = assertNewPattern('testimonials-grid', { title: 'Testimonials Grid', categories: ['agile-base', 'testimonials'] });
+assert.equal((testimonialsGrid.match(/<!-- wp:quote\b/g) || []).length, 3, 'three quotes, as quote blocks');
+assert.equal((testimonialsGrid.match(/<cite\b/g) || []).length, 3, 'each quote names its person');
+const guarantees = assertNewPattern('guarantees', { title: 'Guarantees', categories: ['agile-base', 'about'] });
+assert.equal((guarantees.match(/<h3\b/g) || []).length, 3, 'three guarantees, each with a heading');
+
+// 2.0 Part 4a: contact and conversion sections (spec §7.2).
+const contactDetails = assertNewPattern('contact-details', { title: 'Contact Details', categories: ['agile-base', 'contact'] });
+assert.match(contactDetails, /href="mailto:/);
+assert.match(contactDetails, /href="tel:/);
+assert.equal((contactDetails.match(/<h3\b/g) || []).length, 4, 'email, phone, address and hours, each a small heading');
+assert.doesNotMatch(contactDetails, /<form|wp:jetpack|contact-form/, 'no forms: plugin territory');
+const ctaBanner = assertNewPattern('cta-banner', { title: 'CTA Banner', categories: ['agile-base', 'call-to-action'] });
+assert.match(ctaBanner, /href="tel:/, 'a phone link');
+assert.ok((ctaBanner.match(/<!-- wp:button\b/g) || []).length >= 1, 'a button');
+assert.match(ctaBanner, /"align":"full"/);
+const aboutFounder = assertNewPattern('about-founder', { title: 'About the Founder', categories: ['agile-base', 'about'] });
+assert.match(aboutFounder, /<!-- wp:image\b|wp:media-text \{/, 'a portrait slot');
+assert.doesNotMatch(aboutFounder, /"url":|"mediaUrl"|src=/, 'the portrait slot is empty');
+assert.ok((aboutFounder.match(/<!-- wp:button\b/g) || []).length >= 1, 'a button');
+
+// 2.0 Part 4a: Subscribe (spec §7.2).
+const subscribe = assertNewPattern('subscribe', { title: 'Subscribe', categories: ['agile-base', 'call-to-action'] });
+assert.match(subscribe, /esc_url\( get_feed_link\(\) \)/, 'the RSS button links to the real feed');
+assert.match(subscribe, /wp:social-links /);
+assert.doesNotMatch(subscribe, /<form\b/, 'no forms: plugin territory');
+assert.equal(existsSync(new URL('../patterns/media-text.php', import.meta.url)), false, 'Image and Text is agile-base/text-image (Part 2b): no second one');
+
+// 2.0 Part 4a: latest posts (spec §7.2). Own queries (never the page's), distinct ids, and
+// an empty state for a site with no posts.
+const latestGrid = assertNewPattern('posts-grid', { title: 'Latest Posts (Grid)', categories: ['agile-base', 'posts'] });
+assert.equal(queriesIn(latestGrid)[0].query.perPage, 6);
+assert.match(latestGrid, /wp:post-template \{[^\n]*"type":"grid"[^\n]*"minimumColumnWidth"/, 'a responsive grid, not a fixed column count');
+const latestList = assertNewPattern('posts-compact', { title: 'Latest Posts (List)', categories: ['agile-base', 'posts'] });
+assert.equal(queriesIn(latestList)[0].query.perPage, 5);
+assert.doesNotMatch(latestList, /wp:post-featured-image/, 'the list has no images');
+for (const [slug, source] of [['posts-grid', latestGrid], ['posts-compact', latestList]]) {
+  const queries = queriesIn(source);
+  assert.ok(queries.length >= 1 && queries.every((q) => q.query.inherit === false && q.query.postType === 'post'), `${slug}: own post queries`);
+  assert.equal(new Set(queries.map((q) => q.queryId)).size, queries.length, `${slug}: distinct queryIds`);
+  assert.equal((source.match(/wp:query-no-results/g) || []).length / 2, queries.length, `${slug}: an empty state per query`);
+}
+
+// One post fills the responsive grid instead of leaving unused tracks.
+assert.match(latestGrid, /"className":"agile-base-posts-grid"/);
+assert.match(stylesheet, /\.agile-base-posts-grid[^}]*:only-child\s*\{[^}]*grid-column:\s*1\s*\/\s*-1/);
+
+// Sticky posts remain in date order and never inflate the advertised limits.
+for (const source of [latestGrid, latestList]) {
+  assert.equal(queriesIn(source)[0].query.sticky, 'ignore', 'latest posts ignore sticky promotion');
+}
+// "ignore" arrived in WordPress 6.8; before it, core reads it as "exclude".
+assert.match(read('functions.php'), /add_filter\( 'query_loop_block_query_vars', 'agile_base_query_ignore_sticky', 10, 2 \);/, 'sticky posts stay in Latest Posts on WordPress 6.6 and 6.7');
+
+// Part 4a review: content sits at the wide size, like the Part 2 sections (a constrained
+// wide group held it to 960px); card grids cap their columns, so a wide row doesn't open
+// an empty track.
+for (const slug of ['hero-split', 'hero-cover', 'services-list', 'case-studies', 'testimonials-grid', 'guarantees', 'contact-details', 'cta-banner', 'about-founder', 'subscribe', 'posts-grid', 'posts-compact', 'team', 'pricing', 'style-guide']) {
+  const source = read(`patterns/${slug}.php`);
+  assert.doesNotMatch(source, /"align":"wide","layout":\{"type":"constrained"/, `${slug}: the wide group holds its content at the wide size`);
+  for (const [grid] of source.matchAll(/"layout":\{"type":"grid"[^}]*\}/g)) assert.match(grid, /"columnCount":\d/, `${slug}: the grid sets a column count`);
+}
+assert.match(heroCover, /wp:cover \{[^\n]*"layout":\{"type":"constrained"\}/, 'Hero (Cover): the cover holds its wide group at the wide size');
+assert.doesNotMatch(servicesList, /is-style-section-ruled/, 'Services List: one rule between rows, not a box per row');
+assert.equal((servicesList.match(/"className":"agile-base-list-item"/g) || []).length, serviceRows.length, 'Services List: each service is a ruled row');
+const pricingCards = read('patterns/pricing.php');
+assert.equal((pricingCards.match(/"className":"agile-base-stat-number",[^\n]*"fontSize":"3-x-large"/g) || []).length, 3, 'Pricing: each price is a data point with tight leading');
+assert.equal((pricingCards.match(/"dimensions":\{"minHeight":"100%"\}/g) || []).length, 3, 'Pricing: the cards share a height');
+for (const source of [latestGrid, latestList]) assert.match(source, /wp:post-title \{[^}]*"fontSize":"large"/, 'latest posts titles use the post card size');
+
+// 2.0 Part 4b: page layouts. The Page template shows the title (the <h1>); a layout's intro
+// adds no label and no heading of its own, so nothing repeats the page name; sections follow.
+const assertLayout = (slug, { title, category, nests, lead: opensWithLead = true }) => {
+  const source = read(`patterns/${slug}.php`);
+  if (title) assert.match(source, new RegExp(`^ \\* Title: ${title.replace(/[()]/g, '\\$&')}$`, 'm'), `${slug}: title`);
+  assert.match(source, new RegExp(`^ \\* Categories: agile-base, ${category}$`, 'm'), `${slug}: categories`);
+  assert.match(source, /^ \* Block Types: core\/post-content$/m, `${slug}: offered in the new-page modal`);
+  assert.match(source, /^ \* Post Types: page$/m);
+  for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${slug}: ${header}`);
+  assert.match(source, /^ \* Description: .*(Page \(Full Width\)|Landing Page) template/m, `${slug}: the Description names the template to use`);
+  // The page opens with a lead paragraph that isn't a label: no heading, section or eyebrow first.
+  // A Landing page hides its title, so it opens on its hero section with nothing above it.
+  const body = source.slice(source.indexOf('?>') + 2);
+  const lead = body.indexOf('<!-- wp:paragraph');
+  const firstHeading = body.search(/<!-- wp:heading\b/);
+  const firstSection = body.indexOf('<!-- wp:pattern');
+  assert.ok(firstSection > -1, `${slug}: nests sections`);
+  if (opensWithLead) {
+    assert.ok(lead > -1 && lead < firstSection && (firstHeading === -1 || lead < firstHeading), `${slug}: opens with a lead paragraph, not a heading or a section`);
+    assert.doesNotMatch(body.slice(lead, body.indexOf('<!-- /wp:paragraph -->', lead)), /agile-base-eyebrow/, `${slug}: the intro repeats nothing (no label paragraph)`);
+  } else {
+    assert.equal(body.trimStart().indexOf('<!-- wp:pattern'), 0, `${slug}: opens on its hero section, with nothing above it`);
+  }
+  assert.doesNotMatch(source, /<h1\b|"level":1\b|agile-base\/hero"|href="#"/, `${slug}: no <h1>, no hero, no dead links`);
+  assert.equal(hasKicker(source), false, `${slug}: no label above a heading`);
+  assert.equal(marketsTheme(source), false, `${slug}: copy does not market the theme`);
+  if (nests) assert.deepEqual(pageSlugs(source), nests, `${slug}: sections`);
+  return source;
+};
+assertLayout('page-about', { category: 'about', nests: ['stats', 'team', 'testimonials-grid', 'call-to-action'] });
+assertLayout('page-pricing', { category: 'call-to-action', nests: ['pricing', 'faq', 'call-to-action'] });
+assertLayout('page-team', { category: 'team', nests: ['team', 'call-to-action'] });
+assertLayout('page-contact', { category: 'contact', nests: ['contact-details', 'faq'] });
+
+// 2.0 Part 4b: starter homepages (spec §7.3, D12). Front-page template designs; each is a
+// header part, one <main> nesting a content pattern with the page's only <h1>, and a footer part.
+const STARTERS = {
+  agency: { title: 'Home: Agency', content: 'page-home', header: 'header', footer: 'footer' },
+  'local-business': { title: 'Home: Local Business', content: 'hidden-home-local-business', header: 'header-cta', footer: 'footer-business' },
+  freelancer: { title: 'Home: Freelancer', content: 'hidden-home-freelancer', header: 'header', footer: 'footer' },
+};
+for (const [name, starter] of Object.entries(STARTERS)) {
+  const source = read(`patterns/template-front-page-${name}.php`);
+  assert.match(source, new RegExp(`^ \\* Title: ${starter.title}$`, 'm'), `${name}: title`);
+  assert.match(source, /^ \* Template Types: front-page$/m, `${name}: offered in the front page's Design panel`);
+  assert.match(source, /^ \* Inserter: no$/m);
+  assert.match(source, new RegExp(`wp:template-part \\{"slug":"${starter.header}","tagName":"header","area":"header"\\}`), `${name}: ${starter.header} part`);
+  assert.match(source, new RegExp(`wp:template-part \\{"slug":"${starter.footer}","tagName":"footer","area":"footer"\\}`), `${name}: ${starter.footer} part`);
+  assert.equal((source.match(/"tagName":"main"/g) || []).length, 1, `${name}: one <main>`);
+  assert.match(source, new RegExp(`wp:pattern \\{"slug":"agile-base/${starter.content}"\\}`), `${name}: nests ${starter.content}`);
+  if (starter.content.startsWith('hidden-')) {
+    const content = read(`patterns/${starter.content}.php`);
+    assert.match(content, /^ \* Inserter: no$/m);
+    assert.equal((content.match(/<h1\b/g) || []).length, 1, `${starter.content}: the front page's only <h1>`);
+    assert.equal(hasKicker(content), false);
+    assert.equal(marketsTheme(content), false);
+    assert.doesNotMatch(content, /href="#"/);
+  }
+}
+const localHome = read('patterns/hidden-home-local-business.php');
+assert.match(localHome, /href="tel:/, 'Local Business: the phone number is a link');
+for (const slug of ['services-grid', 'guarantees', 'testimonials-grid', 'contact-details', 'cta-banner']) assert.match(localHome, new RegExp(`"slug":"agile-base/${slug}"`), `Local Business nests ${slug}`);
+const freelancerHome = read('patterns/hidden-home-freelancer.php');
+for (const slug of ['about-founder', 'services-list', 'case-studies', 'testimonial', 'call-to-action']) assert.match(freelancerHome, new RegExp(`"slug":"agile-base/${slug}"`), `Freelancer nests ${slug}`);
+// Every starter opens with the Agency hero's composition (DESIGN.md "Layout"): the color field,
+// a serial column, the display headline, a bold lead sentence and two buttons.
+for (const slug of ['hidden-home-local-business', 'hidden-home-freelancer']) {
+  const hero = read(`patterns/${slug}.php`).split('<!-- wp:pattern')[0];
+  assert.match(hero, /"className":"agile-base-field"[^\n]*"backgroundColor":"primary","textColor":"on-primary"/, `${slug}: the hero is the color field`);
+  assert.match(hero, /wp:column \{"width":"12%"\}[\s\S]*esc_html_x\( 'No\. 001', 'serial number of the first quote'/, `${slug}: serial column`);
+  assert.match(hero, /wp:heading \{"level":1,"fontSize":"5-x-large"\}/, `${slug}: display headline`);
+  assert.match(hero, /wp:paragraph \{"fontSize":"large","style":\{"typography":\{"fontWeight":"700"\}\}\}/, `${slug}: bold lead sentence`);
+  assert.equal((hero.match(/<!-- wp:button\b/g) || []).length, 2, `${slug}: two buttons`);
+  assert.match(hero, /wp:button \{"className":"is-style-outline"\}/, `${slug}: the second button is outlined`);
+}
+assert.match(localHome, /is-style-outline"><a class="wp-block-button__link wp-element-button" href="tel:/, 'Local Business: calling is the second hero action');
+const buttonLabels = (source) => [...source.matchAll(/esc_html_e\( '([^']+)', 'agile-base' \); \?><\/a><\/div>/g)].map((match) => match[1]);
+const founderLabels = buttonLabels(read('patterns/about-founder.php'));
+assert.ok(founderLabels.length > 0);
+for (const label of buttonLabels(freelancerHome.split('<!-- wp:pattern')[0])) {
+  assert.ok(!founderLabels.includes(label), `Freelancer: "${label}" is not repeated by About the Founder right below the hero`);
+}
+
+// 2.0 Part 4b: Service Details, Portfolio and Case Study pages (spec §7.3).
+assertLayout('page-service', { title: 'Page: Service Details', category: 'services', nests: ['steps', 'pricing', 'faq', 'cta-banner'] });
+assertLayout('page-portfolio', { title: 'Page: Portfolio', category: 'portfolio', nests: ['case-studies', 'testimonials-grid', 'call-to-action'] });
+const caseStudy = assertLayout('page-case-study', { title: 'Page: Case Study', category: 'portfolio', nests: ['testimonial', 'cta-banner'] });
+assert.ok((caseStudy.match(/<h2\b/g) || []).length >= 3, 'Case Study: the challenge, the work and the result, each a heading');
+assert.doesNotMatch(caseStudy, /"url":|"mediaUrl"|src=/, 'Case Study: image slots are empty');
+assert.equal((caseStudy.match(/"className":"agile-base-reason"/g) || []).length, 3, 'Case Study: the results are ruled columns, apart from the section heading');
+
+// 2.0 Part 4b: Landing, Thank You and Legal pages (spec §7.3). Legal pages say what to
+// write in every section; they never supply legal text (Review Focus 4).
+const landingContent = assertLayout('page-landing-content', { title: 'Page: Landing', category: 'call-to-action', lead: false, nests: ['hidden-landing-offer', 'features', 'testimonials-grid', 'guarantees', 'hidden-landing-cta'] });
+for (const slug of ['hidden-landing-offer', 'hidden-landing-cta']) {
+  const campaign = read(`patterns/${slug}.php`);
+  assert.match(campaign, /Get the offer/);
+  assert.doesNotMatch(campaign, /href="tel:|Get in touch|Request a quote/);
+  assert.match(campaign, /home_url\( '\/contact\/' \)/);
+}
+assert.match(landingContent, /^ \* Description: .*Landing Page template/m);
+const thankYou = assertLayout('page-thank-you', { title: 'Page: Thank You', category: 'text' });
+assert.match(thankYou, /esc_url\( home_url\( '\/' \) \)/, 'Thank You: a way home');
+assert.equal((thankYou.match(/<!-- wp:buttons\b/g) || []).length, 1, 'Thank You: both actions sit in one row');
+const legal = read('patterns/page-legal.php');
+assert.match(legal, /^ \* Title: Page: Legal$/m);
+assert.match(legal, /^ \* Block Types: core\/post-content$/m);
+assert.match(legal, /^ \* Post Types: page$/m);
+const legalSections = legal.split(/<!-- wp:heading -->/).slice(1);
+assert.ok(legalSections.length >= 4, 'Legal: at least four sections');
+for (const section of legalSections) {
+  assert.match(section, /<p[^>]*><\?php esc_html_e\( 'Replace this /, 'Legal: each section says what to write, not legal text');
+}
+assert.doesNotMatch(legal, /<h1\b|agile-base-eyebrow/);
+
+// 2.0 Part 4b: every inserter pattern is findable and previews at a sensible width.
+for (const file of readdirSync(new URL('../patterns/', import.meta.url)).filter((f) => f.endsWith('.php'))) {
+  const source = read(`patterns/${file}`);
+  if (/^ \* Inserter: no$/m.test(source)) continue;
+  const categories = (source.match(/^ \* Categories: (.+)$/m) || [])[1]?.split(', ') ?? [];
+  assert.equal(categories[0], 'agile-base', `${file}: first category agile-base`);
+  assert.ok(categories.slice(1).some((c) => CORE_CATEGORIES.has(c)), `${file}: also a core category`);
+  for (const header of ['Keywords', 'Viewport Width', 'Description']) assert.match(source, new RegExp(`^ \\* ${header}: .+$`, 'm'), `${file}: ${header}`);
+}
+assert.match(read('patterns/testimonial.php'), /^ \* Categories: agile-base, testimonials/m);
+
+// 2.0 Part 4b: the Page (Full Width) template the page layouts name keeps the page title in the
+// content column, with the side gutter every other template has, while sections run full width.
+const fullWidth = read('templates/page-full-width.html');
+assert.match(fullWidth, /wp:group \{"tagName":"main"[^\n]*"layout":\{"type":"constrained"\}/, 'Page (Full Width): the title is not flush with the screen edge');
+assert.match(fullWidth, /wp:post-content \{"align":"full"/, 'Page (Full Width): sections still run full width');
+// A long menu in the Header (Button) wraps its links instead of running off the screen.
+assert.doesNotMatch(read('style.css'), /\.agile-base-header-actions \.wp-block-navigation \{\s*flex-shrink: 0;/, 'Header (Button): the menu can shrink and wrap');
+
+// 2.0 Part 4b: pattern markup is indented like the rest of the theme: a container's inner
+// blocks sit one tab deeper than the container's opening tag.
+for (const slug of ['hidden-home-local-business', 'hidden-home-freelancer', 'hidden-landing-offer', 'hidden-landing-cta', 'page-service', 'page-portfolio', 'page-case-study', 'page-landing-content', 'page-thank-you', 'page-legal', 'template-front-page-agency', 'template-front-page-local-business', 'template-front-page-freelancer']) {
+  const lines = read(`patterns/${slug}.php`).split('\n');
+  lines.forEach((line, index) => {
+    const opener = line.match(/^(\t*)<(?:div|main|ul|ol)\b[^>]*>(?:<span[^>]*><\/span><div class="wp-block-cover__inner-container">)?$/);
+    if (opener) assert.ok(lines[index + 1].startsWith(`${opener[1]}\t`), `${slug}:${index + 2}: indented one tab inside its container`);
+  });
+}
+
+// 2.0 Part 5: release guards. Readme tags come from the WordPress.org list (read from
+// api.wordpress.org/themes/info/1.1/?action=feature_list on 2026-10-24) and match style.css;
+// the theme ships no JavaScript of its own; PHP stays 7.4-compatible.
+const ALLOWED_TAGS = new Set([
+  'grid-layout', 'one-column', 'two-columns', 'three-columns', 'four-columns', 'left-sidebar', 'right-sidebar', 'wide-blocks',
+  'accessibility-ready', 'block-patterns', 'block-styles', 'buddypress', 'custom-background', 'custom-colors', 'custom-header',
+  'custom-logo', 'custom-menu', 'editor-style', 'featured-image-header', 'featured-images', 'flexible-header', 'footer-widgets',
+  'front-page-post-form', 'full-site-editing', 'full-width-template', 'microformats', 'post-formats', 'rtl-language-support',
+  'sticky-post', 'style-variations', 'template-editing', 'theme-options', 'threaded-comments', 'translation-ready',
+  'blog', 'e-commerce', 'education', 'entertainment', 'food-and-drink', 'holiday', 'news', 'photography', 'portfolio',
+]);
+const SUBJECT_TAGS = new Set(['blog', 'e-commerce', 'education', 'entertainment', 'food-and-drink', 'holiday', 'news', 'photography', 'portfolio']);
+const readmeTags = readme.match(/^Tags: (.+)$/m)[1].split(', ');
+const styleTags = style.match(/^Tags: (.+)$/m)[1].split(', ');
+assert.deepEqual(styleTags, readmeTags, 'style.css and readme.txt list the same tags');
+for (const tag of readmeTags) assert.ok(ALLOWED_TAGS.has(tag), `tag "${tag}" is not a WordPress.org theme tag`);
+assert.ok(readmeTags.filter((tag) => SUBJECT_TAGS.has(tag)).length <= 3, 'at most three subject tags');
+for (const tag of ['block-styles', 'editor-style', 'full-width-template', 'one-column', 'portfolio', 'template-editing']) assert.ok(readmeTags.includes(tag), `2.0 qualifies for "${tag}"`);
+assert.ok(!readmeTags.includes('e-commerce'), 'e-commerce waits for 2.1');
+const enqueuedScripts = [...functions.matchAll(/wp_enqueue_script\(\s*'([^']+)'/g)].map((m) => m[1]);
+assert.deepEqual(enqueuedScripts, ['comment-reply'], 'the theme enqueues no JavaScript of its own');
+const php = [functions, ...readdirSync(new URL('../patterns/', import.meta.url)).map((f) => read(`patterns/${f}`))].join('\n');
+assert.doesNotMatch(php, /\?->|\bmatch\s*\(|#\[|\benum\s+\w+|\breadonly\s/, 'no PHP 8 syntax (Requires PHP: 7.4)');
+
+// 2.0 Part 5: accessibility-ready (spec §7.5, D7). The statement follows the WordPress
+// accessibility.txt format; the tag is claimed; the screen-reader-text class is styled.
+const statement = read('accessibility.txt');
+for (const section of ['=== Accessibility Statement ===', '== Quick Information ==', '== Testing Tools and Methodology ==', '== Screen Reader Text Class ==', '== Accessibility Help Contact ==', '== Where to Report Issues ==']) {
+  assert.ok(statement.includes(section), `accessibility.txt: "${section}"`);
+}
+assert.match(statement, /screen-reader-text/);
+assert.match(stylesheet, /\.screen-reader-text \{/);
+// The owner's keyboard and screen-reader walkthrough passed for 2.0.0, so the tag is claimed.
+assert.match(statement, /Accessibility audit completed: Yes/);
+assert.ok(readmeTags.includes('accessibility-ready'), 'the accessibility-ready tag is claimed');
+assert.doesNotMatch(statement, /is required before claiming/, 'the statement no longer says the walkthrough is pending');
+
+// 2.0.0 release: the readme answers what site owners and builders ask first.
+assert.match(style, /^Version: 2\.0\.0$/m);
+assert.match(readme, /^Stable tag: 2\.0\.0$/m);
+assert.match(readme, /^= 2\.0\.0 =$/m);
+assert.match(readme, /^== Frequently Asked Questions ==$/m);
+for (const question of ['keep the old look', 'still look like 1.x', 'starter homepage', 'rebrand', 'form', 'Proudly powered by']) {
+  assert.match(readme, new RegExp(`^= [^\\n]*${question}[^\\n]* =$`, 'mi'), `readme FAQ answers "${question}"`);
+}
+assert.match(readme, /Velocity/, 'readme tells 1.x sites how to keep the 1.x look');
+assert.doesNotMatch(readme + style, /GeneratePress/i, 'no other theme named in public text');
+
+assert.ok(readmeTags.includes('rtl-language-support'), 'rtl-language-support tag (checked with check-frontend --rtl)');
 
 console.log('release source checks passed');

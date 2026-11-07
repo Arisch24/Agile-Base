@@ -1,0 +1,12 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Double rule",
+	"slug": "double-rule",
+	"blockTypes": [
+		"core/separator"
+	],
+	"styles": {
+		"css": "& { border: 0; border-block-start: 3px double currentColor; height: 0; }"
+	}
+}

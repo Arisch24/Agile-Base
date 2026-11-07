@@ -2,21 +2,21 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Agile Base 1.0.0\n"
+"Project-Id-Version: Agile Base 2.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/agile-base\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-02T23:23:59+08:00\n"
+"POT-Creation-Date: 2026-11-03T20:04:45+08:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: agile-base\n"
 
 #. Theme Name of the theme
 #: style.css
-#: functions.php:51
+#: functions.php:53
 msgid "Agile Base"
 msgstr ""
 
@@ -27,7 +27,7 @@ msgstr ""
 
 #. Description of the theme
 #: style.css
-msgid "A clean, fast, full site editing block theme for blogs and simple sites. Ships light and dark style variations, self-hosted fonts, fluid typography and spacing, and editor-ready block patterns."
+msgid "A fast block theme for business and client sites, with ready-made sections, pages and starter homepages. Rebrand it with color and font presets in the Site Editor. No page builder, no theme JavaScript."
 msgstr ""
 
 #. Author of the theme
@@ -37,7 +37,59 @@ msgstr ""
 
 #. Author URI of the theme
 #: style.css
-msgid "https://varanity.com/"
+msgid "https://github.com/Arisch24"
+msgstr ""
+
+#: functions.php:105
+msgid "Pill"
+msgstr ""
+
+#: functions.php:114
+msgid "Plain"
+msgstr ""
+
+#: patterns/about-founder.php
+msgctxt "Pattern title"
+msgid "About the Founder"
+msgstr ""
+
+#: patterns/about-founder.php
+msgctxt "Pattern description"
+msgid "A portrait beside your name, role and a short story, with a button. Add your own photo."
+msgstr ""
+
+#: patterns/about-founder.php:25
+msgid "Hi, I'm Your Name"
+msgstr ""
+
+#: patterns/about-founder.php:28
+#: patterns/team.php:36
+#: patterns/team.php:52
+#: patterns/team.php:68
+#: patterns/team.php:84
+msgid "Your role"
+msgstr ""
+
+#: patterns/about-founder.php:31
+msgid "Tell visitors who you are and why you do this work."
+msgstr ""
+
+#: patterns/about-founder.php:34
+msgid "Describe how you help your clients and what they can expect when working with you."
+msgstr ""
+
+#: patterns/about-founder.php:39
+msgid "Work with me"
+msgstr ""
+
+#: patterns/author-bio.php
+msgctxt "Pattern title"
+msgid "About the Author"
+msgstr ""
+
+#: patterns/author-bio.php
+msgctxt "Pattern description"
+msgid "The post author's avatar, linked name and biography. Insert it at the end of the Single template to show it under every post."
 msgstr ""
 
 #: patterns/call-to-action.php
@@ -47,24 +99,128 @@ msgstr ""
 
 #: patterns/call-to-action.php
 msgctxt "Pattern description"
-msgid "A bold call-to-action card with a heading and button."
+msgid "A color field with a heading, a sentence and a button that asks visitors to get in touch."
 msgstr ""
 
-#: patterns/call-to-action.php:24
-msgid "Ready to get started?"
+#: patterns/call-to-action.php:23
+msgid "Ready to talk about your project?"
 msgstr ""
 
-#: patterns/call-to-action.php:28
-msgid "Launch your next site with Agile Base and make it yours in an afternoon."
+#: patterns/call-to-action.php:27
+msgid "Tell visitors what happens next and how soon you reply."
 msgstr ""
 
-#: patterns/call-to-action.php:34
-msgid "Read the blog"
+#: patterns/call-to-action.php:33
+#: patterns/hero-split.php:33
+#: patterns/hero.php:33
+#: patterns/hidden-header-cta.php:34
+#: patterns/hidden-home-freelancer.php:42
+#: patterns/hidden-home-hero.php:40
+msgid "Book a call"
+msgstr ""
+
+#: patterns/case-studies.php
+msgctxt "Pattern title"
+msgid "Case Studies"
+msgstr ""
+
+#: patterns/case-studies.php
+msgctxt "Pattern description"
+msgid "Three projects as cards: an image, the client, the result and a link. Add your own images."
+msgstr ""
+
+#: patterns/case-studies.php:23
+msgid "Recent work"
+msgstr ""
+
+#: patterns/case-studies.php:33
+#: patterns/case-studies.php:49
+#: patterns/case-studies.php:65
+msgid "Your client's name"
+msgstr ""
+
+#: patterns/case-studies.php:36
+#: patterns/case-studies.php:52
+#: patterns/case-studies.php:68
+msgid "One line about the result you got them."
+msgstr ""
+
+#: patterns/case-studies.php:39
+#: patterns/case-studies.php:55
+#: patterns/case-studies.php:71
+msgid "Read the case study"
 msgstr ""
 
 #: patterns/comments.php
 msgctxt "Pattern title"
 msgid "Comments"
+msgstr ""
+
+#: patterns/contact-details.php
+msgctxt "Pattern title"
+msgid "Contact Details"
+msgstr ""
+
+#: patterns/contact-details.php
+msgctxt "Pattern description"
+msgid "Email, phone, address and opening hours side by side."
+msgstr ""
+
+#: patterns/contact-details.php:27
+msgid "Email"
+msgstr ""
+
+#: patterns/contact-details.php:30
+#: patterns/hidden-footer-business.php:31
+msgid "hello@example.com"
+msgstr ""
+
+#: patterns/contact-details.php:37
+msgid "Phone"
+msgstr ""
+
+#: patterns/contact-details.php:40
+#: patterns/cta-banner.php:26
+#: patterns/hidden-footer-business.php:34
+#: patterns/hidden-home-local-business.php:48
+msgid "+1 555 555 0123"
+msgstr ""
+
+#: patterns/contact-details.php:47
+msgid "Visit"
+msgstr ""
+
+#: patterns/contact-details.php:50
+msgid "123 Example Street, Springfield"
+msgstr ""
+
+#: patterns/contact-details.php:57
+msgid "Hours"
+msgstr ""
+
+#: patterns/contact-details.php:60
+#: patterns/hidden-footer-business.php:47
+#: patterns/hidden-home-local-business.php:54
+msgid "Monday to Friday, 9am to 5pm"
+msgstr ""
+
+#: patterns/cta-banner.php
+msgctxt "Pattern title"
+msgid "CTA Banner"
+msgstr ""
+
+#: patterns/cta-banner.php
+msgctxt "Pattern description"
+msgid "A full-width band with a headline, your phone number and a button."
+msgstr ""
+
+#: patterns/cta-banner.php:23
+msgid "Ready to start? Call us today."
+msgstr ""
+
+#: patterns/cta-banner.php:31
+#: patterns/hidden-home-local-business.php:44
+msgid "Request a quote"
 msgstr ""
 
 #: patterns/faq.php
@@ -74,47 +230,43 @@ msgstr ""
 
 #: patterns/faq.php
 msgctxt "Pattern description"
-msgid "A Radix-style accordion of frequently asked questions."
+msgid "A ruled accordion of frequently asked questions."
 msgstr ""
 
 #: patterns/faq.php:21
-msgid "Answers"
-msgstr ""
-
-#: patterns/faq.php:25
 msgid "Frequently asked questions"
 msgstr ""
 
-#: patterns/faq.php:33
-msgid "Do I need to know how to code?"
+#: patterns/faq.php:27
+msgid "What does a project cost?"
+msgstr ""
+
+#: patterns/faq.php:29
+msgid "Say how you price your work, and what affects the final figure."
 msgstr ""
 
 #: patterns/faq.php:35
-msgid "No. Agile Base is built for the WordPress Site Editor. You assemble pages from patterns and edit everything visually."
+msgid "How long does it take?"
 msgstr ""
 
-#: patterns/faq.php:41
-msgid "Does it work with my plugins?"
+#: patterns/faq.php:37
+msgid "Say how long a typical project takes, from first call to finished work."
 msgstr ""
 
 #: patterns/faq.php:43
-msgid "Agile Base sticks to core blocks and standard theme features, so it plays nicely with the plugins you already use."
+msgid "Do you work in my area?"
 msgstr ""
 
-#: patterns/faq.php:49
-msgid "Can I change the colors and fonts?"
+#: patterns/faq.php:45
+msgid "Say where you work, and how customers can check."
 msgstr ""
 
 #: patterns/faq.php:51
-msgid "Yes. Pick a style variation or open Styles in the editor to adjust colors, typography and spacing across the whole site."
+msgid "How do I get started?"
 msgstr ""
 
-#: patterns/faq.php:57
-msgid "Is it good for performance?"
-msgstr ""
-
-#: patterns/faq.php:59
-msgid "Very. Fonts are self-hosted, there is no page builder overhead, and the critical fonts are preloaded for fast first paint."
+#: patterns/faq.php:53
+msgid "Say what happens after a customer books a call."
 msgstr ""
 
 #: patterns/features.php
@@ -124,44 +276,127 @@ msgstr ""
 
 #: patterns/features.php
 msgctxt "Pattern description"
-msgid "A left-aligned section heading with a three-column grid of feature cards."
+msgid "A section heading with three short reasons to choose you, set as ruled columns."
 msgstr ""
 
-#: patterns/features.php:21
-msgid "Why Agile Base"
+#: patterns/features.php:23
+msgid "Why customers choose us"
 msgstr ""
 
-#: patterns/features.php:25
-msgid "Everything you need to launch"
+#: patterns/features.php:27
+msgid "Three reasons, in your own words, that help a visitor decide."
 msgstr ""
 
-#: patterns/features.php:29
-msgid "Thoughtful defaults and a full pattern library, so you can focus on your content instead of the plumbing."
+#: patterns/features.php:37
+msgid "Clear, itemised quotes"
 msgstr ""
 
-#: patterns/features.php:43
-#: patterns/stats.php:41
-msgid "Block patterns"
+#: patterns/features.php:41
+msgid "Say how you price your work, so customers know what they pay for."
 msgstr ""
 
-#: patterns/features.php:47
-msgid "Drop in ready-made sections and assemble full pages in minutes, no code required."
+#: patterns/features.php:49
+msgid "On time, as promised"
 msgstr ""
 
-#: patterns/features.php:59
-msgid "Style variations"
+#: patterns/features.php:53
+msgid "Say how you keep to the schedule you agreed."
 msgstr ""
 
-#: patterns/features.php:63
-msgid "Switch between light and dark looks instantly, or fine-tune colors and type in the editor."
+#: patterns/features.php:61
+msgid "Someone you can call"
 msgstr ""
 
-#: patterns/features.php:75
-msgid "Fast by default"
+#: patterns/features.php:65
+msgid "Say who answers when a customer has a question."
 msgstr ""
 
-#: patterns/features.php:79
-msgid "Self-hosted fonts, no page builder bloat, and lean markup keep your pages quick to load."
+#: patterns/guarantees.php
+msgctxt "Pattern title"
+msgid "Guarantees"
+msgstr ""
+
+#: patterns/guarantees.php
+msgctxt "Pattern description"
+msgid "Three promises to your customers, each with a short heading and a sentence."
+msgstr ""
+
+#: patterns/guarantees.php:23
+msgid "Our promises"
+msgstr ""
+
+#: patterns/guarantees.php:30
+msgid "Licensed and insured"
+msgstr ""
+
+#: patterns/guarantees.php:33
+msgid "Replace this with your credentials and where they apply."
+msgstr ""
+
+#: patterns/guarantees.php:40
+msgid "Fixed quotes, no surprises"
+msgstr ""
+
+#: patterns/guarantees.php:43
+msgid "Replace this with your own promise about quotes and costs."
+msgstr ""
+
+#: patterns/guarantees.php:50
+msgid "Work guaranteed for a year"
+msgstr ""
+
+#: patterns/guarantees.php:53
+msgid "Replace this with your own guarantee and its terms."
+msgstr ""
+
+#: patterns/hero-cover.php
+msgctxt "Pattern title"
+msgid "Hero (Cover)"
+msgstr ""
+
+#: patterns/hero-cover.php
+msgctxt "Pattern description"
+msgid "A headline and a button over a colored background. Add a background image if you like."
+msgstr ""
+
+#: patterns/hero-cover.php:23
+msgid "Say what clients can count on"
+msgstr ""
+
+#: patterns/hero-cover.php:26
+msgid "One sentence about the work you do and the people you help."
+msgstr ""
+
+#: patterns/hero-cover.php:31
+msgid "Get in touch"
+msgstr ""
+
+#: patterns/hero-split.php
+msgctxt "Pattern title"
+msgid "Hero (Split)"
+msgstr ""
+
+#: patterns/hero-split.php
+msgctxt "Pattern description"
+msgid "A headline, a sentence and two buttons beside an image. Add your own image."
+msgstr ""
+
+#: patterns/hero-split.php:25
+msgid "Say what you do, for whom, in one line"
+msgstr ""
+
+#: patterns/hero-split.php:28
+msgid "One or two sentences on the result clients get. Keep it concrete."
+msgstr ""
+
+#: patterns/hero-split.php:36
+#: patterns/hero.php:37
+#: patterns/hidden-home-hero.php:44
+#: patterns/style-guide.php:313
+#: patterns/style-guide.php:333
+#: patterns/style-guide.php:353
+#: patterns/style-guide.php:381
+msgid "See services"
 msgstr ""
 
 #: patterns/hero.php
@@ -171,21 +406,17 @@ msgstr ""
 
 #: patterns/hero.php
 msgctxt "Pattern description"
-msgid "A left-aligned hero with a mono eyebrow, large heading with a marked word and a feature strip."
+msgid "A color field with a large headline, one sentence and two buttons. It uses a level-two heading, so it can sit under a page title."
 msgstr ""
 
-#: patterns/hero.php:21
-msgid "The block theme for builders"
+#: patterns/hero.php:23
+#: patterns/hidden-home-hero.php:30
+msgid "Say what you do, and who it is for."
 msgstr ""
 
-#. translators: %s: the highlighted word "proud".
-#: patterns/hero.php:28
-#, php-format
-msgid "Ship a site you are %s of."
-msgstr ""
-
-#: patterns/hero.php:34
-msgid "Agile Base is a fast, no-build block theme. Assemble pages from patterns, flip between light and dark in a click, and launch something that looks nothing like a template."
+#: patterns/hero.php:27
+#: patterns/hidden-home-hero.php:34
+msgid "One short sentence about the problem you solve for your customers."
 msgstr ""
 
 #: patterns/hidden-404.php
@@ -193,19 +424,18 @@ msgctxt "Pattern title"
 msgid "Hidden 404"
 msgstr ""
 
-#: patterns/hidden-404.php:16
-msgid "Error 404"
+#: patterns/hidden-404.php:17
+#: patterns/template-404-search.php:24
+msgid "Page not found"
 msgstr ""
 
-#: patterns/hidden-404.php:20
-msgid "This page took a different sprint."
-msgstr ""
-
-#: patterns/hidden-404.php:24
+#: patterns/hidden-404.php:21
 msgid "We couldn’t find what you were looking for. Try a search, or head back home."
 msgstr ""
 
-#: patterns/hidden-404.php:32
+#: patterns/hidden-404.php:29
+#: patterns/hidden-no-results.php:22
+#: patterns/template-404-search.php:56
 msgid "Back home"
 msgstr ""
 
@@ -215,11 +445,48 @@ msgid "Hidden Blog Heading"
 msgstr ""
 
 #: patterns/hidden-blog-heading.php:18
-msgid "The blog"
+#: patterns/template-404-search.php:30
+msgid "Latest posts"
 msgstr ""
 
-#: patterns/hidden-blog-heading.php:22
-msgid "Latest posts"
+#: patterns/hidden-footer-business.php
+msgctxt "Pattern title"
+msgid "Hidden Footer (Business)"
+msgstr ""
+
+#: patterns/hidden-footer-business.php:28
+msgid "Contact"
+msgstr ""
+
+#: patterns/hidden-footer-business.php:37
+msgid "Add your street address, city and postcode."
+msgstr ""
+
+#: patterns/hidden-footer-business.php:44
+msgid "Opening hours"
+msgstr ""
+
+#: patterns/hidden-footer-business.php:55
+msgctxt "navigation landmark label"
+msgid "Legal"
+msgstr ""
+
+#: patterns/hidden-footer-columns.php
+msgctxt "Pattern title"
+msgid "Hidden Footer Columns"
+msgstr ""
+
+#: patterns/hidden-footer-columns.php:30
+msgid "Explore"
+msgstr ""
+
+#: patterns/hidden-footer-columns.php:33
+msgctxt "navigation landmark label"
+msgid "Footer"
+msgstr ""
+
+#: patterns/hidden-footer-columns.php:40
+msgid "Search"
 msgstr ""
 
 #: patterns/hidden-footer-credit.php
@@ -233,13 +500,164 @@ msgstr ""
 msgid "Proudly powered by %s"
 msgstr ""
 
+#: patterns/hidden-header-centered.php
+msgctxt "Pattern title"
+msgid "Hidden Header (Centered)"
+msgstr ""
+
+#: patterns/hidden-header-centered.php:23
+#: patterns/hidden-header-cta.php:29
+#: patterns/hidden-header-minimal.php:21
+#: patterns/hidden-header.php:27
+msgctxt "navigation landmark label"
+msgid "Primary"
+msgstr ""
+
+#: patterns/hidden-header-cta.php
+msgctxt "Pattern title"
+msgid "Hidden Header (Button)"
+msgstr ""
+
+#: patterns/hidden-header-minimal.php
+msgctxt "Pattern title"
+msgid "Hidden Header (Minimal)"
+msgstr ""
+
+#: patterns/hidden-header.php
+msgctxt "Pattern title"
+msgid "Hidden Header"
+msgstr ""
+
+#: patterns/hidden-home-freelancer.php
+msgctxt "Pattern title"
+msgid "Hidden Home (Freelancer)"
+msgstr ""
+
+#: patterns/hidden-home-freelancer.php
+msgctxt "Pattern description"
+msgid "Homepage content for the Freelancer front-page design."
+msgstr ""
+
+#: patterns/hidden-home-freelancer.php:24
+#: patterns/hidden-home-hero.php:22
+#: patterns/hidden-home-local-business.php:24
+msgctxt "serial number of the first quote"
+msgid "No. 001"
+msgstr ""
+
+#: patterns/hidden-home-freelancer.php:32
+msgid "Your specialty, for small businesses"
+msgstr ""
+
+#: patterns/hidden-home-freelancer.php:36
+msgid "Describe the work you do and the difference it makes for your clients."
+msgstr ""
+
+#: patterns/hidden-home-freelancer.php:46
+msgid "See my work"
+msgstr ""
+
+#: patterns/hidden-home-hero.php
+msgctxt "Pattern title"
+msgid "Hidden Home Hero"
+msgstr ""
+
+#: patterns/hidden-home-local-business.php
+msgctxt "Pattern title"
+msgid "Hidden Home (Local Business)"
+msgstr ""
+
+#: patterns/hidden-home-local-business.php
+msgctxt "Pattern description"
+msgid "Homepage content for the Local Business front-page design."
+msgstr ""
+
+#: patterns/hidden-home-local-business.php:32
+msgid "Your trade, in your town, done right"
+msgstr ""
+
+#: patterns/hidden-home-local-business.php:36
+msgid "Tell neighbors which jobs you take on and the area you serve."
+msgstr ""
+
+#: patterns/hidden-landing-cta.php
+msgctxt "Pattern title"
+msgid "Hidden Landing CTA"
+msgstr ""
+
+#: patterns/hidden-landing-cta.php
+msgctxt "Pattern description"
+msgid "Single-action campaign closing."
+msgstr ""
+
+#: patterns/hidden-landing-cta.php:22
+msgid "Ready for your next step?"
+msgstr ""
+
+#: patterns/hidden-landing-cta.php:26
+msgid "Remind visitors what the offer includes and what happens when they get in touch."
+msgstr ""
+
+#: patterns/hidden-landing-cta.php:32
+#: patterns/hidden-landing-offer.php:32
+msgid "Get the offer"
+msgstr ""
+
+#: patterns/hidden-landing-offer.php
+msgctxt "Pattern title"
+msgid "Hidden Landing Offer"
+msgstr ""
+
+#: patterns/hidden-landing-offer.php
+msgctxt "Pattern description"
+msgid "Single-action campaign opening."
+msgstr ""
+
+#: patterns/hidden-landing-offer.php:22
+msgid "Name your offer and the result it delivers"
+msgstr ""
+
+#: patterns/hidden-landing-offer.php:26
+msgid "Explain who the offer is for and what they receive."
+msgstr ""
+
 #: patterns/hidden-no-results.php
 msgctxt "Pattern title"
 msgid "No Results"
 msgstr ""
 
 #: patterns/hidden-no-results.php:16
-msgid "No posts were found. Try a different search?"
+msgid "No posts found. Try another search or return to the homepage."
+msgstr ""
+
+#: patterns/hidden-no-results.php:19
+msgctxt "search form label"
+msgid "Search"
+msgstr ""
+
+#: patterns/hidden-no-results.php:19
+msgctxt "search button text"
+msgid "Search"
+msgstr ""
+
+#: patterns/hidden-post-header.php
+msgctxt "Pattern title"
+msgid "Hidden Post Header"
+msgstr ""
+
+#: patterns/hidden-post-navigation.php
+msgctxt "Pattern title"
+msgid "Hidden Post Navigation"
+msgstr ""
+
+#: patterns/hidden-post-navigation.php:17
+msgctxt "label for the previous post link"
+msgid "Previous"
+msgstr ""
+
+#: patterns/hidden-post-navigation.php:19
+msgctxt "label for the next post link"
+msgid "Next"
 msgstr ""
 
 #: patterns/logos.php
@@ -249,26 +667,510 @@ msgstr ""
 
 #: patterns/logos.php
 msgctxt "Pattern description"
-msgid "A row of brand names to show who you work with."
+msgid "A ruled row of brand names to show who you work with."
 msgstr ""
 
-#: patterns/logos.php:19
-msgid "Trusted by teams everywhere"
+#: patterns/logos.php:23
+msgctxt "placeholder company name"
+msgid "Northwind"
+msgstr ""
+
+#: patterns/logos.php:27
+msgctxt "placeholder company name"
+msgid "Acme&nbsp;Co"
+msgstr ""
+
+#: patterns/logos.php:31
+msgctxt "placeholder company name"
+msgid "Lumen"
+msgstr ""
+
+#: patterns/logos.php:35
+msgctxt "placeholder company name"
+msgid "Hatch"
+msgstr ""
+
+#: patterns/logos.php:39
+msgctxt "placeholder company name"
+msgid "Vertex"
+msgstr ""
+
+#: patterns/page-about.php
+msgctxt "Pattern title"
+msgid "Page: About"
+msgstr ""
+
+#: patterns/page-about.php
+msgctxt "Pattern description"
+msgid "An About page: a short intro, headline numbers, the team, client testimonials and a call to action. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-about.php:23
+msgid "Tell visitors who you are, who you work for, and why."
+msgstr ""
+
+#: patterns/page-case-study.php
+msgctxt "Pattern title"
+msgid "Page: Case Study"
+msgstr ""
+
+#: patterns/page-case-study.php
+msgctxt "Pattern description"
+msgid "One project told as challenge, work and result, with a client quote. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-case-study.php:23
+msgid "One sentence: the client, and what changed for them."
+msgstr ""
+
+#: patterns/page-case-study.php:33
+msgid "The challenge"
+msgstr ""
+
+#: patterns/page-case-study.php:37
+msgid "Describe the client, their starting point, and the problem they needed to solve."
+msgstr ""
+
+#: patterns/page-case-study.php:49
+msgid "What we did"
+msgstr ""
+
+#: patterns/page-case-study.php:53
+msgid "Explain your approach, the work you delivered, and the choices that mattered."
+msgstr ""
+
+#: patterns/page-case-study.php:85
+msgid "The result"
+msgstr ""
+
+#: patterns/page-case-study.php:89
+msgid "Replace these slots with verified client results and say how you measured them."
+msgstr ""
+
+#: patterns/page-case-study.php:99
+msgid "Your first result"
+msgstr ""
+
+#: patterns/page-case-study.php:103
+msgid "Add a client figure, its unit, and the period measured."
+msgstr ""
+
+#: patterns/page-case-study.php:111
+msgid "Your second result"
+msgstr ""
+
+#: patterns/page-case-study.php:115
+msgid "Add a second client figure and explain what improved."
+msgstr ""
+
+#: patterns/page-case-study.php:123
+msgid "Your third result"
+msgstr ""
+
+#: patterns/page-case-study.php:127
+msgid "Add another measured outcome, or remove this column."
+msgstr ""
+
+#: patterns/page-contact.php
+msgctxt "Pattern title"
+msgid "Page: Contact"
+msgstr ""
+
+#: patterns/page-contact.php
+msgctxt "Pattern description"
+msgid "A Contact page: a short intro, email, address and opening hours, and an FAQ. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-contact.php:23
+msgid "Tell us what you need help with, and how to reach you."
 msgstr ""
 
 #: patterns/page-home.php
 msgctxt "Pattern title"
-msgid "Page: Home"
+msgid "Page: Home (Agency)"
 msgstr ""
 
 #: patterns/page-home.php
 msgctxt "Pattern description"
-msgid "A complete landing page: hero, logos, features, stats, testimonial, FAQ and a call to action."
+msgid "An agency homepage: headline, logos, an introduction with a photo, services, reasons to choose you, figures, a testimonial, FAQ and a call to action."
+msgstr ""
+
+#: patterns/page-landing-content.php
+msgctxt "Pattern title"
+msgid "Page: Landing"
+msgstr ""
+
+#: patterns/page-landing-content.php
+msgctxt "Pattern description"
+msgid "A campaign page: the offer, why it's good, proof and one call to action. Use with the Landing Page template."
+msgstr ""
+
+#: patterns/page-legal.php
+msgctxt "Pattern title"
+msgid "Page: Legal"
+msgstr ""
+
+#: patterns/page-legal.php
+msgctxt "Pattern description"
+msgid "Headings and prompts for a privacy policy or terms page. Write your own text, or get advice; this page contains none. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-legal.php:23
+msgid "This page is a starting point. Replace every section with your own text."
+msgstr ""
+
+#: patterns/page-legal.php:31
+msgid "Who we are"
+msgstr ""
+
+#: patterns/page-legal.php:35
+msgid "Replace this with your business name, who operates this website, and who this policy applies to."
+msgstr ""
+
+#: patterns/page-legal.php:43
+msgid "What we collect and why"
+msgstr ""
+
+#: patterns/page-legal.php:47
+msgid "Replace this with the information you collect, how you collect it, and the reasons you use it."
+msgstr ""
+
+#: patterns/page-legal.php:55
+msgid "How long we keep it"
+msgstr ""
+
+#: patterns/page-legal.php:59
+msgid "Replace this with your retention periods and how you decide when to delete information."
+msgstr ""
+
+#: patterns/page-legal.php:67
+msgid "Your rights"
+msgstr ""
+
+#: patterns/page-legal.php:71
+msgid "Replace this with the rights that apply to your visitors and how they can make a request. Get advice on what belongs here."
+msgstr ""
+
+#: patterns/page-legal.php:79
+msgid "How to contact us"
+msgstr ""
+
+#: patterns/page-legal.php:83
+msgid "Replace this with the contact details people should use for questions about this policy."
+msgstr ""
+
+#: patterns/page-portfolio.php
+msgctxt "Pattern title"
+msgid "Page: Portfolio"
+msgstr ""
+
+#: patterns/page-portfolio.php
+msgctxt "Pattern description"
+msgid "Your recent projects, what clients say, and a call to action. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-portfolio.php:23
+msgid "Introduce the work below: the clients, the problems, and the results."
+msgstr ""
+
+#: patterns/page-pricing.php
+msgctxt "Pattern title"
+msgid "Page: Pricing"
+msgstr ""
+
+#: patterns/page-pricing.php
+msgctxt "Pattern description"
+msgid "A Pricing page: a short intro, three plan cards, an FAQ and a call to action. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-pricing.php:23
+msgid "Describe your packages, what each includes, and how customers choose the right one."
+msgstr ""
+
+#: patterns/page-service.php
+msgctxt "Pattern title"
+msgid "Page: Service Details"
+msgstr ""
+
+#: patterns/page-service.php
+msgctxt "Pattern description"
+msgid "One service in detail: who it's for, what's included, how it works, prices and questions. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-service.php:23
+msgid "Who this service is for, and the result they get."
+msgstr ""
+
+#: patterns/page-service.php:33
+msgid "What's included"
+msgstr ""
+
+#: patterns/page-service.php:39
+msgid "Name your first deliverable and what the customer receives."
+msgstr ""
+
+#: patterns/page-service.php:43
+msgid "Describe the next part of the service and its scope."
+msgstr ""
+
+#: patterns/page-service.php:47
+msgid "Explain the handover and any follow-up support."
+msgstr ""
+
+#: patterns/page-services.php
+msgctxt "Pattern title"
+msgid "Page: Services"
+msgstr ""
+
+#: patterns/page-services.php
+msgctxt "Pattern description"
+msgid "A Services page: a short intro, your services as cards, three steps, a testimonial, an FAQ and a call to action. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-services.php:23
+msgid "Say in two sentences what you do, who you do it for, and what a customer can expect."
+msgstr ""
+
+#: patterns/page-team.php
+msgctxt "Pattern title"
+msgid "Page: Team"
+msgstr ""
+
+#: patterns/page-team.php
+msgctxt "Pattern description"
+msgid "A Team page: a short intro, a grid of team members and a call to action. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-team.php:23
+msgid "Introduce the people customers will work with and what each brings to the job."
+msgstr ""
+
+#: patterns/page-thank-you.php
+msgctxt "Pattern title"
+msgid "Page: Thank You"
+msgstr ""
+
+#: patterns/page-thank-you.php
+msgctxt "Pattern description"
+msgid "A thank-you page for after a form or order: what happens next and where to go. Looks best with the Page (Full Width) template."
+msgstr ""
+
+#: patterns/page-thank-you.php:23
+msgid "Thanks, we have your message."
+msgstr ""
+
+#: patterns/page-thank-you.php:33
+msgid "What happens next"
+msgstr ""
+
+#: patterns/page-thank-you.php:39
+msgid "Explain how you review the message and who will respond."
+msgstr ""
+
+#: patterns/page-thank-you.php:43
+msgid "Tell the customer when to expect a reply."
+msgstr ""
+
+#: patterns/page-thank-you.php:47
+msgid "Say what they can prepare before you speak."
+msgstr ""
+
+#: patterns/page-thank-you.php:55
+msgid "Back to home"
+msgstr ""
+
+#: patterns/page-thank-you.php:59
+msgid "Read our latest posts"
+msgstr ""
+
+#: patterns/posts-compact.php
+msgctxt "Pattern title"
+msgid "Latest Posts (List)"
+msgstr ""
+
+#: patterns/posts-compact.php
+msgctxt "Pattern description"
+msgid "The five latest posts as date and title rows, for sidebars and footers."
+msgstr ""
+
+#: patterns/posts-compact.php:23
+msgid "Recent posts"
+msgstr ""
+
+#: patterns/posts-compact.php:38
+#: patterns/posts-grid.php:39
+msgid "Nothing published yet."
+msgstr ""
+
+#: patterns/posts-grid.php
+msgctxt "Pattern title"
+msgid "Latest Posts (Grid)"
+msgstr ""
+
+#: patterns/posts-grid.php
+msgctxt "Pattern description"
+msgid "The six latest posts in a responsive grid of cards."
+msgstr ""
+
+#: patterns/posts-grid.php:23
+msgid "Latest news"
+msgstr ""
+
+#: patterns/posts-grid.php:48
+msgid "All posts"
 msgstr ""
 
 #: patterns/posts-list.php
 msgctxt "Pattern title"
 msgid "Posts List"
+msgstr ""
+
+#: patterns/pricing.php
+msgctxt "Pattern title"
+msgid "Pricing"
+msgstr ""
+
+#: patterns/pricing.php
+msgctxt "Pattern description"
+msgid "Three service plans with features and a contact button, with one recommended."
+msgstr ""
+
+#: patterns/pricing.php:23
+msgid "Choose the right plan"
+msgstr ""
+
+#: patterns/pricing.php:26
+msgid "Replace these plans with your services, prices and what each includes."
+msgstr ""
+
+#: patterns/pricing.php:35
+msgid "Starter"
+msgstr ""
+
+#: patterns/pricing.php:38
+#: patterns/pricing.php:75
+#: patterns/pricing.php:112
+msgid "Your price"
+msgstr ""
+
+#: patterns/pricing.php:41
+#: patterns/pricing.php:115
+msgid "Say who this plan is for."
+msgstr ""
+
+#: patterns/pricing.php:46
+#: patterns/pricing.php:83
+#: patterns/pricing.php:120
+msgid "Your main deliverable"
+msgstr ""
+
+#: patterns/pricing.php:49
+#: patterns/pricing.php:86
+#: patterns/pricing.php:123
+msgid "What else is included"
+msgstr ""
+
+#: patterns/pricing.php:52
+#: patterns/pricing.php:89
+#: patterns/pricing.php:126
+msgid "Your support and timeline"
+msgstr ""
+
+#: patterns/pricing.php:59
+#: patterns/pricing.php:96
+#: patterns/pricing.php:133
+msgid "Discuss this plan"
+msgstr ""
+
+#: patterns/pricing.php:72
+msgid "Standard"
+msgstr ""
+
+#: patterns/pricing.php:78
+msgid "Recommended for most projects."
+msgstr ""
+
+#: patterns/pricing.php:109
+msgid "Complete"
+msgstr ""
+
+#: patterns/services-grid.php
+msgctxt "Pattern title"
+msgid "Services Grid"
+msgstr ""
+
+#: patterns/services-grid.php
+msgctxt "Pattern description"
+msgid "Your services as cards, each with an icon, a heading, a sentence and a link."
+msgstr ""
+
+#: patterns/services-grid.php:21
+msgid "What we do"
+msgstr ""
+
+#: patterns/services-grid.php:29
+msgctxt "serial number of a quote line"
+msgid "No. 001"
+msgstr ""
+
+#: patterns/services-grid.php:33
+#: patterns/services-list.php:32
+msgid "Your main service"
+msgstr ""
+
+#: patterns/services-grid.php:37
+#: patterns/services-grid.php:57
+#: patterns/services-grid.php:77
+msgid "Describe what the client gets, in one sentence."
+msgstr ""
+
+#: patterns/services-grid.php:41
+#: patterns/services-grid.php:61
+#: patterns/services-grid.php:81
+#: patterns/services-list.php:40
+#: patterns/services-list.php:61
+#: patterns/services-list.php:82
+msgid "Learn more"
+msgstr ""
+
+#: patterns/services-grid.php:49
+msgctxt "serial number of a quote line"
+msgid "No. 002"
+msgstr ""
+
+#: patterns/services-grid.php:53
+#: patterns/services-list.php:53
+msgid "A second service"
+msgstr ""
+
+#: patterns/services-grid.php:69
+msgctxt "serial number of a quote line"
+msgid "No. 003"
+msgstr ""
+
+#: patterns/services-grid.php:73
+#: patterns/services-list.php:74
+msgid "A third service"
+msgstr ""
+
+#: patterns/services-list.php
+msgctxt "Pattern title"
+msgid "Services List"
+msgstr ""
+
+#: patterns/services-list.php
+msgctxt "Pattern description"
+msgid "Your services as rows that alternate sides, each with an image, a description and a link. Add your own images."
+msgstr ""
+
+#: patterns/services-list.php:23
+msgid "Services"
+msgstr ""
+
+#: patterns/services-list.php:35
+#: patterns/services-list.php:56
+#: patterns/services-list.php:77
+msgid "What the client gets, and how long it takes. Say what is included and who this service helps."
 msgstr ""
 
 #: patterns/stats.php
@@ -278,15 +1180,72 @@ msgstr ""
 
 #: patterns/stats.php
 msgctxt "Pattern description"
-msgid "A colored band of headline numbers."
+msgid "A dark field of three headline figures. Replace the placeholder figures with your own."
 msgstr ""
 
 #: patterns/stats.php:29
-msgid "Sites launched"
+msgid "Years in business"
+msgstr ""
+
+#: patterns/stats.php:41
+msgid "Projects delivered"
 msgstr ""
 
 #: patterns/stats.php:53
-msgid "Lighthouse score"
+msgid "Time to your first reply"
+msgstr ""
+
+#: patterns/steps.php
+msgctxt "Pattern title"
+msgid "How It Works"
+msgstr ""
+
+#: patterns/steps.php
+msgctxt "Pattern description"
+msgid "Three numbered steps, each with a short heading and sentence."
+msgstr ""
+
+#: patterns/steps.php:21
+msgid "How it works"
+msgstr ""
+
+#: patterns/steps.php:29
+msgctxt "step number"
+msgid "01"
+msgstr ""
+
+#: patterns/steps.php:33
+msgid "Tell us what you need"
+msgstr ""
+
+#: patterns/steps.php:37
+msgid "Say how a customer starts: a call, a form or a visit."
+msgstr ""
+
+#: patterns/steps.php:45
+msgctxt "step number"
+msgid "02"
+msgstr ""
+
+#: patterns/steps.php:49
+msgid "We agree a plan and a price"
+msgstr ""
+
+#: patterns/steps.php:53
+msgid "Say what the customer gets in writing before any work begins."
+msgstr ""
+
+#: patterns/steps.php:61
+msgctxt "step number"
+msgid "03"
+msgstr ""
+
+#: patterns/steps.php:65
+msgid "We do the work, you get the result"
+msgstr ""
+
+#: patterns/steps.php:69
+msgid "Say how the work is finished and checked."
 msgstr ""
 
 #: patterns/style-guide.php
@@ -296,81 +1255,311 @@ msgstr ""
 
 #: patterns/style-guide.php
 msgctxt "Pattern description"
-msgid "A living showcase of the theme's colors, type scale, fonts, spacing and buttons — all pulled straight from theme.json."
+msgid "A live preview of your colors, type scale, spacing, section styles, block styles and buttons."
 msgstr ""
 
-#: patterns/style-guide.php:21
-msgid "Design system"
-msgstr ""
-
-#: patterns/style-guide.php:25
+#: patterns/style-guide.php:23
 msgid "Style guide"
 msgstr ""
 
-#: patterns/style-guide.php:29
-msgid "Every color, size and space on this page is a live preset from theme.json — change your Styles in the editor and this page updates with it."
+#: patterns/style-guide.php:26
+msgid "Preview your colors, type, spacing and block styles. Change Styles in the editor to make them your own."
 msgstr ""
 
-#: patterns/style-guide.php:39
+#: patterns/style-guide.php:29
 msgid "Colors"
 msgstr ""
 
-#: patterns/style-guide.php:43
-msgid "Neutrals"
+#: patterns/style-guide.php:39
+msgctxt "color swatch name"
+msgid "Black"
 msgstr ""
 
-#: patterns/style-guide.php:150
+#: patterns/style-guide.php:49
+msgctxt "color swatch name"
+msgid "White"
+msgstr ""
+
+#: patterns/style-guide.php:59
+msgctxt "color swatch name"
 msgid "Primary"
 msgstr ""
 
-#: patterns/style-guide.php:213
+#: patterns/style-guide.php:69
+msgctxt "color swatch name"
+msgid "Text on Primary"
+msgstr ""
+
+#: patterns/style-guide.php:79
+msgctxt "color swatch name"
 msgid "Secondary"
 msgstr ""
 
-#: patterns/style-guide.php:276
+#: patterns/style-guide.php:89
+msgctxt "color swatch name"
 msgid "Accent"
 msgstr ""
 
-#: patterns/style-guide.php:343
+#: patterns/style-guide.php:99
+msgctxt "color swatch name"
+msgid "Paper"
+msgstr ""
+
+#: patterns/style-guide.php:109
+msgctxt "color swatch name"
+msgid "Ink"
+msgstr ""
+
+#: patterns/style-guide.php:119
+msgctxt "color swatch name"
+msgid "Surface"
+msgstr ""
+
+#: patterns/style-guide.php:134
 msgid "Type scale"
 msgstr ""
 
-#: patterns/style-guide.php:454
-msgid "Fonts"
+#: patterns/style-guide.php:141
+msgctxt "font size preset name"
+msgid "xSmall"
 msgstr ""
 
-#: patterns/style-guide.php:460
-#: patterns/style-guide.php:471
-#: patterns/style-guide.php:482
-msgid "The quick brown fox jumps over the lazy dog."
+#: patterns/style-guide.php:148
+msgctxt "font size preset name"
+msgid "Small"
 msgstr ""
 
-#: patterns/style-guide.php:463
-msgid "Figtree — body text"
+#: patterns/style-guide.php:155
+msgctxt "font size preset name"
+msgid "Medium"
 msgstr ""
 
-#: patterns/style-guide.php:474
-msgid "Space Grotesk — headings"
+#: patterns/style-guide.php:162
+msgctxt "font size preset name"
+msgid "Large"
 msgstr ""
 
-#: patterns/style-guide.php:485
-msgid "Space Mono — labels & code"
+#: patterns/style-guide.php:169
+msgctxt "font size preset name"
+msgid "xLarge"
 msgstr ""
 
-#: patterns/style-guide.php:495
+#: patterns/style-guide.php:176
+msgctxt "font size preset name"
+msgid "2xLarge"
+msgstr ""
+
+#: patterns/style-guide.php:183
+msgctxt "font size preset name"
+msgid "3xLarge"
+msgstr ""
+
+#: patterns/style-guide.php:190
+msgctxt "font size preset name"
+msgid "4xLarge"
+msgstr ""
+
+#: patterns/style-guide.php:197
+msgctxt "font size preset name"
+msgid "5xLarge"
+msgstr ""
+
+#: patterns/style-guide.php:212
 msgid "Spacing"
 msgstr ""
 
-#: patterns/style-guide.php:584
+#: patterns/style-guide.php:219
+msgctxt "spacing preset name"
+msgid "x-small"
+msgstr ""
+
+#: patterns/style-guide.php:229
+msgctxt "spacing preset name"
+msgid "small"
+msgstr ""
+
+#: patterns/style-guide.php:239
+msgctxt "spacing preset name"
+msgid "medium"
+msgstr ""
+
+#: patterns/style-guide.php:249
+msgctxt "spacing preset name"
+msgid "large"
+msgstr ""
+
+#: patterns/style-guide.php:259
+msgctxt "spacing preset name"
+msgid "x-large"
+msgstr ""
+
+#: patterns/style-guide.php:269
+msgctxt "spacing preset name"
+msgid "2-x-large"
+msgstr ""
+
+#: patterns/style-guide.php:279
+msgctxt "spacing preset name"
+msgid "3-x-large"
+msgstr ""
+
+#: patterns/style-guide.php:297
+msgid "Section styles"
+msgstr ""
+
+#: patterns/style-guide.php:302
+msgid "Field"
+msgstr ""
+
+#: patterns/style-guide.php:305
+#: patterns/style-guide.php:325
+#: patterns/style-guide.php:345
+msgctxt "section style sample"
+msgid "A heading, text and actions in this section style."
+msgstr ""
+
+#: patterns/style-guide.php:310
+#: patterns/style-guide.php:330
+#: patterns/style-guide.php:350
+#: patterns/style-guide.php:378
+msgid "Contact us"
+msgstr ""
+
+#: patterns/style-guide.php:322
+msgid "Ink"
+msgstr ""
+
+#: patterns/style-guide.php:342
+msgid "Ruled"
+msgstr ""
+
+#: patterns/style-guide.php:360
+msgid "Block styles"
+msgstr ""
+
+#: patterns/style-guide.php:365
+msgctxt "block style name"
+msgid "Ruled box"
+msgstr ""
+
+#: patterns/style-guide.php:373
 msgid "Buttons"
 msgstr ""
 
-#: patterns/style-guide.php:588
-msgid "Primary button"
+#: patterns/style-guide.php:384
+#: patterns/text-image.php:35
+msgid "About us"
 msgstr ""
 
-#: patterns/style-guide.php:588
-msgid "Outline button"
+#: patterns/subscribe.php
+msgctxt "Pattern title"
+msgid "Subscribe"
+msgstr ""
+
+#: patterns/subscribe.php
+msgctxt "Pattern description"
+msgid "Invite visitors to follow your news by RSS or on social media."
+msgstr ""
+
+#: patterns/subscribe.php:23
+msgid "Stay in the loop"
+msgstr ""
+
+#: patterns/subscribe.php:26
+msgid "News, tips and offers from us. Follow by RSS or wherever you spend your time."
+msgstr ""
+
+#: patterns/subscribe.php:31
+msgid "RSS feed"
+msgstr ""
+
+#: patterns/team.php
+msgctxt "Pattern title"
+msgid "Team"
+msgstr ""
+
+#: patterns/team.php
+msgctxt "Pattern description"
+msgid "A heading and four team members with initials, names, roles and a sentence."
+msgstr ""
+
+#: patterns/team.php:23
+msgid "The people behind the work"
+msgstr ""
+
+#: patterns/team.php:30
+#: patterns/team.php:46
+#: patterns/team.php:62
+#: patterns/team.php:78
+msgid "YN"
+msgstr ""
+
+#: patterns/team.php:33
+#: patterns/team.php:49
+#: patterns/team.php:65
+#: patterns/team.php:81
+msgid "Your name"
+msgstr ""
+
+#: patterns/team.php:39
+#: patterns/team.php:55
+#: patterns/team.php:71
+#: patterns/team.php:87
+msgid "One line about what you do for clients."
+msgstr ""
+
+#: patterns/template-404-search.php
+msgctxt "Pattern title"
+msgid "404 (Search First)"
+msgstr ""
+
+#: patterns/template-404-search.php
+msgctxt "Pattern description"
+msgid "A 404 design that leads with a search box and lists your three latest posts."
+msgstr ""
+
+#: patterns/template-404-search.php:47
+msgid "Nothing has been published yet."
+msgstr ""
+
+#: patterns/template-archive-list.php
+msgctxt "Pattern title"
+msgid "Archive (List)"
+msgstr ""
+
+#: patterns/template-archive-list.php
+msgctxt "Pattern description"
+msgid "An archive design that lists posts as compact rows with the date, title and excerpt, without images."
+msgstr ""
+
+#: patterns/template-front-page-agency.php
+msgctxt "Pattern title"
+msgid "Home: Agency"
+msgstr ""
+
+#: patterns/template-front-page-agency.php
+msgctxt "Pattern description"
+msgid "For studios and agencies: services, proof and a clear call to action."
+msgstr ""
+
+#: patterns/template-front-page-freelancer.php
+msgctxt "Pattern title"
+msgid "Home: Freelancer"
+msgstr ""
+
+#: patterns/template-front-page-freelancer.php
+msgctxt "Pattern description"
+msgid "For freelancers and consultants: you, your services and your best work."
+msgstr ""
+
+#: patterns/template-front-page-local-business.php
+msgctxt "Pattern title"
+msgid "Home: Local Business"
+msgstr ""
+
+#: patterns/template-front-page-local-business.php
+msgctxt "Pattern description"
+msgid "For local services and trades: phone, hours, guarantees and reviews up front, with the Header (Button) and Footer (Business)."
 msgstr ""
 
 #: patterns/testimonial.php
@@ -380,258 +1569,311 @@ msgstr ""
 
 #: patterns/testimonial.php
 msgctxt "Pattern description"
-msgid "A large left-aligned pull quote with attribution."
+msgid "A large pull quote with attribution. Replace it with a real customer quote."
 msgstr ""
 
-#: patterns/testimonial.php:21
-msgid "From the field"
+#: patterns/testimonial.php:23
+msgid "Quote a customer in one or two sentences: what changed for them after working with you."
 msgstr ""
 
-#. translators: %s: the highlighted word "weekend".
-#: patterns/testimonial.php:28
-#, php-format
-msgid "We rebuilt our whole site in a %s, and our editors actually look forward to publishing now."
+#: patterns/testimonial.php:29
+msgctxt "initials of the person quoted"
+msgid "AB"
 msgstr ""
 
-#: patterns/testimonial.php:42
-msgid "Riley Chen"
+#: patterns/testimonial.php:35
+msgid "Customer name"
 msgstr ""
 
-#: patterns/testimonial.php:46
-msgid "Head of Marketing · Lumen"
+#: patterns/testimonial.php:39
+msgid "Role, company"
+msgstr ""
+
+#: patterns/testimonials-grid.php
+msgctxt "Pattern title"
+msgid "Testimonials Grid"
+msgstr ""
+
+#: patterns/testimonials-grid.php
+msgctxt "Pattern description"
+msgid "Three short client quotes with names and roles."
+msgstr ""
+
+#: patterns/testimonials-grid.php:23
+msgid "What clients say"
+msgstr ""
+
+#: patterns/testimonials-grid.php:32
+msgid "A short quote about the result your client got. Replace this with their own words."
+msgstr ""
+
+#: patterns/testimonials-grid.php:34
+#: patterns/testimonials-grid.php:45
+#: patterns/testimonials-grid.php:56
+msgid "Client name, Company"
+msgstr ""
+
+#: patterns/testimonials-grid.php:43
+msgid "A short quote about what it was like to work with you. Use your client’s own words."
+msgstr ""
+
+#: patterns/testimonials-grid.php:54
+msgid "A short quote about why your client would recommend you. Ask before publishing their words."
+msgstr ""
+
+#: patterns/text-image.php
+msgctxt "Pattern title"
+msgid "Text and Image"
+msgstr ""
+
+#: patterns/text-image.php
+msgctxt "Pattern description"
+msgid "A heading, a few sentences and a button beside a photo."
+msgstr ""
+
+#: patterns/text-image.php:25
+msgid "Show who does the work"
+msgstr ""
+
+#: patterns/text-image.php:29
+msgid "A few sentences about how you work and what it is like to hire you. Swap the photo for one of you, your team or your work."
+msgstr ""
+
+#: patterns/text-image.php:45
+msgctxt "placeholder photo alt text"
+msgid "A potter shaping clay on a spinning wheel"
 msgstr ""
 
 #: theme.json
+#: styles/colors/contrast.json
+#: styles/colors/harbour.json
+#: styles/colors/terracotta.json
+#: styles/dark.json
+#: styles/velocity.json
 msgctxt "Color name"
 msgid "Black"
 msgstr ""
 
 #: theme.json
-msgctxt "Color name"
-msgid "BlackLight"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "BlackUltraLight"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "BlackDark"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "BlackUltraDark"
-msgstr ""
-
-#: theme.json
+#: styles/colors/contrast.json
+#: styles/colors/harbour.json
+#: styles/colors/terracotta.json
+#: styles/dark.json
+#: styles/velocity.json
 msgctxt "Color name"
 msgid "White"
 msgstr ""
 
 #: theme.json
+#: styles/colors/contrast.json
+#: styles/colors/harbour.json
+#: styles/colors/terracotta.json
+#: styles/dark.json
+#: styles/velocity.json
 msgctxt "Color name"
 msgid "Primary"
 msgstr ""
 
 #: theme.json
+#: styles/colors/contrast.json
+#: styles/colors/harbour.json
+#: styles/colors/terracotta.json
+#: styles/dark.json
+#: styles/velocity.json
 msgctxt "Color name"
-msgid "PrimaryLight"
+msgid "Text on Primary"
 msgstr ""
 
 #: theme.json
-msgctxt "Color name"
-msgid "PrimaryUltraLight"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "PrimaryDark"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "PrimaryUltraDark"
-msgstr ""
-
-#: theme.json
+#: styles/colors/contrast.json
+#: styles/colors/harbour.json
+#: styles/colors/terracotta.json
+#: styles/dark.json
+#: styles/velocity.json
 msgctxt "Color name"
 msgid "Secondary"
 msgstr ""
 
 #: theme.json
-msgctxt "Color name"
-msgid "SecondaryLight"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "SecondaryUltraLight"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "SecondaryDark"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "SecondaryUltraDark"
-msgstr ""
-
-#: theme.json
+#: styles/colors/contrast.json
+#: styles/colors/harbour.json
+#: styles/colors/terracotta.json
+#: styles/dark.json
+#: styles/velocity.json
 msgctxt "Color name"
 msgid "Accent"
 msgstr ""
 
 #: theme.json
-msgctxt "Color name"
-msgid "AccentLight"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "AccentUltraLight"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "AccentDark"
-msgstr ""
-
-#: theme.json
-msgctxt "Color name"
-msgid "AccentUltraDark"
-msgstr ""
-
-#: theme.json
+#: styles/colors/contrast.json
+#: styles/colors/harbour.json
+#: styles/colors/terracotta.json
+#: styles/dark.json
+#: styles/velocity.json
 msgctxt "Color name"
 msgid "Paper"
 msgstr ""
 
 #: theme.json
+#: styles/colors/contrast.json
+#: styles/colors/harbour.json
+#: styles/colors/terracotta.json
+#: styles/dark.json
+#: styles/velocity.json
 msgctxt "Color name"
 msgid "Ink"
 msgstr ""
 
 #: theme.json
+#: styles/colors/contrast.json
+#: styles/colors/harbour.json
+#: styles/colors/terracotta.json
+#: styles/dark.json
+#: styles/velocity.json
 msgctxt "Color name"
 msgid "Surface"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Shadow name"
 msgid "Small"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Shadow name"
 msgid "Medium"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Shadow name"
 msgid "Large"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
+msgctxt "Shadow name"
+msgid "Card"
+msgstr ""
+
+#: theme.json
+#: styles/velocity.json
 msgctxt "Space size name"
 msgid "xSmall"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Space size name"
 msgid "Small"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Space size name"
 msgid "Medium"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Space size name"
 msgid "Large"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Space size name"
 msgid "xLarge"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Space size name"
 msgid "2xLarge"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Space size name"
 msgid "3xLarge"
 msgstr ""
 
 #: theme.json
+#: styles/typography/classic.json
 msgctxt "Font family name"
-msgid "Figtree"
+msgid "Public Sans"
 msgstr ""
 
 #: theme.json
 msgctxt "Font family name"
-msgid "Space Grotesk"
+msgid "Archivo"
 msgstr ""
 
 #: theme.json
+#: styles/typography/classic.json
 msgctxt "Font family name"
-msgid "Space Mono"
+msgid "JetBrains Mono"
 msgstr ""
 
 #: theme.json
+#: styles/typography/system.json
+#: styles/velocity.json
 msgctxt "Font family name"
 msgid "System Sans-serif"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Font size name"
 msgid "xSmall"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Font size name"
 msgid "Small"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Font size name"
 msgid "Medium"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Font size name"
 msgid "Large"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Font size name"
 msgid "xLarge"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Font size name"
 msgid "2xLarge"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Font size name"
 msgid "3xLarge"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Font size name"
 msgid "4xLarge"
 msgstr ""
 
 #: theme.json
+#: styles/velocity.json
 msgctxt "Font size name"
 msgid "5xLarge"
 msgstr ""
@@ -643,7 +1885,32 @@ msgstr ""
 
 #: theme.json
 msgctxt "Template part name"
+msgid "Header (Centered)"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header (Minimal)"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header (Button)"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
 msgid "Footer"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer (Columns)"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer (Business)"
 msgstr ""
 
 #: theme.json
@@ -656,7 +1923,194 @@ msgctxt "Custom template name"
 msgid "Page (Full Width)"
 msgstr ""
 
+#: theme.json
+msgctxt "Custom template name"
+msgid "Post (Wide)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blank Canvas"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Landing Page"
+msgstr ""
+
+#: styles/blocks/boxed.json
+msgctxt "Style variation name"
+msgid "Boxed"
+msgstr ""
+
+#: styles/blocks/double-rule.json
+msgctxt "Style variation name"
+msgid "Double rule"
+msgstr ""
+
+#: styles/blocks/ruled.json
+msgctxt "Style variation name"
+msgid "Ruled box"
+msgstr ""
+
+#: styles/colors/contrast.json
+msgctxt "Style variation name"
+msgid "Contrast"
+msgstr ""
+
+#: styles/colors/harbour.json
+msgctxt "Style variation name"
+msgid "Harbour"
+msgstr ""
+
+#: styles/colors/terracotta.json
+msgctxt "Style variation name"
+msgid "Terracotta"
+msgstr ""
+
 #: styles/dark.json
 msgctxt "Style variation name"
 msgid "Dark"
+msgstr ""
+
+#: styles/sections/section-field.json
+msgctxt "Style variation name"
+msgid "Field"
+msgstr ""
+
+#: styles/sections/section-ink.json
+msgctxt "Style variation name"
+msgid "Ink"
+msgstr ""
+
+#: styles/sections/section-ruled.json
+msgctxt "Style variation name"
+msgid "Ruled"
+msgstr ""
+
+#: styles/typography/classic.json
+msgctxt "Style variation name"
+msgid "Classic"
+msgstr ""
+
+#: styles/typography/classic.json
+msgctxt "Font family name"
+msgid "Source Serif 4"
+msgstr ""
+
+#: styles/typography/friendly.json
+msgctxt "Style variation name"
+msgid "Friendly"
+msgstr ""
+
+#: styles/typography/friendly.json
+#: styles/velocity.json
+msgctxt "Font family name"
+msgid "Figtree"
+msgstr ""
+
+#: styles/typography/friendly.json
+#: styles/typography/system.json
+msgctxt "Font family name"
+msgid "System Mono"
+msgstr ""
+
+#: styles/typography/system.json
+msgctxt "Style variation name"
+msgid "System"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Style variation name"
+msgid "Velocity"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "BlackLight"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "BlackUltraLight"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "BlackDark"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "BlackUltraDark"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "PrimaryLight"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "PrimaryUltraLight"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "PrimaryDark"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "PrimaryUltraDark"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "SecondaryLight"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "SecondaryUltraLight"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "SecondaryDark"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "SecondaryUltraDark"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "AccentLight"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "AccentUltraLight"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "AccentDark"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Color name"
+msgid "AccentUltraDark"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Font family name"
+msgid "Space Grotesk"
+msgstr ""
+
+#: styles/velocity.json
+msgctxt "Font family name"
+msgid "Space Mono"
 msgstr ""

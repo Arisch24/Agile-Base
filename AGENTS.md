@@ -1,109 +1,49 @@
 # AGENTS.md
 
-This file provides guidance to Codex when working with code in this repository.
+When reporting information to me, be extremely concise and sacrifice grammar for sake of concision.
 
 ## Overview
 
-**Agile Base** is a WordPress **Full Site Editing (block) theme**, published in the
-WordPress.org theme directory as `agile-base` (author `arisch24`). It is a **no-build**
-theme: there is no Gulp/SASS/webpack step. Appearance is driven almost entirely by
-`theme.json`; structure by block templates, template parts and patterns.
+**Agile Base**: a no-build WordPress block theme (`theme.json` v3), on WordPress.org as
+`agile-base` (author `arisch24`). Who it's for: `PRODUCT.md`. Design system: `DESIGN.md`.
 
 ## Architecture
 
-- `theme.json` (v3) — the single source of truth for the design system: color palette
-  (HSL custom props under `settings.custom.color`, surfaced as presets), fluid typography,
-  fluid spacing, layout `contentSize`/`wideSize` (960px / 1280px), and global block styles.
-  Also declares `templateParts`, `customTemplates` (Page (No Title), Page (Full Width),
-  Post (Wide), Blank Canvas), and the self-hosted Figtree, Space Grotesk, and Space Mono
-  `fontFace` entries.
-- `templates/*.html` — block templates: `index`, `home` (the blog posts page),
-  `front-page` (renders the `page-home` landing pattern), `single`, `single-wide`, `page`,
-  `page-no-title`, `page-full-width`, `page-blank`, `archive`, `author`, `search`, `404`.
-  Each composes: header part → a `core/group` with `tagName="main"` → footer part
-  (`page-blank` has no header or footer). WordPress auto-injects the skip link and
-  targets the first `<main>`. `author` has its own query loop whose cards show the date
-  instead of a byline.
-- `parts/*.html` — template parts, referenced via `wp:template-part` with `tagName`:
-  `header` (Site Logo + Site Title + Navigation), `header-centered`, `header-minimal`,
-  `footer` (credit line), `footer-columns` (title, footer menu, search). Users swap the
-  variants in with "Replace" in the Site Editor.
-- `patterns/*.php` — four kinds:
-  - **Building blocks** (`Inserter: no`), referenced from templates and parts with
-    `<!-- wp:pattern {"slug":"agile-base/..."} /-->`: `posts-list` (the query-loop card
-    grid shared by index/home/archive/search), `comments`, and the `hidden-*` patterns
-    (post header, blog heading, no results, 404, footer credit, footer columns).
-  - **Sections** in the inserter (category `agile-base`): `hero`, `logos`, `features`,
-    `stats`, `testimonial`, `faq`, `call-to-action`, `team`, `pricing`, `style-guide`.
-  - **Page layouts** (`Block Types: core/post-content`, offered in the new-page "Choose a
-    pattern" modal): `page-home`, `page-about`, `page-services`, `page-pricing`,
-    `page-team`, `page-contact`. They nest the section patterns with `wp:pattern`.
-  - **Template designs** (`Template Types:`, `Inserter: no`, listed in the Site Editor's
-    template "Design" panel): `template-archive-list`, `template-404-search`.
-- `styles/dark.json` — the **Dark** style variation. The root `theme.json` is the default
-  (light) style. Variations override `styles.color`/elements only; they are admin-selected
-  global styles, not a visitor runtime toggle.
-- `style.css` — `.org` header block + the CSS blocks can't express (post cards, the FAQ
-  accordion, the author header, post navigation, etc.), using `agile-base-` class names.
-  `functions.php` enqueues it.
-- `assets/styles/core-<block>.css` — per-block stylesheets, loaded only on pages that render
-  that block (`functions.php` globs the folder). Currently `core-post-terms.css` (tag pills).
-- `functions.php` — minimal, `agile_base_`-prefixed and `function_exists`-wrapped: theme
-  supports and editor styles, the `agile-base` pattern category, per-block stylesheets, the
-  Pill/Plain block styles for `core/post-terms`, enqueue `style.css` + `comment-reply` on
-  singular, and preloading the two latin fonts. No autoloader, no classes, no constants.
-
-## Conventions
-
-- **No build step.** Edit `theme.json` / `.html` / pattern `.php` directly, then refine in
-  **Appearance → Editor**. Use the *Create Block Theme* plugin to export Site Editor
-  changes back to these files and to manage fonts.
-- Text domain is `agile-base` (must equal the folder slug). All PHP prefixed `agile_base`/`agile_base_`.
-- Self-hosted fonts live in `assets/fonts/` and are wired via `theme.json`
-  `fontFace` (with `unicodeRange` per latin / latin-ext subset) — **no external font
-  requests**. Don't reintroduce Google Fonts.
-- Block markup must use valid Gutenberg block-comment syntax; spacing/colors should
-  reference preset CSS vars (`var:preset|spacing|small`, `var(--wp--preset--color--*)`)
-  rather than hardcoded values, so the dark variation and user global styles keep working.
-- Write markup exactly as the editor would save it, or the Site Editor shows "Block contains
-  unexpected or invalid content". Known traps: inline padding must be longhand
-  (`padding-top`/`-right`/`-bottom`/`-left`), never shorthand `padding`; a button's border
-  color goes inline (`style="border-color:..."`), not as a `has-*-border-color` class.
-- Use the Avatar + Post Author Name blocks for bylines; the Post Author block is deprecated.
+- `theme.json`: palette, fluid type and spacing, layout (960px / 1280px), `custom` tokens,
+  block styles, `templateParts`, `customTemplates`, `fontFace`s.
+- `styles/`: `dark.json` (the Dark variation); `colors/*.json` and `typography/*.json`
+  presets, which must hold only `color` or only `typography` keys or the Site Editor stops
+  listing them as presets (`typography/system.json` downloads no fonts); `velocity.json`,
+  the frozen 1.x look: never change it, except to add a palette color 2.0 patterns need
+  (such as `on-primary`).
+- `styles/sections/` and `styles/blocks/` hold section and block styles.
+- `templates/` compose header part → `core/group` `tagName="main"` → footer part. Part text
+  lives in `hidden-*` patterns (most parts are a single `wp:pattern` line) so it can be
+  translated.
+- `patterns/`: building blocks (`Inserter: no`, including the `hidden-*` ones), sections
+  (category `agile-base`), page layouts (`Block Types: core/post-content`, offered for
+  new pages) and template designs (`Template Types:`, in the Site Editor's Design panel).
+  Starter homepages are `template-front-page-*` designs in the front page Design panel;
+  their content lives in `hidden-home-*` patterns (Agency uses `page-home`).
+- `style.css`: CSS blocks can't express, on `agile-base-` classes.
+  `assets/styles/core-<block>.css` loads only on pages with that block;
+  `assets/styles/legacy-presets.css` keeps the 1.x preset slugs.
+- `functions.php`: `agile_base_` prefix, `function_exists`-wrapped, no classes. Preloads a
+  font only while its role still uses the bundled family.
+- `accessibility.txt`: shipped statement; accessibility-ready requires the recorded manual walkthrough.
 
 ## Verifying changes
 
-- `node tests/release-check.mjs` — static checks on the source (versions, changelog,
-  template and pattern structure). Add assertions when you change structure.
-- `bash tests/release-package-check.sh` — builds a release zip and checks its contents.
-- `vendor/bin/phpcs .` against `phpcs.xml.dist` (WordPress-Extra + WordPress-Docs) after
-  `composer install`. CI (`.github/workflows/ci.yml`) runs these plus `php -l` on pushes
-  and PRs to `main`.
-- The local site is a ddev WordPress install at https://theme-dev-wp.ddev.site (theme root
-  is `wp-content/themes/agile-base`; run `ddev wp ...` and `ddev exec ...` from the WP root,
-  where PHP is available). Keep `WP_DEBUG = true` and confirm no PHP notices.
-- **Theme Check** must have no REQUIRED items for the release zip. Run against the dev
-  folder it flags `phpcs.xml.dist`, the `bin/` scripts and `build/` zips; those are
-  excluded from the release, so ignore them.
-- In the Site Editor, walk every template and both style variations, and check new markup
-  opens with no invalid-block warnings. Site Editor saves override the theme files, so
-  reset any templates or parts you changed while testing.
+- `npm test`: release, markup and compatibility guards.
+- `npm run check:motion -- <url> …`: reduced motion (color fades allowed).
+- `npm run check:weight -- <url> …`: ≤120 KB fonts, ≤40 KB theme CSS, no theme JS.
+- `npm run check:focus -- [--width 375] <url> …`: skip link first, ≥2px outlines at 3:1.
+- `npm run check:menu -- <url> …`: mobile menu: keyboard, 1rem screen-edge gap, page colors.
+- `npm run check:site -- [pages] [styles] [editor]`: every browser check. CI runs it on a fresh
+  WordPress (`WP_URL`, `WP_CLI`) after merges into `release/*` and on PRs to `main`, not on
+  feature PRs: run it locally before opening one.
 
-## Releases
+## Compatibility
 
-- Bump `Version:` in `style.css` and `Stable tag:` in `readme.txt`, add a changelog entry,
-  and update the version assertions in `tests/release-check.mjs`.
-- If the homepage changed, regenerate `screenshot.png` (1200×900) with
-  `bin/generate-screenshot.sh`, against a site with no Site Editor customizations.
-- After merging to `main`: `bash bin/build-release.sh` writes
-  `build/agile-base-X.Y.Z.zip`. Upload it by hand at https://wordpress.org/themes/upload/;
-  there is no automated deploy.
-- Tag the release commit with a signed annotated tag: `git tag -a X.Y.Z -m "X.Y.Z - Short
-  description"`.
-- WordPress.org only needs a version higher than the live one, so versions that were never
-  uploaded are folded into the next release's changelog entry.
-
-## WordPress.org notes
-
-Keep the theme free of "plugin territory" (no custom post types, no required plugins),
-GPL-compatible, with all bundled assets (fonts, images) credited in `readme.txt`.
+- Never edit `tests/compat-check.mjs`.
+- **2.x public API** (`tests/api-check.mjs`, generated by `bin/freeze-api.mjs`): add and restyle; never rename or remove frozen names. Before each regeneration, copy the old check to `build/` and confirm it still passes.

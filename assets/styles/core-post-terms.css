@@ -20,7 +20,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	gap: 0.5rem;
-	font-family: var(--wp--preset--font-family--space-mono);
+	font-family: var(--wp--custom--font--mono);
 	font-size: var(--wp--preset--font-size--small);
 }
 
@@ -31,8 +31,8 @@
 :where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a {
 	display: inline-block;
 	padding: 0.3em 0.8em;
-	border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
-	border-radius: 999px;
+	border: 1px solid currentColor;
+	border-radius: var(--wp--custom--radius--pill);
 	line-height: 1.4;
 	text-decoration: none;
 }
@@ -45,13 +45,14 @@
 
 :where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a:hover,
 :where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a:focus-visible {
-	border-color: var(--wp--preset--color--primary);
-	background-color: color-mix(in srgb, var(--wp--preset--color--primary) 14%, transparent);
+	color: var(--wp--preset--color--paper);
+	background-color: var(--wp--preset--color--ink);
+	border-color: var(--wp--preset--color--ink);
 	text-decoration: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
 	:where(.wp-block-post-terms.taxonomy-post_tag:not(.is-style-plain)) a {
-		transition: background-color 0.15s ease, border-color 0.15s ease;
+		transition: background-color var(--wp--custom--motion--base) ease, border-color var(--wp--custom--motion--base) ease;
 	}
 }

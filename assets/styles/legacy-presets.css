@@ -1,0 +1,72 @@
+/*
+ * 1.x palette shades that are no longer in the color picker. Content made with
+ * Agile Base 1.x still uses them, so each one is derived from the 2.0 color it
+ * came from and follows a rebrand.
+ */
+:root {
+	--wp--preset--color--primary-light: color-mix(in srgb, var(--wp--preset--color--primary) 65%, white);
+	--wp--preset--color--primary-ultra-light: color-mix(in srgb, var(--wp--preset--color--primary) 25%, white);
+	--wp--preset--color--primary-dark: color-mix(in srgb, var(--wp--preset--color--primary) 75%, black);
+	--wp--preset--color--primary-ultra-dark: color-mix(in srgb, var(--wp--preset--color--primary) 45%, black);
+	--wp--preset--color--secondary-light: color-mix(in srgb, var(--wp--preset--color--secondary) 65%, white);
+	--wp--preset--color--secondary-ultra-light: color-mix(in srgb, var(--wp--preset--color--secondary) 25%, white);
+	--wp--preset--color--secondary-dark: color-mix(in srgb, var(--wp--preset--color--secondary) 75%, black);
+	--wp--preset--color--secondary-ultra-dark: color-mix(in srgb, var(--wp--preset--color--secondary) 45%, black);
+	--wp--preset--color--accent-light: color-mix(in srgb, var(--wp--preset--color--accent) 65%, white);
+	--wp--preset--color--accent-ultra-light: color-mix(in srgb, var(--wp--preset--color--accent) 25%, white);
+	--wp--preset--color--accent-dark: color-mix(in srgb, var(--wp--preset--color--accent) 75%, black);
+	--wp--preset--color--accent-ultra-dark: color-mix(in srgb, var(--wp--preset--color--accent) 45%, black);
+	--wp--preset--color--black-light: color-mix(in srgb, var(--wp--preset--color--black) 40%, white);
+	--wp--preset--color--black-ultra-light: color-mix(in srgb, var(--wp--preset--color--black) 20%, white);
+	--wp--preset--color--black-dark: color-mix(in srgb, var(--wp--preset--color--black) 60%, white);
+	--wp--preset--color--black-ultra-dark: color-mix(in srgb, var(--wp--preset--color--black) 80%, white);
+}
+
+.has-primary-light-color { color: var(--wp--preset--color--primary-light) !important; }
+.has-primary-light-background-color { background-color: var(--wp--preset--color--primary-light) !important; }
+.has-primary-light-border-color { border-color: var(--wp--preset--color--primary-light) !important; }
+.has-primary-ultra-light-color { color: var(--wp--preset--color--primary-ultra-light) !important; }
+.has-primary-ultra-light-background-color { background-color: var(--wp--preset--color--primary-ultra-light) !important; }
+.has-primary-ultra-light-border-color { border-color: var(--wp--preset--color--primary-ultra-light) !important; }
+.has-primary-dark-color { color: var(--wp--preset--color--primary-dark) !important; }
+.has-primary-dark-background-color { background-color: var(--wp--preset--color--primary-dark) !important; }
+.has-primary-dark-border-color { border-color: var(--wp--preset--color--primary-dark) !important; }
+.has-primary-ultra-dark-color { color: var(--wp--preset--color--primary-ultra-dark) !important; }
+.has-primary-ultra-dark-background-color { background-color: var(--wp--preset--color--primary-ultra-dark) !important; }
+.has-primary-ultra-dark-border-color { border-color: var(--wp--preset--color--primary-ultra-dark) !important; }
+.has-secondary-light-color { color: var(--wp--preset--color--secondary-light) !important; }
+.has-secondary-light-background-color { background-color: var(--wp--preset--color--secondary-light) !important; }
+.has-secondary-light-border-color { border-color: var(--wp--preset--color--secondary-light) !important; }
+.has-secondary-ultra-light-color { color: var(--wp--preset--color--secondary-ultra-light) !important; }
+.has-secondary-ultra-light-background-color { background-color: var(--wp--preset--color--secondary-ultra-light) !important; }
+.has-secondary-ultra-light-border-color { border-color: var(--wp--preset--color--secondary-ultra-light) !important; }
+.has-secondary-dark-color { color: var(--wp--preset--color--secondary-dark) !important; }
+.has-secondary-dark-background-color { background-color: var(--wp--preset--color--secondary-dark) !important; }
+.has-secondary-dark-border-color { border-color: var(--wp--preset--color--secondary-dark) !important; }
+.has-secondary-ultra-dark-color { color: var(--wp--preset--color--secondary-ultra-dark) !important; }
+.has-secondary-ultra-dark-background-color { background-color: var(--wp--preset--color--secondary-ultra-dark) !important; }
+.has-secondary-ultra-dark-border-color { border-color: var(--wp--preset--color--secondary-ultra-dark) !important; }
+.has-accent-light-color { color: var(--wp--preset--color--accent-light) !important; }
+.has-accent-light-background-color { background-color: var(--wp--preset--color--accent-light) !important; }
+.has-accent-light-border-color { border-color: var(--wp--preset--color--accent-light) !important; }
+.has-accent-ultra-light-color { color: var(--wp--preset--color--accent-ultra-light) !important; }
+.has-accent-ultra-light-background-color { background-color: var(--wp--preset--color--accent-ultra-light) !important; }
+.has-accent-ultra-light-border-color { border-color: var(--wp--preset--color--accent-ultra-light) !important; }
+.has-accent-dark-color { color: var(--wp--preset--color--accent-dark) !important; }
+.has-accent-dark-background-color { background-color: var(--wp--preset--color--accent-dark) !important; }
+.has-accent-dark-border-color { border-color: var(--wp--preset--color--accent-dark) !important; }
+.has-accent-ultra-dark-color { color: var(--wp--preset--color--accent-ultra-dark) !important; }
+.has-accent-ultra-dark-background-color { background-color: var(--wp--preset--color--accent-ultra-dark) !important; }
+.has-accent-ultra-dark-border-color { border-color: var(--wp--preset--color--accent-ultra-dark) !important; }
+.has-black-light-color { color: var(--wp--preset--color--black-light) !important; }
+.has-black-light-background-color { background-color: var(--wp--preset--color--black-light) !important; }
+.has-black-light-border-color { border-color: var(--wp--preset--color--black-light) !important; }
+.has-black-ultra-light-color { color: var(--wp--preset--color--black-ultra-light) !important; }
+.has-black-ultra-light-background-color { background-color: var(--wp--preset--color--black-ultra-light) !important; }
+.has-black-ultra-light-border-color { border-color: var(--wp--preset--color--black-ultra-light) !important; }
+.has-black-dark-color { color: var(--wp--preset--color--black-dark) !important; }
+.has-black-dark-background-color { background-color: var(--wp--preset--color--black-dark) !important; }
+.has-black-dark-border-color { border-color: var(--wp--preset--color--black-dark) !important; }
+.has-black-ultra-dark-color { color: var(--wp--preset--color--black-ultra-dark) !important; }
+.has-black-ultra-dark-background-color { background-color: var(--wp--preset--color--black-ultra-dark) !important; }
+.has-black-ultra-dark-border-color { border-color: var(--wp--preset--color--black-ultra-dark) !important; }

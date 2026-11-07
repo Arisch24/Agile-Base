@@ -1,81 +1,32 @@
-# NPM #
-##########
-# Ignore all directories called node_modules in current folder and any subfolders.
+# Dependencies (dev tooling only)
 node_modules/
-/node_modules/
+/vendor/
 
-# Packages #
-############
-*.7z
-*.dmg
-*.gz
-*.bz2
-*.iso
-*.jar
-*.rar
-*.tar
+# Build output and archives
+build/
 *.zip
+*.gz
 *.tgz
-*.map
+*.tar
 
-# Logs and databases #
-######################
+# Logs and local environment
 *.log
 *.sql
 .env
 
-# OS generated files #
-######################
-**.DS_Store*
-ehthumbs.db
-Icon?
+# OS and editor files
+.DS_Store
 Thumbs.db
+ehthumbs.db
 ._*
-
-# Vim generated files #
-######################
 *.un~
+.idea/
 
-# SASS #
-##########
-**/.sass-cache
-**/.sass-cache/*
-**/.map
-
-# Composer #
-##########
-!assets/js/vendor/
-wpcs/
-/vendor/
-
-# Bower #
-##########
-assets/bower_components/*
-
-# Claude Code design-hook cache (local artifact; config.json is tracked
-# intentionally where a suppression is meant to be shared) #
-##########
+# Impeccable design-hook cache (config.json and surfaces/ are shared on purpose)
 /.impeccable/*
 !/.impeccable/config.json
+!/.impeccable/surfaces/
 
-# Codekit #
-##########
-/codekit-config.json
-*.codekit
-**.codekit-cache/*
-
-# Compiled Files and Build Dirs #
-##########
-/README.html
-
-# PhpStrom Project Files #
-.idea/
-library/vendors/composer
-assets/img/.DS_Store
-
-# Build
-build/
-
-# Personal scratch notes
+# Local notes, plans and specs
 todo.txt
 /docs/

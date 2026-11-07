@@ -36,6 +36,10 @@ rsync -a --delete \
 	--exclude='build/' \
 	--exclude='composer.json' \
 	--exclude='composer.lock' \
+	--exclude='package.json' \
+	--exclude='package-lock.json' \
+	--exclude='PRODUCT.md' \
+	--exclude='DESIGN.md' \
 	--exclude='docs/' \
 	--exclude='.impeccable/' \
 	--exclude='phpcs.xml.dist' \
@@ -64,6 +68,10 @@ forbidden = {
     f"{slug}/build/",
     f"{slug}/composer.json",
     f"{slug}/composer.lock",
+    f"{slug}/package.json",
+    f"{slug}/package-lock.json",
+    f"{slug}/PRODUCT.md",
+    f"{slug}/DESIGN.md",
     f"{slug}/docs/",
     f"{slug}/.impeccable/",
     f"{slug}/phpcs.xml.dist",

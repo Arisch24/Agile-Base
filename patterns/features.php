@@ -3,7 +3,9 @@
  * Title: Features (Three Columns)
  * Slug: agile-base/features
  * Categories: agile-base, columns, features
- * Description: A left-aligned section heading with a three-column grid of feature cards.
+ * Keywords: features, benefits, reasons, why us
+ * Viewport Width: 1400
+ * Description: A section heading with three short reasons to choose you, set as ruled columns.
  *
  * @package Agile_Base
  */
@@ -13,70 +15,54 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 ?>
-<!-- wp:group {"align":"full","className":"agile-base-band","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"},"blockGap":"var:preset|spacing|large"}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-group alignfull agile-base-band" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--2-x-large)">
-	<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}},"layout":{"type":"constrained","contentSize":"620px","justifyContent":"left"}} -->
-	<div class="wp-block-group">
-		<!-- wp:paragraph {"className":"agile-base-eyebrow"} -->
-		<p class="agile-base-eyebrow"><?php esc_html_e( 'Why Agile Base', 'agile-base' ); ?></p>
-		<!-- /wp:paragraph -->
-
+<!-- wp:group {"align":"full","backgroundColor":"surface","style":{"spacing":{"padding":{"top":"var:preset|spacing|2-x-large","bottom":"var:preset|spacing|2-x-large"},"blockGap":"var:preset|spacing|large"}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignfull has-surface-background-color has-background" style="padding-top:var(--wp--preset--spacing--2-x-large);padding-bottom:var(--wp--preset--spacing--2-x-large)">
+	<!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}},"layout":{"type":"constrained","contentSize":"620px","justifyContent":"left"}} -->
+	<div class="wp-block-group alignwide">
 		<!-- wp:heading {"fontSize":"3-x-large"} -->
-		<h2 class="wp-block-heading has-3-x-large-font-size"><?php esc_html_e( 'Everything you need to launch', 'agile-base' ); ?></h2>
+		<h2 class="wp-block-heading has-3-x-large-font-size"><?php esc_html_e( 'Why customers choose us', 'agile-base' ); ?></h2>
 		<!-- /wp:heading -->
 
-		<!-- wp:paragraph {"fontSize":"large","style":{"spacing":{"margin":{"top":"var:preset|spacing|x-small"}}}} -->
-		<p class="has-large-font-size" style="margin-top:var(--wp--preset--spacing--x-small)"><?php esc_html_e( 'Thoughtful defaults and a full pattern library, so you can focus on your content instead of the plumbing.', 'agile-base' ); ?></p>
+		<!-- wp:paragraph {"fontSize":"large"} -->
+		<p class="has-large-font-size"><?php esc_html_e( 'Three reasons, in your own words, that help a visitor decide.', 'agile-base' ); ?></p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
 
-	<!-- wp:columns {"style":{"spacing":{"blockGap":{"top":"var:preset|spacing|medium","left":"var:preset|spacing|medium"}}}} -->
-	<div class="wp-block-columns">
-		<!-- wp:column {"className":"post-card","style":{"spacing":{"blockGap":"var:preset|spacing|x-small","padding":{"top":"var:preset|spacing|small","right":"var:preset|spacing|small","bottom":"var:preset|spacing|small","left":"var:preset|spacing|small"}}}} -->
-		<div class="wp-block-column post-card" style="padding-top:var(--wp--preset--spacing--small);padding-right:var(--wp--preset--spacing--small);padding-bottom:var(--wp--preset--spacing--small);padding-left:var(--wp--preset--spacing--small)">
-			<!-- wp:html -->
-			<div class="agile-base-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"></rect><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"></rect><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"></rect><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"></rect></svg></div>
-			<!-- /wp:html -->
-
+	<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"top":"var:preset|spacing|medium","left":"var:preset|spacing|medium"}}}} -->
+	<div class="wp-block-columns alignwide">
+		<!-- wp:column {"className":"agile-base-reason","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}}} -->
+		<div class="wp-block-column agile-base-reason">
 			<!-- wp:heading {"level":3,"fontSize":"x-large"} -->
-			<h3 class="wp-block-heading has-x-large-font-size"><?php esc_html_e( 'Block patterns', 'agile-base' ); ?></h3>
+			<h3 class="wp-block-heading has-x-large-font-size"><?php esc_html_e( 'Clear, itemised quotes', 'agile-base' ); ?></h3>
 			<!-- /wp:heading -->
 
 			<!-- wp:paragraph -->
-			<p><?php esc_html_e( 'Drop in ready-made sections and assemble full pages in minutes, no code required.', 'agile-base' ); ?></p>
+			<p><?php esc_html_e( 'Say how you price your work, so customers know what they pay for.', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->
 
-		<!-- wp:column {"className":"post-card","style":{"spacing":{"blockGap":"var:preset|spacing|x-small","padding":{"top":"var:preset|spacing|small","right":"var:preset|spacing|small","bottom":"var:preset|spacing|small","left":"var:preset|spacing|small"}}}} -->
-		<div class="wp-block-column post-card" style="padding-top:var(--wp--preset--spacing--small);padding-right:var(--wp--preset--spacing--small);padding-bottom:var(--wp--preset--spacing--small);padding-left:var(--wp--preset--spacing--small)">
-			<!-- wp:html -->
-			<div class="agile-base-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"></path></svg></div>
-			<!-- /wp:html -->
-
+		<!-- wp:column {"className":"agile-base-reason","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}}} -->
+		<div class="wp-block-column agile-base-reason">
 			<!-- wp:heading {"level":3,"fontSize":"x-large"} -->
-			<h3 class="wp-block-heading has-x-large-font-size"><?php esc_html_e( 'Style variations', 'agile-base' ); ?></h3>
+			<h3 class="wp-block-heading has-x-large-font-size"><?php esc_html_e( 'On time, as promised', 'agile-base' ); ?></h3>
 			<!-- /wp:heading -->
 
 			<!-- wp:paragraph -->
-			<p><?php esc_html_e( 'Switch between light and dark looks instantly, or fine-tune colors and type in the editor.', 'agile-base' ); ?></p>
+			<p><?php esc_html_e( 'Say how you keep to the schedule you agreed.', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->
 
-		<!-- wp:column {"className":"post-card","style":{"spacing":{"blockGap":"var:preset|spacing|x-small","padding":{"top":"var:preset|spacing|small","right":"var:preset|spacing|small","bottom":"var:preset|spacing|small","left":"var:preset|spacing|small"}}}} -->
-		<div class="wp-block-column post-card" style="padding-top:var(--wp--preset--spacing--small);padding-right:var(--wp--preset--spacing--small);padding-bottom:var(--wp--preset--spacing--small);padding-left:var(--wp--preset--spacing--small)">
-			<!-- wp:html -->
-			<div class="agile-base-feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></div>
-			<!-- /wp:html -->
-
+		<!-- wp:column {"className":"agile-base-reason","style":{"spacing":{"blockGap":"var:preset|spacing|x-small"}}} -->
+		<div class="wp-block-column agile-base-reason">
 			<!-- wp:heading {"level":3,"fontSize":"x-large"} -->
-			<h3 class="wp-block-heading has-x-large-font-size"><?php esc_html_e( 'Fast by default', 'agile-base' ); ?></h3>
+			<h3 class="wp-block-heading has-x-large-font-size"><?php esc_html_e( 'Someone you can call', 'agile-base' ); ?></h3>
 			<!-- /wp:heading -->
 
 			<!-- wp:paragraph -->
-			<p><?php esc_html_e( 'Self-hosted fonts, no page builder bloat, and lean markup keep your pages quick to load.', 'agile-base' ); ?></p>
+			<p><?php esc_html_e( 'Say who answers when a customer has a question.', 'agile-base' ); ?></p>
 			<!-- /wp:paragraph -->
 		</div>
 		<!-- /wp:column -->

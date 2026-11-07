@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"title": "Boxed",
+	"slug": "boxed",
+	"blockTypes": [
+		"core/button"
+	],
+	"styles": {
+		"border": {
+			"radius": "var(--wp--custom--radius--bar)",
+			"width": "2px",
+			"style": "solid",
+			"color": "currentColor"
+		},
+		"color": {
+			"background": "transparent",
+			"text": "var(--wp--preset--color--ink)"
+		},
+		"css": "&:not(:disabled):is(:hover, :focus-visible) { color: var(--wp--preset--color--paper); background-color: var(--wp--preset--color--ink); }"
+	}
+}
